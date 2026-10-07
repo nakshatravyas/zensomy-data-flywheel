@@ -551,7 +551,7 @@
   <a href="#32-splits-the-decision-that-silently-destroys-evaluation-if-it-is-wrong" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3.2 Splits — the decision that silently destroys evaluation if it is wrong
+        3.2 Splits - the decision that silently destroys evaluation if it is wrong
       
     </span>
   </a>
@@ -734,17 +734,6 @@
     <span class="md-ellipsis">
       
         6 · Implemented component
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#7-three-claims-this-design-makes" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        7 · Three claims this design makes
       
     </span>
   </a>
@@ -917,7 +906,7 @@
   <a href="#32-splits-the-decision-that-silently-destroys-evaluation-if-it-is-wrong" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3.2 Splits — the decision that silently destroys evaluation if it is wrong
+        3.2 Splits - the decision that silently destroys evaluation if it is wrong
       
     </span>
   </a>
@@ -1106,17 +1095,6 @@
   
 </li>
       
-        <li class="md-nav__item">
-  <a href="#7-three-claims-this-design-makes" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        7 · Three claims this design makes
-      
-    </span>
-  </a>
-  
-</li>
-      
     </ul>
   
 </nav>
@@ -1134,9 +1112,9 @@
 
 
 
-<h1 id="design-document-data-flywheel-for-autonomous-systems">Design Document — Data Flywheel for Autonomous Systems<a class="headerlink" href="#design-document-data-flywheel-for-autonomous-systems" title="Permanent link">&para;</a></h1>
-<p><strong>Nakshatra Vyas</strong> · Data Engineer — Autonomous Systems · October 2026</p>
-<p><strong>Deliverable 2</strong> — the major design decisions and the assumptions behind them.
+<h1 id="design-document-data-flywheel-for-autonomous-systems">Design Document - Data Flywheel for Autonomous Systems<a class="headerlink" href="#design-document-data-flywheel-for-autonomous-systems" title="Permanent link">&para;</a></h1>
+<p><strong>Nakshatra Vyas</strong> · Data Engineer - Autonomous Systems · October 2026</p>
+<p><strong>Deliverable 2</strong> - the major design decisions and the assumptions behind them.
 The architecture itself is in <a href="../technical-design/">Technical Design</a>; the code is in <code>3-implementation/</code> (in the repository).</p>
 <p>Every decision below is stated as <strong>what was chosen and what it was chosen over</strong>, because the brief states that identified trade-offs matter more than the stack selected.</p>
 <hr />
@@ -1156,7 +1134,7 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 </tr>
 <tr>
 <td>2</td>
-<td>Machines <strong>return to a depot most operating days</strong>, with a high-bandwidth local network. <strong>The most load-bearing assumption in the design</strong> — §1.1 gives the fallback if it is false</td>
+<td>Machines <strong>return to a depot most operating days</strong>, with a high-bandwidth local network. <strong>The most load-bearing assumption in the design</strong> - §1.1 gives the fallback if it is false</td>
 </tr>
 <tr>
 <td>3</td>
@@ -1180,7 +1158,7 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 </tr>
 <tr>
 <td>8</td>
-<td><strong>Tens of vehicles now, low hundreds within 2–3 years.</strong> Explicitly not 10,000 — every sizing decision follows from this</td>
+<td><strong>Tens of vehicles now, low hundreds within 2–3 years.</strong> Explicitly not 10,000 - every sizing decision follows from this</td>
 </tr>
 <tr>
 <td>9</td>
@@ -1198,7 +1176,7 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 </table>
 <hr />
 <h2 id="1-ingestion-and-management">1 · Ingestion and management<a class="headerlink" href="#1-ingestion-and-management" title="Permanent link">&para;</a></h2>
-<p><strong>The constraint is arithmetic, not preference.</strong> 400 GB per vehicle-day against a 5 Mbps rural uplink is <strong>178 hours of upload for 8 hours of driving</strong>, and at $1–10/GB the cellular bill is <strong>$400–4,000 per vehicle per day</strong>. Streaming everything to the cloud is not a trade-off that was considered and rejected; it is impossible. Every decision below follows from that.</p>
+<p><strong>The constraint is arithmetic, not preference.</strong> 400 GB per vehicle-day against a rural uplink is <strong>178 hours of upload for 8 hours of driving</strong>, and cellular is priced per gigabyte. Streaming everything to the cloud is not a trade-off that was considered and rejected; it is impossible. Every decision below follows from that.</p>
 <h3 id="11-how-data-is-transferred">1.1 How data is transferred<a class="headerlink" href="#11-how-data-is-transferred" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -1210,7 +1188,7 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 </thead>
 <tbody>
 <tr>
-<td><strong>Four transfer tiers</strong> split by urgency and size — cellular telemetry, cellular flagged clips, depot WiFi bulk, physical media</td>
+<td><strong>Four transfer tiers</strong> split by urgency and size - cellular telemetry, cellular flagged clips, depot WiFi bulk, physical media</td>
 <td>One upload path</td>
 <td>Cellular carries only what must be timely; depot WiFi carries ~98% of bytes at near-zero marginal cost</td>
 </tr>
@@ -1239,7 +1217,7 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 <tr>
 <td><strong>MCAP, 60-second chunks</strong></td>
 <td>Whole-session files; raw rosbag</td>
-<td>MCAP is indexed — session metadata is readable from a few MB of a 10 GB file, which is what makes cataloguing affordable. Chunking makes upload resumable and bounds the loss from a corrupt write</td>
+<td>MCAP is indexed, so session metadata is readable without downloading the whole file - which is what makes cataloguing affordable. Chunking makes upload resumable and bounds the loss from a corrupt write</td>
 </tr>
 <tr>
 <td><strong>ULID session identifiers generated on-vehicle</strong></td>
@@ -1247,7 +1225,7 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 <td>A machine in a field cannot reach a server to request an ID. ULIDs are collision-free offline and sort by time</td>
 </tr>
 <tr>
-<td><strong>Hive-style partitioning</strong> — <code>vehicle_id=…/date=…/session=…</code></td>
+<td><strong>Hive-style partitioning</strong> - <code>vehicle_id=…/date=…/session=…</code></td>
 <td>Flat prefixes</td>
 <td>Queries skip irrelevant partitions entirely; this is the main query-performance lever</td>
 </tr>
@@ -1269,24 +1247,24 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 </thead>
 <tbody>
 <tr>
-<td><strong>Four metadata levels</strong> — fleet, vehicle, session, chunk</td>
+<td><strong>Four metadata levels</strong> - fleet, vehicle, session, chunk</td>
 <td>Flat metadata per file</td>
 <td>Fleet-wide facts are not duplicated across millions of chunks, and chunk-level facts are not lost inside session summaries</td>
 </tr>
 <tr>
 <td><strong>Manifest sidecar <em>and</em> a catalog</strong></td>
 <td>Catalog only</td>
-<td>The manifest makes a session self-describing even if the catalog is lost or has to be rebuilt — and it is what integrity verification reconciles against</td>
+<td>The manifest makes a session self-describing even if the catalog is lost or has to be rebuilt - and it is what integrity verification reconciles against</td>
 </tr>
 <tr>
 <td><strong>Calibration version as a first-class required field</strong></td>
 <td>Assume calibration is stable</td>
-<td>A mount that shifts two centimetres without re-calibration silently invalidates every LiDAR-to-camera projection from that moment on. <strong>Nothing fails and no error is raised.</strong> Models trained on the mixture degrade and the cause is untraceable unless the version was recorded at ingestion</td>
+<td>A mount that shifts slightly without re-calibration silently invalidates every LiDAR-to-camera projection from that moment on. <strong>Nothing fails and no error is raised.</strong> Models trained on the mixture degrade and the cause is untraceable unless the version was recorded at ingestion</td>
 </tr>
 <tr>
 <td><strong>Clock-synchronisation quality recorded per session</strong></td>
 <td>Assume clocks agree</td>
-<td>200 ms of skew at 10 km/h displaces observations by 0.56 m. Downstream consumers need to know how much to trust cross-sensor alignment</td>
+<td>A moving machine displaces observations when sensor clocks drift apart. Downstream consumers need to know how much to trust cross-sensor alignment</td>
 </tr>
 </tbody>
 </table>
@@ -1294,9 +1272,9 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 <p><strong>These are two different problems and conflating them is the common error.</strong></p>
 <pre class="mermaid"><code>graph LR
     U["uploaded recording"] --&gt; I{{"INTEGRITY&lt;br/&gt;Did all the bytes arrive intact?"}}
-    I --&gt;|"fail — hard"| Q["quarantine/&lt;br/&gt;90 days, diagnosis"]
+    I --&gt;|"fail - hard"| Q["quarantine/&lt;br/&gt;90 days, diagnosis"]
     I --&gt;|"pass"| QU{{"QUALITY&lt;br/&gt;Is the data usable?"}}
-    QU --&gt;|"fail — soft flag"| R["raw/ — ingested, flagged&lt;br/&gt;visible to selection"]
+    QU --&gt;|"fail - soft flag"| R["raw/ - ingested, flagged&lt;br/&gt;visible to selection"]
     QU --&gt;|"pass"| R
     Q -.-&gt;|"rising rate on one vehicle"| M["maintenance signal"]
 
@@ -1304,7 +1282,7 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
     classDef store fill:#eef4fb,stroke:#5b86b8,color:#13293d
     class I,QU gate
     class Q,R,M store</code></pre>
-<p>A dusty lens fails quality and is kept — it is exactly the material selection wants. A truncated upload fails integrity and must never become canonical data.</p>
+<p>A dusty lens fails quality and is kept - it is exactly the material selection wants. A truncated upload fails integrity and must never become canonical data.</p>
 <table>
 <thead>
 <tr>
@@ -1343,12 +1321,12 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 <tr>
 <td><strong>Separate hard-fail and soft-flag paths</strong></td>
 <td>One validation step</td>
-<td>A corrupt transfer must never become canonical data. A dusty lens must not be thrown away — it is exactly the material §2 wants</td>
+<td>A corrupt transfer must never become canonical data. A dusty lens must not be thrown away - it is exactly the material §2 wants</td>
 </tr>
 <tr>
 <td><strong><code>landing/</code> → <code>raw/</code> promotion</strong>, raw immutable with Object Lock</td>
 <td>Write directly to the final location</td>
-<td>A partial upload never becomes canonical. Corrections are new versions, never edits — which is what makes dataset manifests (§3.1) and replay testing (§4.1) safe</td>
+<td>A partial upload never becomes canonical. Corrections are new versions, never edits - which is what makes dataset manifests (§3.1) and replay testing (§4.1) safe</td>
 </tr>
 <tr>
 <td><strong>Quarantine rather than discard</strong></td>
@@ -1380,7 +1358,7 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 <tr>
 <td><strong>Idempotent retry</strong></td>
 <td>Transactional upload protocol</td>
-<td>See §1.2 — this is why retry is safe at all</td>
+<td>See §1.2 - this is why retry is safe at all</td>
 </tr>
 <tr>
 <td><strong>Physical media tier for prolonged blackouts</strong></td>
@@ -1424,8 +1402,8 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 </table>
 <hr />
 <h2 id="2-data-selection-and-active-learning">2 · Data selection and active learning<a class="headerlink" href="#2-data-selection-and-active-learning" title="Permanent link">&para;</a></h2>
-<p><strong>The constraint.</strong> Far more is recorded than can ever be annotated, and the limit is financial rather than technical — more compute does not relieve it. So the question is never <em>how much can we annotate</em>, it is <strong>where do we concentrate a fixed amount of human attention.</strong></p>
-<p>Random sampling answers it badly. Most footage is a machine driving straight across a flat dry field, which the stack already handles. And it <strong>degrades over time</strong>: as the model improves, the share of footage it already handles grows, so the expected value of a random hour falls every cycle. Selection has to get smarter simply to hold its value constant — which is why its returns compound.</p>
+<p><strong>The constraint.</strong> Far more is recorded than can ever be annotated, and the limit is financial rather than technical - more compute does not relieve it. So the question is never <em>how much can we annotate</em>, it is <strong>where do we concentrate a fixed amount of human attention.</strong></p>
+<p>Random sampling answers it badly. Most footage is a machine driving straight across a flat dry field, which the stack already handles. And it <strong>degrades over time</strong>: as the model improves, the share of footage it already handles grows, so the expected value of a random hour falls every cycle. Selection has to get smarter simply to hold its value constant - which is why its returns compound.</p>
 <table>
 <thead>
 <tr>
@@ -1436,9 +1414,9 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 </thead>
 <tbody>
 <tr>
-<td><strong>2.1 Four signals — WRONG, UNSURE, CONFLICT, RARE</strong></td>
+<td><strong>2.1 Four signals - WRONG, UNSURE, CONFLICT, RARE</strong></td>
 <td>Uncertainty sampling alone</td>
-<td>Uncertainty cannot detect <strong>confident error</strong> — the model certain and wrong, which is the highest-risk case. Only WRONG and CONFLICT see it. WRONG also needs no model, which solves the cold start</td>
+<td>Uncertainty cannot detect <strong>confident error</strong> - the model certain and wrong, which is the highest-risk case. Only WRONG and CONFLICT see it. WRONG also needs no model, which solves the cold start</td>
 </tr>
 <tr>
 <td><strong>2.2 Weighted linear score</strong></td>
@@ -1466,7 +1444,7 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 <td>One dusty afternoon produces hundreds of near-identical high-scoring clips. Ranking alone spends the whole budget on that afternoon</td>
 </tr>
 <tr>
-<td><strong>2.7 Budget split — must-take, scored, random</strong></td>
+<td><strong>2.7 Budget split - must-take, scored, random</strong></td>
 <td>Fully scored selection</td>
 <td>The random share keeps evaluation honest, and is the only way a failure mode no signal was designed to find can surface</td>
 </tr>
@@ -1488,7 +1466,7 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 </tbody>
 </table>
 <blockquote>
-<p><strong>The point most likely to be challenged.</strong> "Take the top 10% by score" is the intuitive shortlist, and it is wrong — the cheap signals available at that stage are not the signals you are trying to find. A filter that pre-selects for what you already know makes the expensive stage confirm rather than discover.</p>
+<p><strong>The point most likely to be challenged.</strong> "Take the top 10% by score" is the intuitive shortlist, and it is wrong - the cheap signals available at that stage are not the signals you are trying to find. A filter that pre-selects for what you already know makes the expensive stage confirm rather than discover.</p>
 </blockquote>
 <hr />
 <h2 id="3-dataset-and-training-pipeline">3 · Dataset and training pipeline<a class="headerlink" href="#3-dataset-and-training-pipeline" title="Permanent link">&para;</a></h2>
@@ -1506,7 +1484,7 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 <tr>
 <td><strong>A dataset version is an immutable manifest of references</strong>, written once</td>
 <td>A folder of copied files</td>
-<td>A folder is mutable. Someone removes a bad clip, corrects fifty labels, appends a batch — the name stays <code>v4</code> and <em>"what data produced this model"</em> becomes unanswerable. References keep versioning cheap enough that engineers actually create versions</td>
+<td>A folder is mutable. Someone removes a bad clip, corrects fifty labels, appends a batch - the name stays <code>v4</code> and <em>"what data produced this model"</em> becomes unanswerable. References keep versioning cheap enough that engineers actually create versions</td>
 </tr>
 <tr>
 <td><strong>Content hash per sample, verified at load</strong></td>
@@ -1520,7 +1498,7 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 </tr>
 </tbody>
 </table>
-<h3 id="32-splits-the-decision-that-silently-destroys-evaluation-if-it-is-wrong">3.2 Splits — the decision that silently destroys evaluation if it is wrong<a class="headerlink" href="#32-splits-the-decision-that-silently-destroys-evaluation-if-it-is-wrong" title="Permanent link">&para;</a></h3>
+<h3 id="32-splits-the-decision-that-silently-destroys-evaluation-if-it-is-wrong">3.2 Splits - the decision that silently destroys evaluation if it is wrong<a class="headerlink" href="#32-splits-the-decision-that-silently-destroys-evaluation-if-it-is-wrong" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
@@ -1536,9 +1514,9 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 <td>Consecutive frames are near-duplicates. A random split puts one frame in training and its twin in test, and the score comes back <strong>high, stable, and unrelated to field performance.</strong> It does not present as an error; it presents as success</td>
 </tr>
 <tr>
-<td><strong>Permanently sticky assignment</strong> — <code>hash(session_id)</code>, never re-drawn</td>
+<td><strong>Permanently sticky assignment</strong> - <code>hash(session_id)</code>, never re-drawn</td>
 <td>Re-splitting each build</td>
-<td>If splits are redrawn, last version's test data becomes this version's training data, and <strong>every historical model comparison becomes invalid.</strong> The loss is unrecoverable — the models cannot be re-measured against a split that no longer exists</td>
+<td>If splits are redrawn, last version's test data becomes this version's training data, and <strong>every historical model comparison becomes invalid.</strong> The loss is unrecoverable - the models cannot be re-measured against a split that no longer exists</td>
 </tr>
 <tr>
 <td><strong>Held-out sites and dates in the test split</strong></td>
@@ -1548,7 +1526,7 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 <tr>
 <td><strong>An independent leakage check as its own pipeline step</strong></td>
 <td>Trusting the split implementation</td>
-<td>The rule can be satisfied exactly while leakage occurs: a session re-ingested under a new ID is one physical drive with two identifiers, hashed onto opposite sides. The check compares <strong>content</strong> — exact hashes plus near-duplicate embeddings — not identifiers</td>
+<td>The rule can be satisfied exactly while leakage occurs: a session re-ingested under a new ID is one physical drive with two identifiers, hashed onto opposite sides. The check compares <strong>content</strong> - exact hashes plus near-duplicate embeddings - not identifiers</td>
 </tr>
 </tbody>
 </table>
@@ -1565,12 +1543,12 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 <tr>
 <td><strong>Four pins: dataset hash · git SHA · container image digest · config and seeds</strong></td>
 <td>Pinning code and data only</td>
-<td>The environment pin is the one usually weakened. <strong>An image tag is a mutable pointer</strong> — <code>:latest</code> resolves differently over time, and CUDA, driver and library versions shift with no record in the run</td>
+<td>The environment pin is the one usually weakened. <strong>An image tag is a mutable pointer</strong> - <code>:latest</code> resolves differently over time, and CUDA, driver and library versions shift with no record in the run</td>
 </tr>
 <tr>
-<td><strong>Statistical, not bitwise, reproducibility — stated explicitly</strong></td>
+<td><strong>Statistical, not bitwise, reproducibility - stated explicitly</strong></td>
 <td>Deterministic GPU kernels</td>
-<td>Bit-identical reproduction costs roughly 20–30% throughput for a property rarely needed. Claiming stronger reproducibility than has been paid for is worse than claiming none, because someone will rely on it</td>
+<td>Deterministic GPU kernels cost real throughput for a property rarely needed. Claiming stronger reproducibility than has been paid for is worse than claiming none, because someone will rely on it</td>
 </tr>
 </tbody>
 </table>
@@ -1592,7 +1570,7 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 <tr>
 <td><strong>Gate on per-slice metrics, not the aggregate</strong></td>
 <td>A single aggregate score</td>
-<td>A scenario that is 3% of the evaluation set contributes 3% of the aggregate, so a severe regression confined to it is invisible. <strong>A real result from this design: +1.2 points overall, −5.7 in dust.</strong> For a machine in a dry field that model is worse, and the aggregate hid it. The rare slices are exactly the costly ones</td>
+<td>A small slice contributes little to the aggregate, so a severe regression confined to it is invisible. <strong>A real result from this design: +1.2 points overall, −5.7 in dust.</strong> For a machine in a dry field that model is worse, and the aggregate hid it. The rare slices are exactly the costly ones</td>
 </tr>
 <tr>
 <td><strong>A regression suite of real past field incidents</strong>, which only grows</td>
@@ -1612,7 +1590,7 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 </thead>
 <tbody>
 <tr>
-<td><strong>Every run recorded automatically</strong> — inputs, metrics, artifacts, lineage</td>
+<td><strong>Every run recorded automatically</strong> - inputs, metrics, artifacts, lineage</td>
 <td>Recording runs that seem important</td>
 <td>A run that is not recorded did not happen. A pipeline permitting unrecorded runs accumulates models whose origin cannot be established</td>
 </tr>
@@ -1634,7 +1612,7 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 </thead>
 <tbody>
 <tr>
-<td><strong>The registry is a gate, not a store</strong> — stages <code>candidate → validated → shadow → production → archived</code></td>
+<td><strong>The registry is a gate, not a store</strong> - stages <code>candidate → validated → shadow → production → archived</code></td>
 <td>A model directory</td>
 <td>Storage is object storage. What the registry adds is a <strong>stage</strong> and a <strong>lineage record</strong> tying a model to the exact data, code and environment that produced it</td>
 </tr>
@@ -1656,9 +1634,9 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 </thead>
 <tbody>
 <tr>
-<td><strong>Three triggers:</strong> accumulation (+5% by volume), field performance, schedule</td>
+<td><strong>Three triggers:</strong> accumulated new data, field performance, schedule</td>
 <td>Retrain on every arrival</td>
-<td>Retraining on fifty new clips burns GPU hours learning noise — but a serious field regression must not wait for a volume threshold. The performance trigger is <strong>feedback edge ①</strong> expressed as a mechanism</td>
+<td>Retraining on a handful of new clips burns GPU hours learning noise - but a serious field regression must not wait for a volume threshold. The performance trigger is <strong>feedback edge ①</strong> expressed as a mechanism</td>
 </tr>
 <tr>
 <td><strong>A weekly scheduled floor</strong></td>
@@ -1678,15 +1656,15 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 </thead>
 <tbody>
 <tr>
-<td><strong>Sequential ~1 GB shards for training reads</strong></td>
+<td><strong>Sequential shards for training reads</strong></td>
 <td>Per-sample object reads</td>
-<td>One request per file starves the GPU — utilisation settles around 30% waiting on the network. The manifest stays authoritative; shards are a regenerable materialisation of it</td>
+<td>One request per file starves the GPU, which then sits waiting on the network. The manifest stays authoritative; shards are a regenerable materialisation of it</td>
 </tr>
 </tbody>
 </table>
 <hr />
 <h2 id="4-cicd-and-deployment">4 · CI/CD and deployment<a class="headerlink" href="#4-cicd-and-deployment" title="Permanent link">&para;</a></h2>
-<p><strong>The constraint.</strong> Support continuous development while preventing an unvalidated model or software change from reaching a vehicle. The resolution is not to slow development down — it is to make the path to a vehicle <strong>narrow and automatic</strong>, so that speed is bounded by the gate rather than by caution.</p>
+<p><strong>The constraint.</strong> Support continuous development while preventing an unvalidated model or software change from reaching a vehicle. The resolution is not to slow development down - it is to make the path to a vehicle <strong>narrow and automatic</strong>, so that speed is bounded by the gate rather than by caution.</p>
 <p><strong>Four properties of the target decide most of what follows</strong>, and none of them hold for a server:</p>
 <table>
 <thead>
@@ -1727,7 +1705,7 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 <tr>
 <td><strong>Replay against recorded field sessions in CI</strong></td>
 <td>Synthetic fixtures only</td>
-<td>Regression testing against the real distribution, catching behavioural divergence and latency regressions that no unit test produces. It is possible <strong>only because the raw zone is immutable and complete</strong> — a Task 1 decision made for unrelated reasons</td>
+<td>Regression testing against the real distribution, catching behavioural divergence and latency regressions that no unit test produces. It is possible <strong>only because the raw zone is immutable and complete</strong> - a Task 1 decision made for unrelated reasons</td>
 </tr>
 <tr>
 <td><strong>A curated, versioned replay corpus that only grows</strong></td>
@@ -1754,7 +1732,7 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 <tr>
 <td><strong>Re-evaluate the compiled artifact on target hardware</strong></td>
 <td>Trusting the training-time evaluation</td>
-<td><strong>The artifact that trains is not the artifact that runs.</strong> It is exported, quantised and compiled for the vehicle's accelerator, and <strong>quantisation degrades low-contrast inputs disproportionately</strong> — exactly the rare, costly slices. In this design v7 passed dust at FP32 and failed it at INT8. Skip this step and the model you validated and the model you deployed are different objects, with the deployed one carrying a report saying it passed</td>
+<td><strong>The artifact that trains is not the artifact that runs.</strong> It is exported, quantised and compiled for the vehicle's accelerator, and <strong>quantisation degrades low-contrast inputs disproportionately</strong> - exactly the rare, costly slices. In this design v7 passed dust at FP32 and failed it at INT8. Skip this step and the model you validated and the model you deployed are different objects, with the deployed one carrying a report saying it passed</td>
 </tr>
 <tr>
 <td><strong>Provenance verification before compilation</strong></td>
@@ -1764,7 +1742,7 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 </tbody>
 </table>
 <h3 id="43-the-release-unit-and-preventing-unvalidated-deployment">4.3 The release unit, and preventing unvalidated deployment<a class="headerlink" href="#43-the-release-unit-and-preventing-unvalidated-deployment" title="Permanent link">&para;</a></h3>
-<p><strong>"Validated" is given an operational definition</strong> — seven conditions, all of which must hold before a bundle can be promoted.</p>
+<p><strong>"Validated" is given an operational definition</strong> - seven conditions, all of which must hold before a bundle can be promoted.</p>
 <pre class="mermaid"><code>graph TB
     B["bundle candidate"]
     C1["1 · every artifact traceable to source&lt;br/&gt;git SHA · image digest · dataset version · run id"]
@@ -1773,9 +1751,9 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
     C4["4 · model: slices and regression suite pass&lt;br/&gt;ON THE COMPILED ARTIFACT, ON TARGET HARDWARE"]
     C5["5 · hardware-in-the-loop passed"]
     C6["6 · bundle manifest signed"]
-    C7["7 · named human approved — recorded"]
+    C7["7 · named human approved - recorded"]
     REL["RELEASABLE"]
-    NO["blocked — recorded, not released"]
+    NO["blocked - recorded, not released"]
 
     B --&gt; C1 --&gt; C2 --&gt; C3 --&gt; C4 --&gt; C5 --&gt; C6 --&gt; C7 --&gt; REL
     C1 &amp; C2 &amp; C3 &amp; C4 &amp; C5 &amp; C6 &amp; C7 -.-&gt;|"any fails"| NO
@@ -1788,7 +1766,7 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
     class C7 human
     class NO bad
     class REL good</code></pre>
-<p>Conditions 1 to 6 are automatic. Condition 7 is deliberately not — and the reasoning is below.</p>
+<p>Conditions 1 to 6 are automatic. Condition 7 is deliberately not - and the reasoning is below.</p>
 <table>
 <thead>
 <tr>
@@ -1799,24 +1777,24 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 </thead>
 <tbody>
 <tr>
-<td><strong>The release unit is a bundle</strong> — software image + compiled models + config + calibration schema + hardware target, signed as one</td>
+<td><strong>The release unit is a bundle</strong> - software image + compiled models + config + calibration schema + hardware target, signed as one</td>
 <td>Deploying software and models independently</td>
 <td>A model's accuracy depends on pre- and post-processing that live in the software. Change the normalisation constants or the NMS threshold and the model behaves differently <strong>without the model changing.</strong> A model validated against software v12 has no established behaviour under v13</td>
 </tr>
 <tr>
-<td><strong>A gate of seven conditions</strong> — traceability, software tests, replay, compiled-model evaluation, hardware-in-the-loop, signature, named human approval</td>
+<td><strong>A gate of seven conditions</strong> - traceability, software tests, replay, compiled-model evaluation, hardware-in-the-loop, signature, named human approval</td>
 <td>An approval checklist</td>
 <td>This is the operational definition of "validated". Six are automatic; conditions 1–6 produce the evidence, and condition 7 records accountability</td>
 </tr>
 <tr>
 <td><strong>Hardware-in-the-loop before release</strong></td>
 <td>Software testing only</td>
-<td><strong>There is no staging server here — the staging environment for a robot is a physical machine.</strong> Thermal throttling, memory pressure from the recording stack competing with perception, and embedded latency budgets cannot be reproduced off-target</td>
+<td><strong>There is no staging server here - the staging environment for a robot is a physical machine.</strong> Thermal throttling, memory pressure from the recording stack competing with perception, and embedded latency budgets cannot be reproduced off-target</td>
 </tr>
 <tr>
 <td><strong>A named human approves production promotion</strong></td>
 <td>Fully automated promotion</td>
-<td>Auto-promotion is correct where failure is reversible and bounded. Here it is neither — the blast radius is physical machines near people. The approver is not re-deriving evidence; they are accountable, and the signature records that</td>
+<td>Auto-promotion is correct where failure is reversible and bounded. Here it is neither - the blast radius is physical machines near people. The approver is not re-deriving evidence; they are accountable, and the signature records that</td>
 </tr>
 </tbody>
 </table>
@@ -1838,12 +1816,12 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 <tr>
 <td><strong>Shadow before canary</strong></td>
 <td>Canary directly</td>
-<td>The candidate runs on live sensor data with its outputs logged and never actuated — real field evidence at <strong>zero operational risk</strong></td>
+<td>The candidate runs on live sensor data with its outputs logged and never actuated - real field evidence at <strong>zero operational risk</strong></td>
 </tr>
 <tr>
 <td><strong>Shadow disagreements fed back into the selection pool</strong></td>
 <td>Discarding them after validation</td>
-<td>A frame on which two independently trained models disagree is difficult by construction. <strong>Validating a model produces the data that improves the next one</strong> — feedback edge ③</td>
+<td>A frame on which two independently trained models disagree is difficult by construction. <strong>Validating a model produces the data that improves the next one</strong> - feedback edge ③</td>
 </tr>
 <tr>
 <td><strong>Time-in-stage <em>and</em> metric thresholds at every transition</strong></td>
@@ -1853,7 +1831,7 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 <tr>
 <td><strong>Dual-slot A/B with automatic revert on failed boot health check</strong></td>
 <td>In-place update</td>
-<td>Rollback works with <strong>no network and no human</strong> — which is exactly the state a bad bundle creates — and is bounded in minutes rather than waiting on a diagnosis</td>
+<td>Rollback works with <strong>no network and no human</strong> - which is exactly the state a bad bundle creates - and is bounded in minutes rather than waiting on a diagnosis</td>
 </tr>
 <tr>
 <td><strong>Download decoupled from installation</strong></td>
@@ -1866,15 +1844,15 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 <td><strong>Data cannot be rolled back.</strong> A defective model that ran six hours produced six hours of recordings. With this field, every artifact it produced is identifiable in one query; without it the contamination is permanent and undetectable</td>
 </tr>
 <tr>
-<td><strong>A separate, bounded configuration path</strong> — schema-validated, bounds-checked in CI and again on the vehicle</td>
+<td><strong>A separate, bounded configuration path</strong> - schema-validated, bounds-checked in CI and again on the vehicle</td>
 <td>Everything is a bundle</td>
-<td>Requiring a full release for a threshold change creates pressure to bypass the process, which produces <strong>undocumented on-machine overrides — invisible, and strictly worse.</strong> Anything the models were validated against is excluded from this path by schema</td>
+<td>Requiring a full release for a threshold change creates pressure to bypass the process, which produces <strong>undocumented on-machine overrides - invisible, and strictly worse.</strong> Anything the models were validated against is excluded from this path by schema</td>
 </tr>
 </tbody>
 </table>
 <hr />
 <h2 id="5-cloud-architecture">5 · Cloud architecture<a class="headerlink" href="#5-cloud-architecture" title="Permanent link">&para;</a></h2>
-<p>Managed by default. At tens of machines the load is not the hard part — operating clusters with a small team is. Two rules follow: <strong>buy managed unless managed forces a design compromise</strong>, and <strong>build only the selection and curation logic.</strong></p>
+<p>Managed by default. At tens of machines the load is not the hard part - operating clusters with a small team is. Two rules follow: <strong>buy managed unless managed forces a design compromise</strong>, and <strong>build only the selection and curation logic.</strong></p>
 <h3 id="51-the-services-and-why-each-one">5.1 The services, and why each one<a class="headerlink" href="#51-the-services-and-why-each-one" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -1893,12 +1871,12 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 <tr>
 <td><strong>IoT Core</strong></td>
 <td>A self-run MQTT broker</td>
-<td>One X.509 certificate per machine, and a device shadow that carries the desired bundle version — which is exactly the desired-state convergence deployment needs</td>
+<td>One X.509 certificate per machine, and a device shadow that carries the desired bundle version - which is exactly the desired-state convergence deployment needs</td>
 </tr>
 <tr>
-<td><strong>Amazon MSK — Kafka</strong></td>
+<td><strong>Amazon MSK - Kafka</strong></td>
 <td>A cloud-native managed queue</td>
-<td><strong>Portability.</strong> Some customer sites — mining especially — will have no dependable link to any cloud, and the streaming layer is the one component that must then run locally. Kafka runs anywhere</td>
+<td><strong>Portability.</strong> Some customer sites - mining especially - will have no dependable link to any cloud, and the streaming layer is the one component that must then run locally. Kafka runs anywhere</td>
 </tr>
 <tr>
 <td><strong>Glue Schema Registry</strong></td>
@@ -1923,12 +1901,12 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 <tr>
 <td><strong>RDS PostgreSQL</strong></td>
 <td>Aurora Serverless; DynamoDB</td>
-<td>The operational state is ~10⁶ rows at low transaction rates, joined constantly. Aurora's elasticity solves a problem this workload does not have; DynamoDB would trade a write-scale problem we do not have for a query-rigidity problem we would acquire</td>
+<td>The operational state is modest and heavily joined. Aurora's elasticity solves a problem this workload does not have; DynamoDB would trade a write-scale problem we do not have for a query-rigidity problem we would acquire</td>
 </tr>
 <tr>
 <td><strong>AWS Batch on EC2 Spot</strong></td>
 <td>On-demand; a Kubernetes cluster</td>
-<td>Every job is already idempotent and restartable, so interruption is cheap — roughly a two-thirds saving for a property the pipeline had to have anyway</td>
+<td>Every job is already idempotent and restartable, so interruption is cheap - a large saving for a property the pipeline had to have anyway</td>
 </tr>
 <tr>
 <td><strong>Glue · Athena</strong></td>
@@ -1943,7 +1921,7 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 <tr>
 <td><strong>MLflow, self-hosted</strong></td>
 <td>Weights &amp; Biases; SageMaker Model Registry</td>
-<td>No per-seat cost, and field recordings and model artifacts stay inside the organisation's own account. Keeping the registry here too means a model's lineage lives in one system — lineage in two places is lineage nobody trusts</td>
+<td>No per-seat cost, and field recordings and model artifacts stay inside the organisation's own account. Keeping the registry here too means a model's lineage lives in one system - lineage in two places is lineage nobody trusts</td>
 </tr>
 <tr>
 <td><strong>Step Functions</strong></td>
@@ -1983,27 +1961,27 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 <tbody>
 <tr>
 <td><strong>Scalability</strong></td>
-<td>Managed and serverless by default, so growth is a configuration change rather than a capacity project. The four axes — more machines, more data per machine, more queries, more vehicle variants — scale independently. The cloud is not what binds first — depot bandwidth and the annotation budget are</td>
+<td>Managed and serverless by default, so growth is a configuration change rather than a capacity project. The four axes - more machines, more data per machine, more queries, more vehicle variants - scale independently. The cloud is not what binds first - depot bandwidth and the annotation budget are</td>
 </tr>
 <tr>
 <td><strong>Reliability</strong></td>
-<td>The vehicle is the first line: it buffers locally and forwards when connected, so a cloud outage delays ingestion rather than losing data — and nothing in AWS provides that. Containment is architectural rather than operational: idempotent keys, dead-letter queues, and a quarantine zone so bad data stops instead of propagating. Single region, with bundles and model artifacts copied to a second one so a regional failure cannot leave the fleet without a way to deploy</td>
+<td>The vehicle is the first line: it buffers locally and forwards when connected, so a cloud outage delays ingestion rather than losing data - and nothing in AWS provides that. Containment is architectural rather than operational: idempotent keys, dead-letter queues, and a quarantine zone so bad data stops instead of propagating. Single region, with bundles and model artifacts copied to a second one so a regional failure cannot leave the fleet without a way to deploy</td>
 </tr>
 <tr>
 <td><strong>Cost</strong></td>
-<td>Storage dominates at every scale, and it grows with bytes retained rather than with machines — so the lever is deciding what to keep, not tuning jobs. That makes selection a cost lever as well as a quality one: the same mechanism that decides what is worth annotating decides what is worth keeping in instant-access storage</td>
+<td>Storage dominates at every scale, and it grows with bytes retained rather than with machines - so the lever is deciding what to keep, not tuning jobs. That makes selection a cost lever as well as a quality one: the same mechanism that decides what is worth annotating decides what is worth keeping in instant-access storage</td>
 </tr>
 <tr>
 <td><strong>Data storage</strong></td>
-<td>One S3 substrate with prefixes by lifecycle state, Object Lock on raw, and automatic tiering since recordings are written once and read rarely. Two stores because the questions differ — Iceberg for search across billions of rows, PostgreSQL for transactional state</td>
+<td>One S3 substrate with prefixes by lifecycle state, Object Lock on raw, and automatic tiering since recordings are written once and read rarely. Two stores because the questions differ - Iceberg for search across billions of rows, PostgreSQL for transactional state</td>
 </tr>
 <tr>
 <td><strong>Compute</strong></td>
-<td>Spot by default for anything interruptible, which every job already is. Managed training rather than a cluster. One GPU at a time, because annotation throughput is the binding constraint by about an order of magnitude</td>
+<td>Spot by default for anything interruptible, which every job already is. Managed training rather than a cluster. One GPU at a time, because annotation throughput binds long before training capacity does</td>
 </tr>
 <tr>
 <td><strong>Security</strong></td>
-<td>One certificate per machine, scoped so a vehicle can only write its own data. Separate KMS keys per data class. No long-lived credentials — SSO for people, OIDC for CI. And face and plate blurring on the annotation export, because machines in agriculture and construction record people and the exposure is largest where data leaves the account</td>
+<td>One certificate per machine, scoped so a vehicle can only write its own data. Separate KMS keys per data class. No long-lived credentials - SSO for people, OIDC for CI. And face and plate blurring on the annotation export, because machines in agriculture and construction record people and the exposure is largest where data leaves the account</td>
 </tr>
 <tr>
 <td><strong>Automation</strong></td>
@@ -2015,11 +1993,6 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 <p>The <strong>data selection and active-learning pipeline</strong> is implemented as working code.</p>
 <p>Chosen because it is the component whose returns compound, it is what the role description describes as the ideal candidate's work, it requires no infrastructure to demonstrate, and its scoring functions are deterministic and therefore genuinely testable.</p>
 <p>Source, README, tests, and example input and output are in <code>3-implementation/</code> (in the repository).</p>
-<hr />
-<h2 id="7-three-claims-this-design-makes">7 · Three claims this design makes<a class="headerlink" href="#7-three-claims-this-design-makes" title="Permanent link">&para;</a></h2>
-<p><strong>It is a flywheel, not a pipeline.</strong> Three feedback edges are named and mechanised: field failures fire retraining, weak evaluation slices steer the next collection, and shadow-mode disagreements become annotation candidates. Remove them and this is a pipeline that is run repeatedly.</p>
-<p><strong>Every gate fails closed.</strong> No stage produces output by default. A label batch, a dataset version, a model candidate, a release bundle — each exists only because a specific check passed, and the failed attempt is recorded as completely as the successful one. The most useful run in the worked example was the one that failed.</p>
-<p><strong>It is sized for this company, and it says where it stops.</strong> Tens of machines now, low hundreds within three years. Every place where that assumption binds is named, along with the trigger that would change the decision — because an architecture that knows its own revision points is more useful than one that claims to be final.</p>
 
 
 

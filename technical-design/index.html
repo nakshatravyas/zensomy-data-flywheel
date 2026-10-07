@@ -850,13 +850,13 @@
 
 
 
-<h1 id="technical-design-data-flywheel-for-autonomous-systems">Technical Design — Data Flywheel for Autonomous Systems<a class="headerlink" href="#technical-design-data-flywheel-for-autonomous-systems" title="Permanent link">&para;</a></h1>
-<p><strong>Nakshatra Vyas</strong> · Data Engineer — Autonomous Systems · October 2026</p>
-<p><strong>Deliverable 1</strong> — a high-level architecture covering the complete Data Flywheel.
+<h1 id="technical-design-data-flywheel-for-autonomous-systems">Technical Design - Data Flywheel for Autonomous Systems<a class="headerlink" href="#technical-design-data-flywheel-for-autonomous-systems" title="Permanent link">&para;</a></h1>
+<p><strong>Nakshatra Vyas</strong> · Data Engineer - Autonomous Systems · October 2026</p>
+<p><strong>Deliverable 1</strong> - a high-level architecture covering the complete Data Flywheel.
 Decisions, assumptions and trade-offs are in <a href="../design-document/">Design Document</a>.</p>
 <hr />
 <h2 id="1-the-flywheel">1 · The flywheel<a class="headerlink" href="#1-the-flywheel" title="Permanent link">&para;</a></h2>
-<p>A pipeline runs and stops. A flywheel stores momentum — each turn makes the next turn cheaper and more productive. <strong>The feedback edges are the design.</strong> Without them this is a data pipeline that happens to be run repeatedly.</p>
+<p>A pipeline runs and stops. A flywheel stores momentum - each turn makes the next turn cheaper and more productive. <strong>The feedback edges are the design.</strong> Without them this is a data pipeline that happens to be run repeatedly.</p>
 <pre class="mermaid"><code>graph LR
     V["VEHICLE&lt;br/&gt;sensors, recording"] --&gt; I["INGEST&lt;br/&gt;Task 1"]
     I --&gt; M["MANAGE&lt;br/&gt;Task 1"]
@@ -906,8 +906,8 @@ Decisions, assumptions and trade-offs are in <a href="../design-document/">Desig
 </table>
 <h3 id="why-the-returns-compound-rather-than-repeat">Why the returns compound rather than repeat<a class="headerlink" href="#why-the-returns-compound-rather-than-repeat" title="Permanent link">&para;</a></h3>
 <ul>
-<li>As the model improves, the share of footage it already handles grows — so <strong>the value of a randomly chosen hour falls every cycle.</strong> Selection must get smarter simply to hold its value constant. That makes selection the component whose returns compound, not a cost measure bolted on.</li>
-<li>The production model pre-labels clips before annotation, so <strong>a better model makes annotation cheaper</strong> — the same budget buys more labelled hours each cycle.</li>
+<li>As the model improves, the share of footage it already handles grows - so <strong>the value of a randomly chosen hour falls every cycle.</strong> Selection must get smarter simply to hold its value constant. That makes selection the component whose returns compound, not a cost measure bolted on.</li>
+<li>The production model pre-labels clips before annotation, so <strong>a better model makes annotation cheaper</strong> - the same budget buys more labelled hours each cycle.</li>
 <li>Every release contributes new regression tests, new replay sessions and new scenario weights. <strong>The test suite strengthens as a by-product of shipping.</strong></li>
 </ul>
 <hr />
@@ -923,15 +923,15 @@ Decisions, assumptions and trade-offs are in <a href="../design-document/">Desig
     subgraph TRANSFER["FOUR TRANSFER TIERS"]
         T1["1 · cellular telemetry&lt;br/&gt;always, kilobytes/s"]
         T2["2 · cellular clips&lt;br/&gt;flagged events only"]
-        T3["3 · depot WiFi&lt;br/&gt;bulk — about 98% of bytes"]
+        T3["3 · depot WiFi&lt;br/&gt;bulk - about 98% of bytes"]
         T4["4 · physical media&lt;br/&gt;sites with no usable link"]
     end
 
     subgraph STORE["STORAGE"]
         LAND["landing/&lt;br/&gt;unverified"]
-        RAW["raw/ — immutable, Object Lock"]
+        RAW["raw/ - immutable, Object Lock"]
         QUAR["quarantine/"]
-        CUR["curated/ — Iceberg catalog"]
+        CUR["curated/ - Iceberg catalog"]
     end
 
     GATE1{{"VERIFY&lt;br/&gt;integrity + quality"}}
@@ -1014,7 +1014,7 @@ Decisions, assumptions and trade-offs are in <a href="../design-document/">Desig
 </blockquote>
 <hr />
 <h2 id="3-data-ingestion-and-management">3 · Data ingestion and management<a class="headerlink" href="#3-data-ingestion-and-management" title="Permanent link">&para;</a></h2>
-<p><strong>The constraint is arithmetic.</strong> 400 GB per vehicle-day against a 5 Mbps rural uplink is <strong>178 hours of upload for 8 hours of driving</strong>, and at $1–10/GB, <strong>$400–4,000 per vehicle per day</strong>. Streaming everything to the cloud is not a rejected trade-off; it is impossible. The transfer architecture follows from that.</p>
+<p><strong>The constraint is arithmetic.</strong> 400 GB per vehicle-day against a rural uplink is <strong>178 hours of upload for 8 hours of driving</strong>, and cellular is priced per gigabyte. Streaming everything to the cloud is not a rejected trade-off; it is impossible. The transfer architecture follows from that.</p>
 <pre class="mermaid"><code>graph TB
     subgraph ONVEH["ON THE VEHICLE"]
         R["ROS 2 → MCAP&lt;br/&gt;60-second chunks"]
@@ -1032,15 +1032,15 @@ Decisions, assumptions and trade-offs are in <a href="../design-document/">Desig
 
     L["s3://…/landing/&lt;br/&gt;unverified · expires after 7 days"]
 
-    INT{{"INTEGRITY — hard fail&lt;br/&gt;manifest reconciliation&lt;br/&gt;SHA-256 · chunk count · sequence"}}
-    QUAL{{"QUALITY — soft flag&lt;br/&gt;structural · temporal&lt;br/&gt;signal · semantic"}}
+    INT{{"INTEGRITY - hard fail&lt;br/&gt;manifest reconciliation&lt;br/&gt;SHA-256 · chunk count · sequence"}}
+    QUAL{{"QUALITY - soft flag&lt;br/&gt;structural · temporal&lt;br/&gt;signal · semantic"}}
 
     RAWZ["s3://…/raw/&lt;br/&gt;immutable · Object Lock · canonical"]
     QZ["s3://…/quarantine/&lt;br/&gt;90 days for diagnosis"]
 
-    subgraph CAT["CATALOG — two stores, two workloads"]
+    subgraph CAT["CATALOG - two stores, two workloads"]
         ICE["Iceberg on S3 + Glue Catalog&lt;br/&gt;searchable metadata, about 10⁹ rows"]
-        PG["PostgreSQL&lt;br/&gt;session state machine, about 10⁶ rows"]
+        PG["PostgreSQL&lt;br/&gt;session state machine"]
     end
 
     ID --&gt; A1 &amp; A2 &amp; A3 &amp; A4
@@ -1057,23 +1057,21 @@ Decisions, assumptions and trade-offs are in <a href="../design-document/">Desig
     classDef store fill:#eef4fb,stroke:#5b86b8,color:#13293d
     class INT,QUAL gate
     class L,RAWZ,QZ,ICE,PG store</code></pre>
-<p><strong>Metadata is recorded at four levels</strong> — fleet, vehicle, session, chunk — so fleet-wide facts are not repeated per chunk and chunk-level facts are not lost inside session summaries.</p>
+<p><strong>Metadata is recorded at four levels</strong> - fleet, vehicle, session, chunk - so fleet-wide facts are not repeated per chunk and chunk-level facts are not lost inside session summaries.</p>
 <p><strong>Calibration version is a first-class required field.</strong> A sensor mount that shifts two centimetres without re-calibration silently invalidates every LiDAR-to-camera projection from that moment onward. Nothing fails, and no error is raised.</p>
 <hr />
 <h2 id="4-data-selection-and-active-learning">4 · Data selection and active learning<a class="headerlink" href="#4-data-selection-and-active-learning" title="Permanent link">&para;</a></h2>
 <p><strong>The constraint.</strong> 10,000 hours recorded against 100 hours that can be annotated.</p>
-<p><strong>The 100 hours is an illustration, not a design parameter.</strong> Next quarter it may be 60 or 300, and as the fleet grows the recorded side grows far faster than the annotated side, so the fraction shrinks rather than holds. What is permanent is the shape of the problem: <em>only a small part of what is recorded can ever be looked at, so the system's job is to decide where that attention goes.</em></p>
 <p>Everything below is therefore built around <strong>the ratio and the mechanism</strong>, never around a particular ceiling. The ceiling is one number in a config file; the question the design answers is <strong>how to concentrate a fixed amount of human attention on the material that carries the most information</strong>, whatever that amount turns out to be.</p>
-<p>The worked numbers that follow use 100 hours because a concrete walkthrough is easier to check than an abstract one.</p>
 <pre class="mermaid"><code>graph TB
     F["1.08 billion frames"]
-    FS["ADAPTIVE FRAME SAMPLING&lt;br/&gt;1 frame / 2 s when idle&lt;br/&gt;full 30 fps inside event windows&lt;br/&gt;governs scanning only — raw stays complete"]
+    FS["ADAPTIVE FRAME SAMPLING&lt;br/&gt;1 frame / 2 s when idle&lt;br/&gt;full 30 fps inside event windows&lt;br/&gt;governs scanning only - raw stays complete"]
     C1["1.5 million clips of 10 s"]
     QF["quality filter&lt;br/&gt;exclude already-labelled"]
     C2["1.335 million clips"]
     SL["THREE-GROUP SHORTLIST&lt;br/&gt;all event-bearing&lt;br/&gt;+ all rare-scenario&lt;br/&gt;+ random sample of ordinary"]
     C3["133,000 clips"]
-    SC["SCORE&lt;br/&gt;0.35·WRONG + 0.30·UNSURE&lt;br/&gt;+ 0.20·CONFLICT + 0.15·RARE&lt;br/&gt;× quality ÷ similarity"]
+    SC["SCORE&lt;br/&gt;four weighted signals&lt;br/&gt;scaled by quality&lt;br/&gt;attenuated by similarity"]
     BU["BUDGET ALLOCATION&lt;br/&gt;20% must-take · 70% scored and&lt;br/&gt;diversity-attenuated · 10% random&lt;br/&gt;15% per-vehicle cap"]
     OUT["36,000 clips = the annotation ceiling&lt;br/&gt;100 h in this walkthrough"]
 
@@ -1085,13 +1083,13 @@ Decisions, assumptions and trade-offs are in <a href="../design-document/">Desig
     class F,C1,C2,C3,OUT count</code></pre>
 <h3 id="the-four-signals">The four signals<a class="headerlink" href="#the-four-signals" title="Permanent link">&para;</a></h3>
 <pre class="mermaid"><code>graph LR
-    subgraph EV["EVIDENCE OF DIFFICULTY — no ground truth required"]
+    subgraph EV["EVIDENCE OF DIFFICULTY - no ground truth required"]
         W["WRONG&lt;br/&gt;disengagement · emergency brake&lt;br/&gt;near-miss · re-plan storm&lt;br/&gt;needs no model"]
         U["UNSURE&lt;br/&gt;low confidence · narrow margin&lt;br/&gt;detection instability"]
-        CF["CONFLICT&lt;br/&gt;camera and LiDAR disagree&lt;br/&gt;requires clock sync under 10 ms"]
+        CF["CONFLICT&lt;br/&gt;camera and LiDAR disagree&lt;br/&gt;requires synchronised clocks"]
         RA["RARE&lt;br/&gt;coverage gap against&lt;br/&gt;the scenario taxonomy"]
     end
-    SCORE["weighted score&lt;br/&gt;× quality ÷ similarity"]
+    SCORE["weighted score&lt;br/&gt;scaled by quality&lt;br/&gt;attenuated by similarity"]
     W --&gt;|0.35| SCORE
     U --&gt;|0.30| SCORE
     CF --&gt;|0.20| SCORE
@@ -1113,7 +1111,7 @@ Decisions, assumptions and trade-offs are in <a href="../design-document/">Desig
 <tr>
 <td><strong>WRONG</strong></td>
 <td>Vehicle logs</td>
-<td>✅ Yes — the strongest signal needs no model</td>
+<td>✅ Yes - the strongest signal needs no model</td>
 </tr>
 <tr>
 <td><strong>UNSURE</strong></td>
@@ -1123,7 +1121,7 @@ Decisions, assumptions and trade-offs are in <a href="../design-document/">Desig
 <tr>
 <td><strong>CONFLICT</strong></td>
 <td>Cross-sensor comparison</td>
-<td>⚠️ Partially — needs clock sync under 10 ms</td>
+<td>⚠️ Partially - needs synchronised clocks</td>
 </tr>
 <tr>
 <td><strong>RARE</strong></td>
@@ -1132,7 +1130,7 @@ Decisions, assumptions and trade-offs are in <a href="../design-document/">Desig
 </tr>
 </tbody>
 </table>
-<p>Four signals rather than one because <strong>uncertainty cannot detect confident error</strong> — the model 97% certain and wrong. That is the highest-risk failure mode, because the machine proceeds at full speed into it, and only WRONG and CONFLICT can see it.</p>
+<p>Four signals rather than one because <strong>uncertainty cannot detect confident error</strong> - the model certain and wrong. That is the highest-risk failure mode, because the machine proceeds at full speed into it, and only WRONG and CONFLICT can see it.</p>
 <h3 id="worked-ranking-example">Worked ranking example<a class="headerlink" href="#worked-ranking-example" title="Permanent link">&para;</a></h3>
 <p>Eight representative clips from one selection cycle. This is the concrete output the pipeline produces: a ranked list with every term visible, so any selection can be explained.</p>
 <blockquote>
@@ -1180,7 +1178,7 @@ Decisions, assumptions and trade-offs are in <a href="../design-document/">Desig
 </tr>
 <tr>
 <td>3</td>
-<td><code>veh04</code> near-miss — LiDAR sees obstacle, camera does not</td>
+<td><code>veh04</code> near-miss - LiDAR sees obstacle, camera does not</td>
 <td>0.80</td>
 <td>0.12</td>
 <td>0.78</td>
@@ -1200,7 +1198,7 @@ Decisions, assumptions and trade-offs are in <a href="../design-document/">Desig
 <td>1.00</td>
 <td>1.0</td>
 <td><strong>0.307</strong></td>
-<td>Selected — rare bucket</td>
+<td>Selected - rare bucket</td>
 </tr>
 <tr>
 <td>5</td>
@@ -1212,7 +1210,7 @@ Decisions, assumptions and trade-offs are in <a href="../design-document/">Desig
 <td>0.95</td>
 <td><strong>2.4</strong></td>
 <td><strong>0.310</strong></td>
-<td>Deferred — diversity</td>
+<td>Deferred - diversity</td>
 </tr>
 <tr>
 <td>6</td>
@@ -1224,7 +1222,7 @@ Decisions, assumptions and trade-offs are in <a href="../design-document/">Desig
 <td><strong>0.21</strong></td>
 <td>1.0</td>
 <td><strong>0.147</strong></td>
-<td>Rejected — quality</td>
+<td>Rejected - quality</td>
 </tr>
 <tr>
 <td>7</td>
@@ -1248,31 +1246,31 @@ Decisions, assumptions and trade-offs are in <a href="../design-document/">Desig
 <td>1.00</td>
 <td>1.0</td>
 <td><strong>0.038</strong></td>
-<td>Selected — random 10%</td>
+<td>Selected - random 10%</td>
 </tr>
 </tbody>
 </table>
 <p><strong>What each row demonstrates:</strong></p>
 <ul>
-<li><strong>#1</strong> — A disengagement is the strongest available evidence: a trained operator judged the machine unsafe. It needs no model to detect and enters the must-take bucket unconditionally.</li>
-<li><strong>#3 — the confident error.</strong> <code>UNSURE</code> is 0.12: the model is <em>certain</em>. Uncertainty sampling would discard this clip entirely. <code>WRONG</code> and <code>CONFLICT</code> are what surface it, and it is the most dangerous category in the set — the machine proceeds at full speed into a situation it has misread.</li>
-<li><strong>#5 — diversity attenuation.</strong> Identical raw signals to #1, but a similarity divisor of 2.4 because near-neighbours were already selected. Without this term, one dusty afternoon consumes a large share of the budget. The clip is deferred, not discarded — it returns to the pool next cycle.</li>
-<li><strong>#6 — quality as a multiplier, not an additive term.</strong> Every difficulty signal is high, but the sensor is faulty. Annotating it would teach the model about a dirty lens. A multiplier suppresses the clip regardless of how strongly it scores elsewhere; an additive penalty would not. The clip instead raises a maintenance alert.</li>
-<li><strong>#8 — the random reservation.</strong> Scores below the threshold and is selected anyway, from the 10% random bucket. Without it, every labelled clip would be one the model struggled with, and performance under normal conditions would become unmeasurable.</li>
+<li><strong>#1</strong> - A disengagement is the strongest available evidence: a trained operator judged the machine unsafe. It needs no model to detect and enters the must-take bucket unconditionally.</li>
+<li><strong>#3 - the confident error.</strong> <code>UNSURE</code> is 0.12: the model is <em>certain</em>. Uncertainty sampling would discard this clip entirely. <code>WRONG</code> and <code>CONFLICT</code> are what surface it, and it is the most dangerous category in the set - the machine proceeds at full speed into a situation it has misread.</li>
+<li><strong>#5 - diversity attenuation.</strong> Identical raw signals to #1, but a similarity divisor of 2.4 because near-neighbours were already selected. Without this term, one dusty afternoon consumes a large share of the budget. The clip is deferred, not discarded - it returns to the pool next cycle.</li>
+<li><strong>#6 - quality as a multiplier, not an additive term.</strong> Every difficulty signal is high, but the sensor is faulty. Annotating it would teach the model about a dirty lens. A multiplier suppresses the clip regardless of how strongly it scores elsewhere; an additive penalty would not. The clip instead raises a maintenance alert.</li>
+<li><strong>#8 - the random reservation.</strong> Scores below the threshold and is selected anyway, from the 10% random bucket. Without it, every labelled clip would be one the model struggled with, and performance under normal conditions would become unmeasurable.</li>
 </ul>
 <hr />
 <h2 id="5-dataset-and-training-pipeline">5 · Dataset and training pipeline<a class="headerlink" href="#5-dataset-and-training-pipeline" title="Permanent link">&para;</a></h2>
 <p><strong>What this stage produces is a candidate</strong>, not a deployed model. Training answers <em>is this better</em>; deployment answers <em>is this safe to release</em>.</p>
 <pre class="mermaid"><code>graph TB
-    SEL["selected clips — from Task 2"]
-    EXP["export package&lt;br/&gt;pre-labelled by the production model&lt;br/&gt;about 4× faster annotation"]
+    SEL["selected clips - from Task 2"]
+    EXP["export package&lt;br/&gt;pre-labelled by the production model&lt;br/&gt;correcting is faster than drawing"]
     EXT["external annotation"]
     IMP["import labels"]
-    QA{{"QA GATE&lt;br/&gt;2% double-annotated&lt;br/&gt;mean IoU ≥ 0.80"}}
+    QA{{"QA GATE&lt;br/&gt;sample double-annotated&lt;br/&gt;agreement must clear a threshold"}}
     REJ["batch rejected&lt;br/&gt;returned for re-annotation"]
     BUILD["BUILD DATASET VERSION&lt;br/&gt;immutable manifest of references&lt;br/&gt;content hashes · sticky session splits&lt;br/&gt;sampling weights"]
     LEAK{{"LEAKAGE CHECK&lt;br/&gt;exact hash overlap&lt;br/&gt;+ near-duplicate embeddings"}}
-    STOP["STOP — rebuild required"]
+    STOP["STOP - rebuild required"]
     TRAIN["TRAIN&lt;br/&gt;pinned: dataset hash · git SHA&lt;br/&gt;image digest · config and seeds"]
     EV["EVALUATE&lt;br/&gt;aggregate + per-slice + regression suite"]
     CMP{{"COMPARE vs PRODUCTION&lt;br/&gt;any slice regression fails"}}
@@ -1294,8 +1292,8 @@ Decisions, assumptions and trade-offs are in <a href="../design-document/">Desig
     class QA,LEAK,CMP gate
     class REJ,STOP,NOCAND bad
     class CAND,T4 good</code></pre>
-<p><strong>Splits are assigned at session level and are permanently sticky</strong> — a session assigned to test stays in test across every future dataset version — because consecutive frames are near-duplicates, and because redrawn splits invalidate every historical model comparison.</p>
-<p><strong>Evaluation is gated per scenario slice</strong>, not on the aggregate. A scenario that is 3% of the evaluation set contributes 3% of the aggregate, so a severe regression confined to it is invisible — and the rare slices are exactly the costly ones.</p>
+<p><strong>Splits are assigned at session level and are permanently sticky</strong> - a session assigned to test stays in test across every future dataset version - because consecutive frames are near-duplicates, and because redrawn splits invalidate every historical model comparison.</p>
+<p><strong>Evaluation is gated per scenario slice</strong>, not on the aggregate. A small slice contributes little to the aggregate, so a severe regression confined to it is invisible - and the rare slices are exactly the costly ones.</p>
 <hr />
 <h2 id="6-cicd-and-deployment">6 · CI/CD and deployment<a class="headerlink" href="#6-cicd-and-deployment" title="Permanent link">&para;</a></h2>
 <p><strong>The constraint.</strong> Support continuous development while preventing an unvalidated model or software change from reaching a vehicle. Four properties of the target shape everything: it can injure someone; it is offline for days; it cannot be recreated; and it is busy when the update arrives.</p>
@@ -1308,22 +1306,22 @@ Decisions, assumptions and trade-offs are in <a href="../design-document/">Desig
     end
 
     subgraph MD["MODEL PATH"]
-        MC["model candidate — from Task 3"]
+        MC["model candidate - from Task 3"]
         PV["verify provenance&lt;br/&gt;report · eval-set version · lineage"]
         CO["compile for target&lt;br/&gt;ONNX → INT8 / FP16 engine"]
         RE{{"RE-EVALUATE the compiled engine&lt;br/&gt;on target hardware"}}
         MC --&gt; PV --&gt; CO --&gt; RE
     end
 
-    BUN["BUNDLE — signed&lt;br/&gt;software image + compiled models + config&lt;br/&gt;+ calibration schema + hardware target"]
+    BUN["BUNDLE - signed&lt;br/&gt;software image + compiled models + config&lt;br/&gt;+ calibration schema + hardware target"]
     HIL{{"HARDWARE-IN-THE-LOOP&lt;br/&gt;real device · true-rate sensor replay&lt;br/&gt;accuracy · p99 latency · memory · thermal"}}
-    GATE{{"RELEASE GATE — 7 conditions&lt;br/&gt;6 automatic + 1 named human approval"}}
+    GATE{{"RELEASE GATE - 7 conditions&lt;br/&gt;6 automatic + 1 named human approval"}}
 
-    SH["SHADOW — 3 machines&lt;br/&gt;zero exposure, outputs logged only&lt;br/&gt;≥ 20 operating hours"]
-    CN["CANARY — 2 machines&lt;br/&gt;live, supervised, known sites&lt;br/&gt;≥ 50 operating hours"]
-    W1["WAVE 1 — 25% of fleet&lt;br/&gt;≥ 72 hour soak"]
-    W2["WAVE 2 — remainder"]
-    SELP["selection pool — Task 2"]
+    SH["SHADOW - 3 machines&lt;br/&gt;zero exposure, outputs logged only&lt;br/&gt;≥ 20 operating hours"]
+    CN["CANARY - 2 machines&lt;br/&gt;live, supervised, known sites&lt;br/&gt;≥ 50 operating hours"]
+    W1["WAVE 1 - 25% of fleet&lt;br/&gt;≥ 72 hour soak"]
+    W2["WAVE 2 - remainder"]
+    SELP["selection pool - Task 2"]
 
     AB["ON THE MACHINE&lt;br/&gt;dual-slot A/B · boot health check&lt;br/&gt;automatic revert, no network, no human"]
 
@@ -1340,7 +1338,7 @@ Decisions, assumptions and trade-offs are in <a href="../design-document/">Desig
     class RP,RE,HIL,GATE gate
     class SH,CN,W1,W2 stage
     class BUN,AB,SELP box</code></pre>
-<p><strong>The release unit is a bundle</strong>, never a model or a binary alone, because a model's accuracy depends on pre- and post-processing that live in the software. <strong>The gate is enforced twice</strong> — in the pipeline, and again on the vehicle, which independently verifies signature, hardware target, calibration schema and the revocation list before installing anything.</p>
+<p><strong>The release unit is a bundle</strong>, never a model or a binary alone, because a model's accuracy depends on pre- and post-processing that live in the software. <strong>The gate is enforced twice</strong> - in the pipeline, and again on the vehicle, which independently verifies signature, hardware target, calibration schema and the revocation list before installing anything.</p>
 <hr />
 <h2 id="7-cloud-architecture">7 · Cloud architecture<a class="headerlink" href="#7-cloud-architecture" title="Permanent link">&para;</a></h2>
 <p>The major services, and how they interact. The organising split: a <strong>data plane</strong> that bytes flow through, and a <strong>control plane</strong> that decides when things run.</p>
@@ -1353,12 +1351,12 @@ Decisions, assumptions and trade-offs are in <a href="../design-document/">Desig
     subgraph L2["② INGEST"]
         direction TB
         IOT["IoT Core&lt;br/&gt;device identity · MQTT"]
-        MSK["Amazon MSK — Kafka&lt;br/&gt;runs on-prem unchanged"]
+        MSK["Amazon MSK - Kafka&lt;br/&gt;runs on-prem unchanged"]
         FH["Data Firehose&lt;br/&gt;Kafka → Iceberg"]
         UP["presigned upload&lt;br/&gt;recordings direct to S3"]
     end
 
-    subgraph L3["③ STORE — S3"]
+    subgraph L3["③ STORE - S3"]
         direction TB
         LAND["landing/&lt;br/&gt;unverified"]
         RAW["raw/ · Object Lock&lt;br/&gt;immutable"]
@@ -1431,7 +1429,7 @@ Decisions, assumptions and trade-offs are in <a href="../design-document/">Desig
     class BLD,JOB dlv
     class EVB,SFN,AF ctl
     class GDC,PG,CW shr</code></pre>
-<p><strong>Solid lines are data. Dotted lines are decisions.</strong> The three numbered dotted edges are the flywheel — the only paths that carry information backwards.</p>
+<p><strong>Solid lines are data. Dotted lines are decisions.</strong> The three numbered dotted edges are the flywheel - the only paths that carry information backwards.</p>
 <h3 id="how-the-pieces-interact">How the pieces interact<a class="headerlink" href="#how-the-pieces-interact" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -1455,7 +1453,7 @@ Decisions, assumptions and trade-offs are in <a href="../design-document/">Desig
 <tr>
 <td>Kafka → Firehose → Iceberg</td>
 <td>Validated messages</td>
-<td>Managed landing — no streaming job to write or run</td>
+<td>Managed landing - no streaming job to write or run</td>
 </tr>
 <tr>
 <td>S3 event → EventBridge → Step Functions</td>
@@ -1470,7 +1468,7 @@ Decisions, assumptions and trade-offs are in <a href="../design-document/">Desig
 <tr>
 <td>Airflow → selection → dataset → training</td>
 <td>Clip IDs, then a manifest</td>
-<td>Dependency-rich and periodically backfilled — DAG-shaped work</td>
+<td>Dependency-rich and periodically backfilled - DAG-shaped work</td>
 </tr>
 <tr>
 <td>Training → compile → bundle → IoT Jobs</td>
@@ -1502,7 +1500,7 @@ Decisions, assumptions and trade-offs are in <a href="../design-document/">Desig
 <td>One certificate per machine; carries the desired bundle version</td>
 </tr>
 <tr>
-<td><strong>Amazon MSK — Kafka</strong></td>
+<td><strong>Amazon MSK - Kafka</strong></td>
 <td>Telemetry and events. Chosen because it also runs at a site with no cloud link</td>
 </tr>
 <tr>
@@ -1523,7 +1521,7 @@ Decisions, assumptions and trade-offs are in <a href="../design-document/">Desig
 </tr>
 <tr>
 <td><strong>AWS Batch on Spot</strong></td>
-<td>Heavy work — parsing, frame extraction, GPU embeddings</td>
+<td>Heavy work - parsing, frame extraction, GPU embeddings</td>
 </tr>
 <tr>
 <td><strong>Glue · Athena</strong></td>
@@ -1547,7 +1545,7 @@ Decisions, assumptions and trade-offs are in <a href="../design-document/">Desig
 </tr>
 <tr>
 <td><strong>EventBridge</strong></td>
-<td>One bus — S3 events, schedules, alarms, manual triggers</td>
+<td>One bus - S3 events, schedules, alarms, manual triggers</td>
 </tr>
 <tr>
 <td><strong>Step Functions</strong></td>
@@ -1564,7 +1562,7 @@ Decisions, assumptions and trade-offs are in <a href="../design-document/">Desig
 </tbody>
 </table>
 <h2 id="8-implemented-component">8 · Implemented component<a class="headerlink" href="#8-implemented-component" title="Permanent link">&para;</a></h2>
-<p>The <strong>data selection and active-learning pipeline</strong> — section 4 of this document, as working code. Scoring, diversity-aware ranking and budget-constrained selection, with deterministic tests and example input and output.</p>
+<p>The <strong>data selection and active-learning pipeline</strong> - section 4 of this document, as working code. Scoring, diversity-aware ranking and budget-constrained selection, with deterministic tests and example input and output.</p>
 <p>See <code>3-implementation/</code> (in the repository).</p>
 
 
