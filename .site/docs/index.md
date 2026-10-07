@@ -66,6 +66,26 @@ A pipeline runs and stops. A flywheel stores momentum - each turn makes the next
 
     [:octicons-arrow-right-24: Read it](design-document.md)
 
+-   :material-code-braces:{ .lg .middle } **Implementation**
+
+    ---
+
+    Working Python for the part of the design that decides which footage is worth paying
+    a human to label. Runs with one Docker command. Source, tests, example input and
+    output, and a README.
+
+    [:octicons-arrow-right-24: Open on GitHub](https://github.com/nakshatravyas/zensomy-data-flywheel/tree/main/3-implementation)
+
+-   :material-presentation:{ .lg .middle } **Presentation**
+
+    ---
+
+    Ten to fifteen minutes on the architecture, the decisions behind it, the trade-offs,
+    how it scales, and what makes this a flywheel rather than a pipeline. PDF, with
+    speaker notes.
+
+    [:octicons-arrow-right-24: Open on GitHub](https://github.com/nakshatravyas/zensomy-data-flywheel/tree/main/4-presentation)
+
 </div>
 
 <p class="footnote">Built with MkDocs Material. Diagrams are Mermaid, rendered from the same Markdown that is submitted.</p>
