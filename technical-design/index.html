@@ -1,0 +1,1717 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Technical assessment — Data Engineer, Autonomous Systems. Zensomy Autonomous Technologies.">
+      
+      
+        <meta name="author" content="Nakshatra Vyas">
+      
+      
+      
+        <link rel="prev" href="..">
+      
+      
+        <link rel="next" href="../design-document/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>1 · Technical Design - Data Flywheel for Autonomous Systems</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Inter";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/extra.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#technical-design-data-flywheel-for-autonomous-systems" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Data Flywheel for Autonomous Systems" class="md-header__button md-logo" aria-label="Data Flywheel for Autonomous Systems" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18a6 6 0 0 1-6-6c0-1 .25-1.97.7-2.8L5.24 7.74A7.93 7.93 0 0 0 4 12a8 8 0 0 0 8 8v3l4-4-4-4m0-11V1L8 5l4 4V6a6 6 0 0 1 6 6c0 1-.25 1.97-.7 2.8l1.46 1.46A7.93 7.93 0 0 0 20 12a8 8 0 0 0-8-8"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Data Flywheel for Autonomous Systems
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              1 · Technical Design
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="amber"  aria-label="Dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="amber"  aria-label="Light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Overview
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
+        
+  
+  
+    
+  
+  1 · Technical Design
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../design-document/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  2 · Design Document
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../implementation/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  3 · Implementation
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Data Flywheel for Autonomous Systems" class="md-nav__button md-logo" aria-label="Data Flywheel for Autonomous Systems" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18a6 6 0 0 1-6-6c0-1 .25-1.97.7-2.8L5.24 7.74A7.93 7.93 0 0 0 4 12a8 8 0 0 0 8 8v3l4-4-4-4m0-11V1L8 5l4 4V6a6 6 0 0 1 6 6c0 1-.25 1.97-.7 2.8l1.46 1.46A7.93 7.93 0 0 0 20 12a8 8 0 0 0-8-8"/></svg>
+
+    </a>
+    Data Flywheel for Autonomous Systems
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    1 · Technical Design
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    1 · Technical Design
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-the-flywheel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1 · The flywheel
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1 · The flywheel">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-three-feedback-edges" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The three feedback edges
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-the-returns-compound-rather-than-repeat" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why the returns compound rather than repeat
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-the-system-end-to-end" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2 · The system end to end
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2 · The system end to end">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-each-stage-owes-the-next" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What each stage owes the next
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-data-ingestion-and-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3 · Data ingestion and management
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-data-selection-and-active-learning" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4 · Data selection and active learning
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4 · Data selection and active learning">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-four-signals" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The four signals
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#worked-ranking-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Worked ranking example
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-dataset-and-training-pipeline" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5 · Dataset and training pipeline
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-cicd-and-deployment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6 · CI/CD and deployment
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-cloud-architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7 · Cloud architecture
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7 · Cloud architecture">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-the-pieces-interact" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How the pieces interact
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-each-service-is-for" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What each service is for
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-implemented-component" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8 · Implemented component
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../design-document/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2 · Design Document
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../implementation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3 · Implementation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-the-flywheel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1 · The flywheel
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1 · The flywheel">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-three-feedback-edges" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The three feedback edges
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-the-returns-compound-rather-than-repeat" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why the returns compound rather than repeat
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-the-system-end-to-end" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2 · The system end to end
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2 · The system end to end">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-each-stage-owes-the-next" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What each stage owes the next
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-data-ingestion-and-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3 · Data ingestion and management
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-data-selection-and-active-learning" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4 · Data selection and active learning
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4 · Data selection and active learning">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-four-signals" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The four signals
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#worked-ranking-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Worked ranking example
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-dataset-and-training-pipeline" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5 · Dataset and training pipeline
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-cicd-and-deployment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6 · CI/CD and deployment
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-cloud-architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7 · Cloud architecture
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7 · Cloud architecture">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-the-pieces-interact" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How the pieces interact
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-each-service-is-for" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What each service is for
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-implemented-component" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8 · Implemented component
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="technical-design-data-flywheel-for-autonomous-systems">Technical Design — Data Flywheel for Autonomous Systems<a class="headerlink" href="#technical-design-data-flywheel-for-autonomous-systems" title="Permanent link">&para;</a></h1>
+<p><strong>Nakshatra Vyas</strong> · Data Engineer — Autonomous Systems · October 2026</p>
+<p><strong>Deliverable 1</strong> — a high-level architecture covering the complete Data Flywheel.
+Decisions, assumptions and trade-offs are in <a href="../design-document/">Design Document</a>.</p>
+<hr />
+<h2 id="1-the-flywheel">1 · The flywheel<a class="headerlink" href="#1-the-flywheel" title="Permanent link">&para;</a></h2>
+<p>A pipeline runs and stops. A flywheel stores momentum — each turn makes the next turn cheaper and more productive. <strong>The feedback edges are the design.</strong> Without them this is a data pipeline that happens to be run repeatedly.</p>
+<pre class="mermaid"><code>graph LR
+    V["VEHICLE&lt;br/&gt;sensors, recording"] --&gt; I["INGEST&lt;br/&gt;Task 1"]
+    I --&gt; M["MANAGE&lt;br/&gt;Task 1"]
+    M --&gt; S["SELECT&lt;br/&gt;Task 2"]
+    S --&gt; A["ANNOTATE&lt;br/&gt;Task 3"]
+    A --&gt; D["DATASET&lt;br/&gt;Task 3"]
+    D --&gt; T["TRAIN&lt;br/&gt;Task 3"]
+    T --&gt; E["EVALUATE&lt;br/&gt;Task 3"]
+    E --&gt; VA["VALIDATE&lt;br/&gt;Task 4"]
+    VA --&gt; DE["DEPLOY&lt;br/&gt;Task 4"]
+    DE --&gt; V
+
+    DE -.-&gt;|"① field failures&lt;br/&gt;fire retraining"| T
+    E -.-&gt;|"② weak slices steer&lt;br/&gt;the next collection"| S
+    VA -.-&gt;|"③ shadow-mode&lt;br/&gt;disagreements"| S
+
+    classDef stage fill:#eef4fb,stroke:#5b86b8,stroke-width:1px,color:#13293d
+    classDef fb fill:#fff6e8,stroke:#d08a2e,stroke-width:1px,color:#5c3a00
+    class V,I,M,S,A,D,T,E stage
+    class VA,DE fb</code></pre>
+<h3 id="the-three-feedback-edges">The three feedback edges<a class="headerlink" href="#the-three-feedback-edges" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Edge</th>
+<th>Mechanism</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>①</td>
+<td>Field failures → retraining</td>
+<td>A deployed model's slice-level failure rate crosses a threshold and triggers the pipeline that replaces it</td>
+</tr>
+<tr>
+<td>②</td>
+<td>Weak evaluation slices → next collection</td>
+<td>A slice that scores badly raises its weight in the next selection cycle</td>
+</tr>
+<tr>
+<td>③</td>
+<td>Shadow disagreements → selection pool</td>
+<td>Frames where candidate and production models disagree are difficult by construction, and become annotation candidates</td>
+</tr>
+</tbody>
+</table>
+<h3 id="why-the-returns-compound-rather-than-repeat">Why the returns compound rather than repeat<a class="headerlink" href="#why-the-returns-compound-rather-than-repeat" title="Permanent link">&para;</a></h3>
+<ul>
+<li>As the model improves, the share of footage it already handles grows — so <strong>the value of a randomly chosen hour falls every cycle.</strong> Selection must get smarter simply to hold its value constant. That makes selection the component whose returns compound, not a cost measure bolted on.</li>
+<li>The production model pre-labels clips before annotation, so <strong>a better model makes annotation cheaper</strong> — the same budget buys more labelled hours each cycle.</li>
+<li>Every release contributes new regression tests, new replay sessions and new scenario weights. <strong>The test suite strengthens as a by-product of shipping.</strong></li>
+</ul>
+<hr />
+<h2 id="2-the-system-end-to-end">2 · The system end to end<a class="headerlink" href="#2-the-system-end-to-end" title="Permanent link">&para;</a></h2>
+<pre class="mermaid"><code>graph TB
+    subgraph VEH["ON THE VEHICLE"]
+        SEN["sensors&lt;br/&gt;camera · LiDAR · radar · GNSS/INS · CAN"]
+        REC["recording stack&lt;br/&gt;ROS 2 → MCAP, 60-second chunks"]
+        BUF["local buffer&lt;br/&gt;store-and-forward, priority queue"]
+        SEN --&gt; REC --&gt; BUF
+    end
+
+    subgraph TRANSFER["FOUR TRANSFER TIERS"]
+        T1["1 · cellular telemetry&lt;br/&gt;always, kilobytes/s"]
+        T2["2 · cellular clips&lt;br/&gt;flagged events only"]
+        T3["3 · depot WiFi&lt;br/&gt;bulk — about 98% of bytes"]
+        T4["4 · physical media&lt;br/&gt;sites with no usable link"]
+    end
+
+    subgraph STORE["STORAGE"]
+        LAND["landing/&lt;br/&gt;unverified"]
+        RAW["raw/ — immutable, Object Lock"]
+        QUAR["quarantine/"]
+        CUR["curated/ — Iceberg catalog"]
+    end
+
+    GATE1{{"VERIFY&lt;br/&gt;integrity + quality"}}
+
+    subgraph PIPE["FLYWHEEL STAGES"]
+        SEL["SELECT&lt;br/&gt;10,000 h → 100 h"]
+        ANN["ANNOTATE&lt;br/&gt;pre-labelled"]
+        DSET["DATASET VERSION&lt;br/&gt;immutable manifest"]
+        TRN["TRAIN&lt;br/&gt;four pins"]
+        EVAL["EVALUATE&lt;br/&gt;aggregate + slices + regression"]
+        CAND["MODEL CANDIDATE"]
+        BUND["BUNDLE&lt;br/&gt;signed release"]
+        ROLL["STAGED ROLLOUT&lt;br/&gt;shadow → canary → waves"]
+        FLEET["FLEET"]
+    end
+
+    BUF --&gt; T1 &amp; T2 &amp; T3 &amp; T4
+    T1 --&gt; CUR
+    T2 &amp; T3 &amp; T4 --&gt; LAND
+    LAND --&gt; GATE1
+    GATE1 --&gt;|"pass"| RAW
+    GATE1 --&gt;|"fail"| QUAR
+    RAW --&gt; CUR
+    CUR --&gt; SEL --&gt; ANN --&gt; DSET --&gt; TRN --&gt; EVAL --&gt; CAND --&gt; BUND --&gt; ROLL --&gt; FLEET
+
+    FLEET -.-&gt;|"field failures"| TRN
+    EVAL -.-&gt;|"weak slices"| SEL
+    ROLL -.-&gt;|"shadow disagreements"| SEL
+
+    classDef gate fill:#fdecea,stroke:#c0392b,stroke-width:2px,color:#7b241c
+    classDef store fill:#eef4fb,stroke:#5b86b8,color:#13293d
+    classDef pipe fill:#eefaf0,stroke:#3f9c62,color:#14432a
+    class GATE1 gate
+    class LAND,RAW,QUAR,CUR store
+    class SEL,ANN,DSET,TRN,EVAL,CAND,BUND,ROLL,FLEET pipe</code></pre>
+<h3 id="what-each-stage-owes-the-next">What each stage owes the next<a class="headerlink" href="#what-each-stage-owes-the-next" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Stage</th>
+<th>Produces</th>
+<th>Guarantee it must hold</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Ingestion</strong></td>
+<td>Verified, identified, catalogued recordings</td>
+<td>Nothing in <code>raw/</code> is incomplete, unidentified or mutable</td>
+</tr>
+<tr>
+<td><strong>Selection</strong></td>
+<td>A ranked list of clip references</td>
+<td>Nothing valuable was silently dropped; every choice is explainable</td>
+</tr>
+<tr>
+<td><strong>Dataset</strong></td>
+<td>An immutable manifest</td>
+<td>The exact data behind any model is recoverable years later</td>
+</tr>
+<tr>
+<td><strong>Training</strong></td>
+<td>A model candidate plus an evaluation report</td>
+<td>No candidate exists without evidence attached</td>
+</tr>
+<tr>
+<td><strong>Deployment</strong></td>
+<td>A signed, staged bundle</td>
+<td>Nothing unvalidated reaches a machine</td>
+</tr>
+<tr>
+<td><strong>Fleet</strong></td>
+<td>Telemetry, failures, disagreements</td>
+<td>The next cycle knows what to collect</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Throughout this document, <strong>a red node is a gate that fails closed.</strong> No stage produces output by default; output exists only because a specific check passed.</p>
+</blockquote>
+<hr />
+<h2 id="3-data-ingestion-and-management">3 · Data ingestion and management<a class="headerlink" href="#3-data-ingestion-and-management" title="Permanent link">&para;</a></h2>
+<p><strong>The constraint is arithmetic.</strong> 400 GB per vehicle-day against a 5 Mbps rural uplink is <strong>178 hours of upload for 8 hours of driving</strong>, and at $1–10/GB, <strong>$400–4,000 per vehicle per day</strong>. Streaming everything to the cloud is not a rejected trade-off; it is impossible. The transfer architecture follows from that.</p>
+<pre class="mermaid"><code>graph TB
+    subgraph ONVEH["ON THE VEHICLE"]
+        R["ROS 2 → MCAP&lt;br/&gt;60-second chunks"]
+        MF["manifest per session&lt;br/&gt;chunk list + SHA-256 + counts"]
+        ID["session id = ULID&lt;br/&gt;generated offline, sorts by time"]
+        R --&gt; MF --&gt; ID
+    end
+
+    subgraph TIERS["TRANSFER, BY URGENCY AND SIZE"]
+        A1["cellular telemetry"]
+        A2["cellular flagged clips"]
+        A3["depot WiFi bulk"]
+        A4["physical media"]
+    end
+
+    L["s3://…/landing/&lt;br/&gt;unverified · expires after 7 days"]
+
+    INT{{"INTEGRITY — hard fail&lt;br/&gt;manifest reconciliation&lt;br/&gt;SHA-256 · chunk count · sequence"}}
+    QUAL{{"QUALITY — soft flag&lt;br/&gt;structural · temporal&lt;br/&gt;signal · semantic"}}
+
+    RAWZ["s3://…/raw/&lt;br/&gt;immutable · Object Lock · canonical"]
+    QZ["s3://…/quarantine/&lt;br/&gt;90 days for diagnosis"]
+
+    subgraph CAT["CATALOG — two stores, two workloads"]
+        ICE["Iceberg on S3 + Glue Catalog&lt;br/&gt;searchable metadata, about 10⁹ rows"]
+        PG["PostgreSQL&lt;br/&gt;session state machine, about 10⁶ rows"]
+    end
+
+    ID --&gt; A1 &amp; A2 &amp; A3 &amp; A4
+    A1 &amp; A2 &amp; A3 &amp; A4 --&gt; L
+    L --&gt; INT
+    INT --&gt;|"fail"| QZ
+    INT --&gt;|"pass"| QUAL
+    QUAL --&gt;|"flagged but usable"| RAWZ
+    QUAL --&gt;|"pass"| RAWZ
+    RAWZ --&gt; ICE
+    RAWZ --&gt; PG
+
+    classDef gate fill:#fdecea,stroke:#c0392b,stroke-width:2px,color:#7b241c
+    classDef store fill:#eef4fb,stroke:#5b86b8,color:#13293d
+    class INT,QUAL gate
+    class L,RAWZ,QZ,ICE,PG store</code></pre>
+<p><strong>Metadata is recorded at four levels</strong> — fleet, vehicle, session, chunk — so fleet-wide facts are not repeated per chunk and chunk-level facts are not lost inside session summaries.</p>
+<p><strong>Calibration version is a first-class required field.</strong> A sensor mount that shifts two centimetres without re-calibration silently invalidates every LiDAR-to-camera projection from that moment onward. Nothing fails, and no error is raised.</p>
+<hr />
+<h2 id="4-data-selection-and-active-learning">4 · Data selection and active learning<a class="headerlink" href="#4-data-selection-and-active-learning" title="Permanent link">&para;</a></h2>
+<p><strong>The constraint.</strong> 10,000 hours recorded against 100 hours that can be annotated.</p>
+<p><strong>The 100 hours is an illustration, not a design parameter.</strong> Next quarter it may be 60 or 300, and as the fleet grows the recorded side grows far faster than the annotated side, so the fraction shrinks rather than holds. What is permanent is the shape of the problem: <em>only a small part of what is recorded can ever be looked at, so the system's job is to decide where that attention goes.</em></p>
+<p>Everything below is therefore built around <strong>the ratio and the mechanism</strong>, never around a particular ceiling. The ceiling is one number in a config file; the question the design answers is <strong>how to concentrate a fixed amount of human attention on the material that carries the most information</strong>, whatever that amount turns out to be.</p>
+<p>The worked numbers that follow use 100 hours because a concrete walkthrough is easier to check than an abstract one.</p>
+<pre class="mermaid"><code>graph TB
+    F["1.08 billion frames"]
+    FS["ADAPTIVE FRAME SAMPLING&lt;br/&gt;1 frame / 2 s when idle&lt;br/&gt;full 30 fps inside event windows&lt;br/&gt;governs scanning only — raw stays complete"]
+    C1["1.5 million clips of 10 s"]
+    QF["quality filter&lt;br/&gt;exclude already-labelled"]
+    C2["1.335 million clips"]
+    SL["THREE-GROUP SHORTLIST&lt;br/&gt;all event-bearing&lt;br/&gt;+ all rare-scenario&lt;br/&gt;+ random sample of ordinary"]
+    C3["133,000 clips"]
+    SC["SCORE&lt;br/&gt;0.35·WRONG + 0.30·UNSURE&lt;br/&gt;+ 0.20·CONFLICT + 0.15·RARE&lt;br/&gt;× quality ÷ similarity"]
+    BU["BUDGET ALLOCATION&lt;br/&gt;20% must-take · 70% scored and&lt;br/&gt;diversity-attenuated · 10% random&lt;br/&gt;15% per-vehicle cap"]
+    OUT["36,000 clips = the annotation ceiling&lt;br/&gt;100 h in this walkthrough"]
+
+    F --&gt; FS --&gt; C1 --&gt; QF --&gt; C2 --&gt; SL --&gt; C3 --&gt; SC --&gt; BU --&gt; OUT
+
+    classDef step fill:#eefaf0,stroke:#3f9c62,color:#14432a
+    classDef count fill:#eef4fb,stroke:#5b86b8,color:#13293d
+    class FS,QF,SL,SC,BU step
+    class F,C1,C2,C3,OUT count</code></pre>
+<h3 id="the-four-signals">The four signals<a class="headerlink" href="#the-four-signals" title="Permanent link">&para;</a></h3>
+<pre class="mermaid"><code>graph LR
+    subgraph EV["EVIDENCE OF DIFFICULTY — no ground truth required"]
+        W["WRONG&lt;br/&gt;disengagement · emergency brake&lt;br/&gt;near-miss · re-plan storm&lt;br/&gt;needs no model"]
+        U["UNSURE&lt;br/&gt;low confidence · narrow margin&lt;br/&gt;detection instability"]
+        CF["CONFLICT&lt;br/&gt;camera and LiDAR disagree&lt;br/&gt;requires clock sync under 10 ms"]
+        RA["RARE&lt;br/&gt;coverage gap against&lt;br/&gt;the scenario taxonomy"]
+    end
+    SCORE["weighted score&lt;br/&gt;× quality ÷ similarity"]
+    W --&gt;|0.35| SCORE
+    U --&gt;|0.30| SCORE
+    CF --&gt;|0.20| SCORE
+    RA --&gt;|0.15| SCORE
+
+    classDef sig fill:#eef4fb,stroke:#5b86b8,color:#13293d
+    classDef out fill:#eefaf0,stroke:#3f9c62,color:#14432a
+    class W,U,CF,RA sig
+    class SCORE out</code></pre>
+<table>
+<thead>
+<tr>
+<th>Signal</th>
+<th>Source</th>
+<th>Available before a model exists</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>WRONG</strong></td>
+<td>Vehicle logs</td>
+<td>✅ Yes — the strongest signal needs no model</td>
+</tr>
+<tr>
+<td><strong>UNSURE</strong></td>
+<td>Model output</td>
+<td>❌ No</td>
+</tr>
+<tr>
+<td><strong>CONFLICT</strong></td>
+<td>Cross-sensor comparison</td>
+<td>⚠️ Partially — needs clock sync under 10 ms</td>
+</tr>
+<tr>
+<td><strong>RARE</strong></td>
+<td>Catalog coverage counts</td>
+<td>✅ Yes</td>
+</tr>
+</tbody>
+</table>
+<p>Four signals rather than one because <strong>uncertainty cannot detect confident error</strong> — the model 97% certain and wrong. That is the highest-risk failure mode, because the machine proceeds at full speed into it, and only WRONG and CONFLICT can see it.</p>
+<h3 id="worked-ranking-example">Worked ranking example<a class="headerlink" href="#worked-ranking-example" title="Permanent link">&para;</a></h3>
+<p>Eight representative clips from one selection cycle. This is the concrete output the pipeline produces: a ranked list with every term visible, so any selection can be explained.</p>
+<blockquote>
+<p><code>score = (0.35·WRONG + 0.30·UNSURE + 0.20·CONFLICT + 0.15·RARE) × quality ÷ similarity</code></p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Clip</th>
+<th>WRONG</th>
+<th>UNSURE</th>
+<th>CONFLICT</th>
+<th>RARE</th>
+<th>Qual</th>
+<th>Sim</th>
+<th><strong>Score</strong></th>
+<th>Outcome</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><code>veh03</code> disengagement, dust plume</td>
+<td>1.00</td>
+<td>0.71</td>
+<td>0.44</td>
+<td>0.92</td>
+<td>0.95</td>
+<td>1.0</td>
+<td><strong>0.750</strong></td>
+<td><strong>Must-take</strong></td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>veh01</code> emergency brake, low sun</td>
+<td>0.90</td>
+<td>0.55</td>
+<td>0.30</td>
+<td>0.40</td>
+<td>0.98</td>
+<td>1.0</td>
+<td><strong>0.588</strong></td>
+<td>Selected</td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>veh04</code> near-miss — LiDAR sees obstacle, camera does not</td>
+<td>0.80</td>
+<td>0.12</td>
+<td>0.78</td>
+<td>0.55</td>
+<td>0.93</td>
+<td>1.0</td>
+<td><strong>0.516</strong></td>
+<td>Selected</td>
+</tr>
+<tr>
+<td>4</td>
+<td><code>veh02</code> wet descent, steep grade, no event</td>
+<td>0.00</td>
+<td>0.48</td>
+<td>0.10</td>
+<td>0.95</td>
+<td>1.00</td>
+<td>1.0</td>
+<td><strong>0.307</strong></td>
+<td>Selected — rare bucket</td>
+</tr>
+<tr>
+<td>5</td>
+<td><code>veh03</code> same dust afternoon as #1, 90 s later</td>
+<td>1.00</td>
+<td>0.68</td>
+<td>0.41</td>
+<td>0.92</td>
+<td>0.95</td>
+<td><strong>2.4</strong></td>
+<td><strong>0.310</strong></td>
+<td>Deferred — diversity</td>
+</tr>
+<tr>
+<td>6</td>
+<td><code>veh05</code> mud on lens, hardware fault confirmed</td>
+<td>0.60</td>
+<td>0.88</td>
+<td>0.91</td>
+<td>0.30</td>
+<td><strong>0.21</strong></td>
+<td>1.0</td>
+<td><strong>0.147</strong></td>
+<td>Rejected — quality</td>
+</tr>
+<tr>
+<td>7</td>
+<td><code>veh01</code> straight-line travel, clear day</td>
+<td>0.00</td>
+<td>0.08</td>
+<td>0.05</td>
+<td>0.05</td>
+<td>1.00</td>
+<td>1.0</td>
+<td><strong>0.042</strong></td>
+<td>Not selected</td>
+</tr>
+<tr>
+<td>8</td>
+<td><code>veh02</code> straight-line travel, clear day</td>
+<td>0.00</td>
+<td>0.06</td>
+<td>0.04</td>
+<td>0.08</td>
+<td>1.00</td>
+<td>1.0</td>
+<td><strong>0.038</strong></td>
+<td>Selected — random 10%</td>
+</tr>
+</tbody>
+</table>
+<p><strong>What each row demonstrates:</strong></p>
+<ul>
+<li><strong>#1</strong> — A disengagement is the strongest available evidence: a trained operator judged the machine unsafe. It needs no model to detect and enters the must-take bucket unconditionally.</li>
+<li><strong>#3 — the confident error.</strong> <code>UNSURE</code> is 0.12: the model is <em>certain</em>. Uncertainty sampling would discard this clip entirely. <code>WRONG</code> and <code>CONFLICT</code> are what surface it, and it is the most dangerous category in the set — the machine proceeds at full speed into a situation it has misread.</li>
+<li><strong>#5 — diversity attenuation.</strong> Identical raw signals to #1, but a similarity divisor of 2.4 because near-neighbours were already selected. Without this term, one dusty afternoon consumes a large share of the budget. The clip is deferred, not discarded — it returns to the pool next cycle.</li>
+<li><strong>#6 — quality as a multiplier, not an additive term.</strong> Every difficulty signal is high, but the sensor is faulty. Annotating it would teach the model about a dirty lens. A multiplier suppresses the clip regardless of how strongly it scores elsewhere; an additive penalty would not. The clip instead raises a maintenance alert.</li>
+<li><strong>#8 — the random reservation.</strong> Scores below the threshold and is selected anyway, from the 10% random bucket. Without it, every labelled clip would be one the model struggled with, and performance under normal conditions would become unmeasurable.</li>
+</ul>
+<hr />
+<h2 id="5-dataset-and-training-pipeline">5 · Dataset and training pipeline<a class="headerlink" href="#5-dataset-and-training-pipeline" title="Permanent link">&para;</a></h2>
+<p><strong>What this stage produces is a candidate</strong>, not a deployed model. Training answers <em>is this better</em>; deployment answers <em>is this safe to release</em>.</p>
+<pre class="mermaid"><code>graph TB
+    SEL["selected clips — from Task 2"]
+    EXP["export package&lt;br/&gt;pre-labelled by the production model&lt;br/&gt;about 4× faster annotation"]
+    EXT["external annotation"]
+    IMP["import labels"]
+    QA{{"QA GATE&lt;br/&gt;2% double-annotated&lt;br/&gt;mean IoU ≥ 0.80"}}
+    REJ["batch rejected&lt;br/&gt;returned for re-annotation"]
+    BUILD["BUILD DATASET VERSION&lt;br/&gt;immutable manifest of references&lt;br/&gt;content hashes · sticky session splits&lt;br/&gt;sampling weights"]
+    LEAK{{"LEAKAGE CHECK&lt;br/&gt;exact hash overlap&lt;br/&gt;+ near-duplicate embeddings"}}
+    STOP["STOP — rebuild required"]
+    TRAIN["TRAIN&lt;br/&gt;pinned: dataset hash · git SHA&lt;br/&gt;image digest · config and seeds"]
+    EV["EVALUATE&lt;br/&gt;aggregate + per-slice + regression suite"]
+    CMP{{"COMPARE vs PRODUCTION&lt;br/&gt;any slice regression fails"}}
+    NOCAND["run fully recorded&lt;br/&gt;NO candidate registered"]
+    CAND["MODEL CANDIDATE&lt;br/&gt;registered, evaluation report attached"]
+    T4["→ Task 4"]
+
+    SEL --&gt; EXP --&gt; EXT --&gt; IMP --&gt; QA
+    QA --&gt;|"fail"| REJ
+    QA --&gt;|"pass"| BUILD --&gt; LEAK
+    LEAK --&gt;|"duplicates found"| STOP
+    LEAK --&gt;|"clean"| TRAIN --&gt; EV --&gt; CMP
+    CMP --&gt;|"fail"| NOCAND
+    CMP --&gt;|"pass"| CAND --&gt; T4
+
+    classDef gate fill:#fdecea,stroke:#c0392b,stroke-width:2px,color:#7b241c
+    classDef bad fill:#fbeaea,stroke:#c0392b,color:#7b241c
+    classDef good fill:#eefaf0,stroke:#3f9c62,color:#14432a
+    class QA,LEAK,CMP gate
+    class REJ,STOP,NOCAND bad
+    class CAND,T4 good</code></pre>
+<p><strong>Splits are assigned at session level and are permanently sticky</strong> — a session assigned to test stays in test across every future dataset version — because consecutive frames are near-duplicates, and because redrawn splits invalidate every historical model comparison.</p>
+<p><strong>Evaluation is gated per scenario slice</strong>, not on the aggregate. A scenario that is 3% of the evaluation set contributes 3% of the aggregate, so a severe regression confined to it is invisible — and the rare slices are exactly the costly ones.</p>
+<hr />
+<h2 id="6-cicd-and-deployment">6 · CI/CD and deployment<a class="headerlink" href="#6-cicd-and-deployment" title="Permanent link">&para;</a></h2>
+<p><strong>The constraint.</strong> Support continuous development while preventing an unvalidated model or software change from reaching a vehicle. Four properties of the target shape everything: it can injure someone; it is offline for days; it cannot be recreated; and it is busy when the update arrives.</p>
+<pre class="mermaid"><code>graph TB
+    subgraph SW["SOFTWARE PATH"]
+        CM["commit · pull request"]
+        CI["lint · unit · build by digest · integration"]
+        RP{{"REPLAY&lt;br/&gt;against recorded field sessions"}}
+        CM --&gt; CI --&gt; RP
+    end
+
+    subgraph MD["MODEL PATH"]
+        MC["model candidate — from Task 3"]
+        PV["verify provenance&lt;br/&gt;report · eval-set version · lineage"]
+        CO["compile for target&lt;br/&gt;ONNX → INT8 / FP16 engine"]
+        RE{{"RE-EVALUATE the compiled engine&lt;br/&gt;on target hardware"}}
+        MC --&gt; PV --&gt; CO --&gt; RE
+    end
+
+    BUN["BUNDLE — signed&lt;br/&gt;software image + compiled models + config&lt;br/&gt;+ calibration schema + hardware target"]
+    HIL{{"HARDWARE-IN-THE-LOOP&lt;br/&gt;real device · true-rate sensor replay&lt;br/&gt;accuracy · p99 latency · memory · thermal"}}
+    GATE{{"RELEASE GATE — 7 conditions&lt;br/&gt;6 automatic + 1 named human approval"}}
+
+    SH["SHADOW — 3 machines&lt;br/&gt;zero exposure, outputs logged only&lt;br/&gt;≥ 20 operating hours"]
+    CN["CANARY — 2 machines&lt;br/&gt;live, supervised, known sites&lt;br/&gt;≥ 50 operating hours"]
+    W1["WAVE 1 — 25% of fleet&lt;br/&gt;≥ 72 hour soak"]
+    W2["WAVE 2 — remainder"]
+    SELP["selection pool — Task 2"]
+
+    AB["ON THE MACHINE&lt;br/&gt;dual-slot A/B · boot health check&lt;br/&gt;automatic revert, no network, no human"]
+
+    RP --&gt; BUN
+    RE --&gt; BUN
+    BUN --&gt; HIL --&gt; GATE --&gt; SH --&gt; CN --&gt; W1 --&gt; W2
+    SH -.-&gt;|"disagreements"| SELP
+    W2 --&gt; AB
+    CN --&gt; AB
+
+    classDef gate fill:#fdecea,stroke:#c0392b,stroke-width:2px,color:#7b241c
+    classDef stage fill:#eefaf0,stroke:#3f9c62,color:#14432a
+    classDef box fill:#eef4fb,stroke:#5b86b8,color:#13293d
+    class RP,RE,HIL,GATE gate
+    class SH,CN,W1,W2 stage
+    class BUN,AB,SELP box</code></pre>
+<p><strong>The release unit is a bundle</strong>, never a model or a binary alone, because a model's accuracy depends on pre- and post-processing that live in the software. <strong>The gate is enforced twice</strong> — in the pipeline, and again on the vehicle, which independently verifies signature, hardware target, calibration schema and the revocation list before installing anything.</p>
+<hr />
+<h2 id="7-cloud-architecture">7 · Cloud architecture<a class="headerlink" href="#7-cloud-architecture" title="Permanent link">&para;</a></h2>
+<p>The major services, and how they interact. The organising split: a <strong>data plane</strong> that bytes flow through, and a <strong>control plane</strong> that decides when things run.</p>
+<pre class="mermaid"><code>graph LR
+    subgraph L1["① VEHICLE"]
+        direction TB
+        GG["IoT Greengrass&lt;br/&gt;buffer&lt;br/&gt;store-and-forward"]
+    end
+
+    subgraph L2["② INGEST"]
+        direction TB
+        IOT["IoT Core&lt;br/&gt;device identity · MQTT"]
+        MSK["Amazon MSK — Kafka&lt;br/&gt;runs on-prem unchanged"]
+        FH["Data Firehose&lt;br/&gt;Kafka → Iceberg"]
+        UP["presigned upload&lt;br/&gt;recordings direct to S3"]
+    end
+
+    subgraph L3["③ STORE — S3"]
+        direction TB
+        LAND["landing/&lt;br/&gt;unverified"]
+        RAW["raw/ · Object Lock&lt;br/&gt;immutable"]
+        CUR["curated/&lt;br/&gt;Iceberg tables"]
+        ART["datasets&lt;br/&gt;models · bundles"]
+    end
+
+    subgraph L4["④ PROCESS"]
+        direction TB
+        BAT["AWS Batch on Spot&lt;br/&gt;parse · frames&lt;br/&gt;embeddings"]
+        GLU["Glue + Athena&lt;br/&gt;transforms · SQL"]
+    end
+
+    subgraph L5["⑤ TRAIN"]
+        direction TB
+        SEL["selection"]
+        SM["SageMaker Training&lt;br/&gt;+ evaluate"]
+        CMP["compile for target&lt;br/&gt;then re-evaluate"]
+        MLF["MLflow&lt;br/&gt;tracking + registry"]
+    end
+
+    subgraph L6["⑥ DELIVER"]
+        direction TB
+        BLD["GitHub Actions + ECR&lt;br/&gt;build · test · sign"]
+        JOB["IoT Jobs&lt;br/&gt;shadow → canary → waves"]
+    end
+
+    subgraph CP["CONTROL PLANE"]
+        direction TB
+        EVB["EventBridge"]
+        SFN["Step Functions&lt;br/&gt;verify each recording"]
+        AF["Airflow&lt;br/&gt;the pipeline DAGs"]
+    end
+
+    subgraph SH["SHARED"]
+        direction TB
+        GDC[("Glue Data Catalog")]
+        PG[("RDS PostgreSQL&lt;br/&gt;session state")]
+        CW["CloudWatch + SNS"]
+    end
+
+    GG --&gt;|"small"| IOT --&gt; MSK --&gt; FH --&gt; CUR
+    GG --&gt;|"large"| UP --&gt; LAND --&gt; RAW --&gt; BAT --&gt; CUR
+    GLU --&gt; CUR --&gt; GDC
+    CUR --&gt; SEL --&gt; ART --&gt; SM --&gt; CMP --&gt; ART
+    SM --&gt; MLF
+    BLD --&gt; ART --&gt; JOB --&gt; IOT --&gt; CW
+
+    EVB -.-&gt; SFN -.-&gt; LAND
+    SFN -.-&gt; PG
+    AF -.-&gt; SEL
+    AF -.-&gt; GLU
+    CW -.-&gt;|"① field failures"| AF
+    CMP -.-&gt;|"② weak slices"| SEL
+    JOB -.-&gt;|"③ shadow disagreements"| SEL
+
+    classDef veh fill:#fff4e6,stroke:#d08a2e,stroke-width:1.5px,color:#5c3a00
+    classDef ing fill:#eaf3fc,stroke:#5b86b8,stroke-width:1.5px,color:#13293d
+    classDef sto fill:#eef7f0,stroke:#3f9c62,stroke-width:1.5px,color:#14432a
+    classDef prc fill:#f4eefb,stroke:#8a63b8,stroke-width:1.5px,color:#2e1a46
+    classDef mlr fill:#fdeef0,stroke:#c0617a,stroke-width:1.5px,color:#4a1526
+    classDef dlv fill:#fdf3e3,stroke:#b8862e,stroke-width:1.5px,color:#4a3310
+    classDef ctl fill:#eceef5,stroke:#55607a,stroke-width:2px,color:#20283d
+    classDef shr fill:#f2f4f7,stroke:#6b7785,stroke-width:1.5px,color:#2b3440
+    class GG veh
+    class IOT,MSK,FH,UP ing
+    class LAND,RAW,CUR,ART sto
+    class BAT,GLU prc
+    class SEL,SM,CMP,MLF mlr
+    class BLD,JOB dlv
+    class EVB,SFN,AF ctl
+    class GDC,PG,CW shr</code></pre>
+<p><strong>Solid lines are data. Dotted lines are decisions.</strong> The three numbered dotted edges are the flywheel — the only paths that carry information backwards.</p>
+<h3 id="how-the-pieces-interact">How the pieces interact<a class="headerlink" href="#how-the-pieces-interact" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>What passes</th>
+<th>Why it works that way</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Vehicle → IoT Core → Kafka</td>
+<td>Telemetry and events, kilobytes</td>
+<td>Small and frequent. Needs ordering, replay, several independent consumers</td>
+</tr>
+<tr>
+<td>Vehicle → S3 directly</td>
+<td>Recordings, gigabytes</td>
+<td>A 10 GB file never enters a message bus, and never touches compute we operate</td>
+</tr>
+<tr>
+<td>Kafka → Firehose → Iceberg</td>
+<td>Validated messages</td>
+<td>Managed landing — no streaming job to write or run</td>
+</tr>
+<tr>
+<td>S3 event → EventBridge → Step Functions</td>
+<td>A reference, not a payload</td>
+<td>Verification starts when data arrives, not on a schedule</td>
+</tr>
+<tr>
+<td>Step Functions → <code>raw/</code> or <code>quarantine/</code></td>
+<td>A promotion decision</td>
+<td>A partial upload never becomes canonical data</td>
+</tr>
+<tr>
+<td>Airflow → selection → dataset → training</td>
+<td>Clip IDs, then a manifest</td>
+<td>Dependency-rich and periodically backfilled — DAG-shaped work</td>
+</tr>
+<tr>
+<td>Training → compile → bundle → IoT Jobs</td>
+<td>A signed release</td>
+<td>What reaches a vehicle is one versioned unit</td>
+</tr>
+<tr>
+<td>Fleet → CloudWatch → Airflow</td>
+<td>Slice failure rates</td>
+<td>The deployed model's own failures trigger its replacement</td>
+</tr>
+</tbody>
+</table>
+<h3 id="what-each-service-is-for">What each service is for<a class="headerlink" href="#what-each-service-is-for" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Service</th>
+<th>Doing what</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>IoT Greengrass</strong></td>
+<td>Buffers on the machine, forwards when connected, deploys the recording stack</td>
+</tr>
+<tr>
+<td><strong>IoT Core</strong></td>
+<td>One certificate per machine; carries the desired bundle version</td>
+</tr>
+<tr>
+<td><strong>Amazon MSK — Kafka</strong></td>
+<td>Telemetry and events. Chosen because it also runs at a site with no cloud link</td>
+</tr>
+<tr>
+<td><strong>Data Firehose</strong></td>
+<td>Reads Kafka, writes Iceberg. No streaming job to operate</td>
+</tr>
+<tr>
+<td><strong>S3</strong></td>
+<td>One storage substrate. <code>raw/</code> is write-once under Object Lock</td>
+</tr>
+<tr>
+<td><strong>Glue Data Catalog</strong></td>
+<td>Metastore for the Iceberg tables</td>
+</tr>
+<tr>
+<td><strong>RDS PostgreSQL</strong></td>
+<td>Session state, upload progress, fleet inventory</td>
+</tr>
+<tr>
+<td><strong>AWS Batch on Spot</strong></td>
+<td>Heavy work — parsing, frame extraction, GPU embeddings</td>
+</tr>
+<tr>
+<td><strong>Glue · Athena</strong></td>
+<td>Scheduled transforms, table maintenance, SQL with no cluster</td>
+</tr>
+<tr>
+<td><strong>SageMaker Training</strong></td>
+<td>Managed spot training with checkpointing</td>
+</tr>
+<tr>
+<td><strong>MLflow</strong></td>
+<td>Experiment tracking and the model registry</td>
+</tr>
+<tr>
+<td><strong>GitHub Actions · ECR · Signer</strong></td>
+<td>Build, test, replay, sign the bundle</td>
+</tr>
+<tr>
+<td><strong>IoT Jobs</strong></td>
+<td>Staged rollout, against the version each machine reports</td>
+</tr>
+<tr>
+<td><strong>EventBridge</strong></td>
+<td>One bus — S3 events, schedules, alarms, manual triggers</td>
+</tr>
+<tr>
+<td><strong>Step Functions</strong></td>
+<td>Per-recording verification: thousands of short runs a day</td>
+</tr>
+<tr>
+<td><strong>Airflow</strong></td>
+<td>The pipeline DAGs: selection, dataset build, train, evaluate, register</td>
+</tr>
+<tr>
+<td><strong>CloudWatch + SNS</strong></td>
+<td>Fleet inventory, data-quality alarms, the retraining trigger</td>
+</tr>
+</tbody>
+</table>
+<h2 id="8-implemented-component">8 · Implemented component<a class="headerlink" href="#8-implemented-component" title="Permanent link">&para;</a></h2>
+<p>The <strong>data selection and active-learning pipeline</strong> — section 4 of this document, as working code. Scoring, diversity-aware ranking and budget-constrained selection, with deterministic tests and example input and output.</p>
+<p>See <a href="../implementation/">Implementation</a>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href=".." class="md-footer__link md-footer__link--prev" aria-label="Previous: Overview">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Overview
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../design-document/" class="md-footer__link md-footer__link--next" aria-label="Next: 2 · Design Document">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                2 · Design Document
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.top", "navigation.footer", "toc.follow", "content.code.copy", "content.tooltips", "search.suggest", "search.highlight"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>
