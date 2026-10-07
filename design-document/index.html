@@ -1146,7 +1146,7 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 </tr>
 <tr>
 <td>5</td>
-<td>Sensor clocks are synchronised by GNSS or PTP, and residual skew is <strong>measured, not assumed zero</strong></td>
+<td>Sensor clocks are synchronised by GNSS or PTP, and clock drift is <strong>measured, not assumed to be zero</strong></td>
 </tr>
 <tr>
 <td>6</td>
@@ -1232,7 +1232,7 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 <tr>
 <td><strong>Idempotent keys throughout</strong></td>
 <td>Retry bookkeeping and dedup logic</td>
-<td>Over unreliable links, unknown completion state is the normal case. Deterministic keys make retry unconditionally safe and collapse a whole class of failure handling</td>
+<td>Over unreliable links, unknown completion state is the normal case. Deterministic keys mean sending the same chunk twice is the same as sending it once, so a retry never has to ask whether the first one worked</td>
 </tr>
 </tbody>
 </table>
@@ -1368,12 +1368,12 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 </tbody>
 </table>
 <h3 id="16-how-it-scales-as-vehicles-increase">1.6 How it scales as vehicles increase<a class="headerlink" href="#16-how-it-scales-as-vehicles-increase" title="Permanent link">&para;</a></h3>
-<p>Four axes, scaled independently:</p>
+<p>Four things grow, and they grow separately:</p>
 <table>
 <thead>
 <tr>
-<th>Axis</th>
-<th>Absorbed by</th>
+<th>What grows</th>
+<th>Handled by</th>
 <th>What actually binds</th>
 </tr>
 </thead>
@@ -1391,7 +1391,7 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 <tr>
 <td>More consumers and queries</td>
 <td>Iceberg partitioning; serverless query concurrency</td>
-<td>Query <strong>cost</strong> before query capacity</td>
+<td><strong>Cost rises before anything breaks</strong></td>
 </tr>
 <tr>
 <td>More vehicle variants</td>
@@ -1439,7 +1439,7 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 <td>At shortlist time only the cheap signals exist. Ranking on those admits almost only event clips and excludes what the expensive signals are there to find</td>
 </tr>
 <tr>
-<td><strong>2.6 Diversity-attenuated selection</strong></td>
+<td><strong>2.6 Push down clips that look like one already picked</strong></td>
 <td>Pure ranked selection</td>
 <td>One dusty afternoon produces hundreds of near-identical high-scoring clips. Ranking alone spends the whole budget on that afternoon</td>
 </tr>
@@ -1658,7 +1658,7 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 <tr>
 <td><strong>Sequential shards for training reads</strong></td>
 <td>Per-sample object reads</td>
-<td>One request per file starves the GPU, which then sits waiting on the network. The manifest stays authoritative; shards are a regenerable materialisation of it</td>
+<td>One request per file starves the GPU, which then sits waiting on the network. The manifest stays authoritative; shards can be rebuilt from it at any time</td>
 </tr>
 </tbody>
 </table>
@@ -1680,7 +1680,7 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 </tr>
 <tr>
 <td>It is offline for days at a time</td>
-<td>Desired-state convergence, not push deployment</td>
+<td>We leave the target version where the machine can read it; the machine collects it when it can</td>
 </tr>
 <tr>
 <td>It cannot be recreated</td>
@@ -1742,7 +1742,7 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 </tbody>
 </table>
 <h3 id="43-the-release-unit-and-preventing-unvalidated-deployment">4.3 The release unit, and preventing unvalidated deployment<a class="headerlink" href="#43-the-release-unit-and-preventing-unvalidated-deployment" title="Permanent link">&para;</a></h3>
-<p><strong>"Validated" is given an operational definition</strong> - seven conditions, all of which must hold before a bundle can be promoted.</p>
+<p><strong>We say exactly what "validated" means</strong> - seven conditions, all of which must hold before a bundle can be promoted.</p>
 <pre class="mermaid"><code>graph TB
     B["bundle candidate"]
     C1["1 · every artifact traceable to source&lt;br/&gt;git SHA · image digest · dataset version · run id"]
@@ -1756,7 +1756,7 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
     NO["blocked - recorded, not released"]
 
     B --&gt; C1 --&gt; C2 --&gt; C3 --&gt; C4 --&gt; C5 --&gt; C6 --&gt; C7 --&gt; REL
-    C1 &amp; C2 &amp; C3 &amp; C4 &amp; C5 &amp; C6 &amp; C7 -.-&gt;|"any fails"| NO
+    C4 -.-&gt;|"any one of the seven fails"| NO
 
     classDef auto fill:#eef4fb,stroke:#5b86b8,color:#13293d
     classDef human fill:#fff6e8,stroke:#d08a2e,color:#5c3a00
@@ -1784,7 +1784,7 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 <tr>
 <td><strong>A gate of seven conditions</strong> - traceability, software tests, replay, compiled-model evaluation, hardware-in-the-loop, signature, named human approval</td>
 <td>An approval checklist</td>
-<td>This is the operational definition of "validated". Six are automatic; conditions 1–6 produce the evidence, and condition 7 records accountability</td>
+<td>This is what "validated" means here. Six are automatic; conditions 1–6 produce the evidence, and condition 7 records accountability</td>
 </tr>
 <tr>
 <td><strong>Hardware-in-the-loop before release</strong></td>
