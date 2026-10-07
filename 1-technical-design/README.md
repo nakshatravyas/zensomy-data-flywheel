@@ -336,53 +336,86 @@ Nothing proceeds by default. A failed run is recorded as completely as a success
 
 ## 6 · CI/CD and deployment
 
-**The constraint.** Support continuous development while preventing an unvalidated model or software change from reaching a vehicle. Four properties of the target shape everything: it can injure someone; it is offline for days; it cannot be recreated; and it is busy when the update arrives.
+**The constraint.** Ship continuously, while making it impossible for an unchecked model or an unchecked line of code to reach a machine in a field.
+
+A vehicle is not a server, and four differences decide the whole design:
+
+| The machine | So the pipeline must |
+|---|---|
+| can injure someone | keep a named person in the final approval |
+| is offline for days | leave an instruction the machine collects, not push an update at it |
+| cannot be recreated | make rollback work with no network and nobody present |
+| is busy when the update arrives | let the machine choose when to install |
 
 ```mermaid
 graph TB
-    subgraph SW["SOFTWARE PATH"]
-        CM["commit · pull request"]
-        CI["lint · unit · build by digest · integration"]
-        RP{{"REPLAY<br/>against recorded field sessions"}}
-        CM --> CI --> RP
+    subgraph A["① WHAT CHANGED"]
+        direction TB
+        CM["code change"]
+        CI["tests, then replay<br/>against real recorded drives"]
+        MC["new model from Task 3"]
+        CO["compile it for the vehicle's chip"]
+        RE{{"does the compiled version<br/>still pass?"}}
+        CM --> CI
+        MC --> CO --> RE
     end
 
-    subgraph MD["MODEL PATH"]
-        MC["model candidate - from Task 3"]
-        PV["verify provenance<br/>report · eval-set version · lineage"]
-        CO["compile for target<br/>ONNX → INT8 / FP16 engine"]
-        RE{{"RE-EVALUATE the compiled engine<br/>on target hardware"}}
-        MC --> PV --> CO --> RE
+    subgraph B["② ONE SIGNED PACKAGE"]
+        direction TB
+        BUN["bundle<br/>software + models + config + calibration"]
+        HIL{{"run it on real hardware"}}
+        GATE{{"release gate<br/>7 checks, 6 automatic, 1 a person"}}
+        BUN --> HIL --> GATE
     end
 
-    BUN["BUNDLE - signed<br/>software image + compiled models + config<br/>+ calibration schema + hardware target"]
-    HIL{{"HARDWARE-IN-THE-LOOP<br/>real device · true-rate sensor replay<br/>accuracy · p99 latency · memory · thermal"}}
-    GATE{{"RELEASE GATE - 7 conditions<br/>6 automatic + 1 named human approval"}}
+    subgraph C["③ ROLL OUT SLOWLY"]
+        direction TB
+        SH["shadow - 3 machines<br/>runs live, never acts"]
+        CN["canary - 2 machines<br/>driving, supervised"]
+        W1["a quarter of the fleet"]
+        W2["the rest"]
+        SH --> CN --> W1 --> W2
+    end
 
-    SH["SHADOW - 3 machines<br/>zero exposure, outputs logged only<br/>≥ 20 operating hours"]
-    CN["CANARY - 2 machines<br/>live, supervised, known sites<br/>≥ 50 operating hours"]
-    W1["WAVE 1 - 25% of fleet<br/>≥ 72 hour soak"]
-    W2["WAVE 2 - remainder"]
-    SELP["selection pool - Task 2"]
+    subgraph D["④ ON EACH MACHINE"]
+        direction TB
+        VEH["checks the bundle itself<br/>signature, hardware, calibration, not withdrawn"]
+        INS["installs when parked<br/>and not mid-upload"]
+        AB["will not boot?<br/>switches back by itself"]
+        VEH --> INS --> AB
+    end
 
-    AB["ON THE MACHINE<br/>dual-slot A/B · boot health check<br/>automatic revert, no network, no human"]
+    SELP["clips the two models disagreed on<br/>→ back to Task 2"]
 
-    RP --> BUN
+    CI --> BUN
     RE --> BUN
-    BUN --> HIL --> GATE --> SH --> CN --> W1 --> W2
-    SH -.->|"disagreements"| SELP
-    W2 --> AB
-    CN --> AB
+    GATE --> SH
+    W2 --> VEH
+    SH -.->|"③ feedback edge"| SELP
 
     classDef gate fill:#fdecea,stroke:#c0392b,stroke-width:2px,color:#7b241c
     classDef stage fill:#eefaf0,stroke:#3f9c62,color:#14432a
     classDef box fill:#eef4fb,stroke:#5b86b8,color:#13293d
-    class RP,RE,HIL,GATE gate
+    class RE,HIL,GATE gate
     class SH,CN,W1,W2 stage
-    class BUN,AB,SELP box
+    class BUN,VEH,INS,AB,SELP box
 ```
 
-**The release unit is a bundle**, never a model or a binary alone, because a model's accuracy depends on pre- and post-processing that live in the software. **The gate is enforced twice** - in the pipeline, and again on the vehicle, which independently verifies signature, hardware target, calibration schema and the revocation list before installing anything.
+### The four ideas in that picture
+
+**① One package, never a loose model.** A model's accuracy depends on code that sits around it - how the image is prepared, what threshold filters the results. Change that code and the model behaves differently without the model changing. Ship them separately and combinations end up in the field that nobody ever tested together.
+
+**② The model that trains is not the model that runs.** It gets shrunk to run on a small chip, and shrinking it costs accuracy - most of all on dim, low-contrast scenes, which are exactly the dust and night clips that matter. So the shrunk version is scored again, on the real hardware, before it counts.
+
+**③ The gate is checked twice.** Once in the pipeline, and again by the machine before it installs anything. A pipeline can be bypassed by someone with enough access. A machine that refuses unsigned bundles cannot be talked into accepting one.
+
+**④ Rollout buys evidence, and so does failure.** Shadow runs the new model on live sensors with its decisions recorded but never acted on - real evidence at no risk. Every frame where the new and old models disagreed is a hard frame by definition, and goes back into the pool worth labelling. **Validating a model produces the data that improves the next one.**
+
+Each stage needs both a time threshold and a metric threshold before it promotes. Time alone can pass while the numbers slide; metrics alone can be satisfied by two easy hours in good weather.
+
+### The one thing that cannot be rolled back
+
+A bad bundle can be withdrawn, but the six hours it ran already produced six hours of recordings. So **every recording stores the bundle version that made it.** Withdraw a bundle and one query finds everything it touched. Without that field the contamination is permanent and invisible.
 
 ---
 
