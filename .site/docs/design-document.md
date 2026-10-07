@@ -19,7 +19,7 @@ Stated explicitly, as the brief invites. Each one is load-bearing somewhere.
 | 2 | Machines **return to a depot most operating days**, with a high-bandwidth local network. **The most load-bearing assumption in the design** - §1.1 gives the fallback if it is false |
 | 3 | About 8 operating hours per vehicle-day, and **400 GB per vehicle-day** across 4–6 cameras, LiDAR, radar, GNSS/INS and CAN |
 | 4 | On-vehicle software is ROS 2; recordings are written as MCAP |
-| 5 | Sensor clocks are synchronised by GNSS or PTP, and residual skew is **measured, not assumed zero** |
+| 5 | Sensor clocks are synchronised by GNSS or PTP, and clock drift is **measured, not assumed to be zero** |
 | 6 | Annotation is performed off-platform and integrated over an API. Building an annotation tool is out of scope |
 | 7 | Cloud is AWS; §5 marks where the reasoning is portable |
 | 8 | **Tens of vehicles now, low hundreds within 2–3 years.** Explicitly not 10,000 - every sizing decision follows from this |
@@ -48,7 +48,7 @@ Stated explicitly, as the brief invites. Each one is load-bearing somewhere.
 | **MCAP, 60-second chunks** | Whole-session files; raw rosbag | MCAP is indexed, so session metadata is readable without downloading the whole file - which is what makes cataloguing affordable. Chunking makes upload resumable and bounds the loss from a corrupt write |
 | **ULID session identifiers generated on-vehicle** | Server-assigned IDs; UUIDv4 | A machine in a field cannot reach a server to request an ID. ULIDs are collision-free offline and sort by time |
 | **Hive-style partitioning** - `vehicle_id=…/date=…/session=…` | Flat prefixes | Queries skip irrelevant partitions entirely; this is the main query-performance lever |
-| **Idempotent keys throughout** | Retry bookkeeping and dedup logic | Over unreliable links, unknown completion state is the normal case. Deterministic keys make retry unconditionally safe and collapse a whole class of failure handling |
+| **Idempotent keys throughout** | Retry bookkeeping and dedup logic | Over unreliable links, unknown completion state is the normal case. Deterministic keys mean sending the same chunk twice is the same as sending it once, so a retry never has to ask whether the first one worked |
 
 ### 1.3 How metadata is associated
 
@@ -103,13 +103,13 @@ A dusty lens fails quality and is kept - it is exactly the material selection wa
 
 ### 1.6 How it scales as vehicles increase
 
-Four axes, scaled independently:
+Four things grow, and they grow separately:
 
-| Axis | Absorbed by | What actually binds |
+| What grows | Handled by | What actually binds |
 |---|---|---|
 | More vehicles | S3 and the streaming layer scale without intervention; processing queues deepen | Not the cloud, at this volume |
 | More data per vehicle | Storage lifecycle; the four transfer tiers | **Depot upload bandwidth** |
-| More consumers and queries | Iceberg partitioning; serverless query concurrency | Query **cost** before query capacity |
+| More consumers and queries | Iceberg partitioning; serverless query concurrency | **Cost rises before anything breaks** |
 | More vehicle variants | Per-variant schemas and bundles; the compatibility field already exists | Bench hardware for validation |
 
 ---
@@ -127,7 +127,7 @@ Random sampling answers it badly. Most footage is a machine driving straight acr
 | **2.3 Quality as a multiplier** | Quality as a subtracted penalty | A faulty sensor scores high on several signals at once. Only a multiplier suppresses the clip however strongly it scores elsewhere |
 | **2.4 Adaptive frame sampling** | Fixed-rate subsampling | Sampling governs scanning, not storage; events are found in logs rather than frames; and the rate rises to full frame rate inside an event window. Without all three, a brief safety-critical moment can be sampled away |
 | **2.5 Three-group shortlist** | Rank on the cheap score, take the top N | At shortlist time only the cheap signals exist. Ranking on those admits almost only event clips and excludes what the expensive signals are there to find |
-| **2.6 Diversity-attenuated selection** | Pure ranked selection | One dusty afternoon produces hundreds of near-identical high-scoring clips. Ranking alone spends the whole budget on that afternoon |
+| **2.6 Push down clips that look like one already picked** | Pure ranked selection | One dusty afternoon produces hundreds of near-identical high-scoring clips. Ranking alone spends the whole budget on that afternoon |
 | **2.7 Budget split - must-take, scored, random** | Fully scored selection | The random share keeps evaluation honest, and is the only way a failure mode no signal was designed to find can surface |
 | **2.8 Per-vehicle cap** | Uncapped allocation | One machine with a dirty lens would otherwise take the whole budget. The cap doubles as a maintenance signal |
 | **2.9 Clock-synchronisation gate on CONFLICT** | Trusting cross-sensor comparison | Badly synchronised sensors appear to disagree on every frame, so the signal is disabled rather than believed |
@@ -198,7 +198,7 @@ Random sampling answers it badly. Most footage is a machine driving straight acr
 
 | Decision | Instead of | Why |
 |---|---|---|
-| **Sequential shards for training reads** | Per-sample object reads | One request per file starves the GPU, which then sits waiting on the network. The manifest stays authoritative; shards are a regenerable materialisation of it |
+| **Sequential shards for training reads** | Per-sample object reads | One request per file starves the GPU, which then sits waiting on the network. The manifest stays authoritative; shards can be rebuilt from it at any time |
 
 ---
 
@@ -211,7 +211,7 @@ Random sampling answers it badly. Most footage is a machine driving straight acr
 | Property | Consequence |
 |---|---|
 | It can injure someone | A named human stays in the production approval path |
-| It is offline for days at a time | Desired-state convergence, not push deployment |
+| It is offline for days at a time | We leave the target version where the machine can read it; the machine collects it when it can |
 | It cannot be recreated | Rollback must work with **no network and no human** |
 | It is busy when the update arrives | The vehicle decides when to install, not the pipeline |
 
@@ -232,7 +232,7 @@ Random sampling answers it badly. Most footage is a machine driving straight acr
 
 ### 4.3 The release unit, and preventing unvalidated deployment
 
-**"Validated" is given an operational definition** - seven conditions, all of which must hold before a bundle can be promoted.
+**We say exactly what "validated" means** - seven conditions, all of which must hold before a bundle can be promoted.
 
 ```mermaid
 graph TB
@@ -248,7 +248,7 @@ graph TB
     NO["blocked - recorded, not released"]
 
     B --> C1 --> C2 --> C3 --> C4 --> C5 --> C6 --> C7 --> REL
-    C1 & C2 & C3 & C4 & C5 & C6 & C7 -.->|"any fails"| NO
+    C4 -.->|"any one of the seven fails"| NO
 
     classDef auto fill:#eef4fb,stroke:#5b86b8,color:#13293d
     classDef human fill:#fff6e8,stroke:#d08a2e,color:#5c3a00
@@ -265,7 +265,7 @@ Conditions 1 to 6 are automatic. Condition 7 is deliberately not - and the reaso
 | Decision | Instead of | Why |
 |---|---|---|
 | **The release unit is a bundle** - software image + compiled models + config + calibration schema + hardware target, signed as one | Deploying software and models independently | A model's accuracy depends on pre- and post-processing that live in the software. Change the normalisation constants or the NMS threshold and the model behaves differently **without the model changing.** A model validated against software v12 has no established behaviour under v13 |
-| **A gate of seven conditions** - traceability, software tests, replay, compiled-model evaluation, hardware-in-the-loop, signature, named human approval | An approval checklist | This is the operational definition of "validated". Six are automatic; conditions 1–6 produce the evidence, and condition 7 records accountability |
+| **A gate of seven conditions** - traceability, software tests, replay, compiled-model evaluation, hardware-in-the-loop, signature, named human approval | An approval checklist | This is what "validated" means here. Six are automatic; conditions 1–6 produce the evidence, and condition 7 records accountability |
 | **Hardware-in-the-loop before release** | Software testing only | **There is no staging server here - the staging environment for a robot is a physical machine.** Thermal throttling, memory pressure from the recording stack competing with perception, and embedded latency budgets cannot be reproduced off-target |
 | **A named human approves production promotion** | Fully automated promotion | Auto-promotion is correct where failure is reversible and bounded. Here it is neither - the blast radius is physical machines near people. The approver is not re-deriving evidence; they are accountable, and the signature records that |
 
