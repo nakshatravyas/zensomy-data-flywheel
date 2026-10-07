@@ -49,10 +49,7 @@ A pipeline runs and stops. A flywheel stores momentum - each turn makes the next
 
     ---
 
-    How the system is built, start to finish. How data leaves the machine and arrives
-    intact. How the system picks which footage is worth a human's time. How a dataset
-    becomes a trained model, how that model is checked, and how it reaches a machine
-    in the field. Mostly diagrams.
+    How the system is built, start to finish. Mostly diagrams.
 
     [:octicons-arrow-right-24: Read it](technical-design.md)
 
@@ -60,9 +57,7 @@ A pipeline runs and stops. A flywheel stores momentum - each turn makes the next
 
     ---
 
-    Why it is built that way. Each choice, what was chosen instead, and what that
-    choice costs. Opens with a table showing where every part of the brief is
-    answered, and ends with every trade-off in one list.
+    Why it is built that way. Each choice, and what was chosen instead.
 
     [:octicons-arrow-right-24: Read it](design-document.md)
 
@@ -70,9 +65,7 @@ A pipeline runs and stops. A flywheel stores momentum - each turn makes the next
 
     ---
 
-    Working Python for the part of the design that decides which footage is worth paying
-    a human to label. Runs with one Docker command. Source, tests, example input and
-    output, and a README.
+    Working code that picks which footage to label. Runs with one Docker command.
 
     [:octicons-arrow-right-24: Open on GitHub](https://github.com/nakshatravyas/zensomy-data-flywheel/tree/main/3-implementation)
 
@@ -80,9 +73,7 @@ A pipeline runs and stops. A flywheel stores momentum - each turn makes the next
 
     ---
 
-    Ten to fifteen minutes on the architecture, the decisions behind it, the trade-offs,
-    how it scales, and what makes this a flywheel rather than a pipeline. PDF, with
-    speaker notes.
+    The whole design in ten to fifteen minutes. PDF, with speaker notes.
 
     [:octicons-arrow-right-24: Open on GitHub](https://github.com/nakshatravyas/zensomy-data-flywheel/tree/main/4-presentation)
 
