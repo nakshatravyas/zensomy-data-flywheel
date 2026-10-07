@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dataflywheel-selection"
+version = "1.0.0"
+description = "Budget-constrained data selection for an autonomous-systems data flywheel"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "numpy>=1.26,<3",
+    "pydantic>=2.7,<3",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8,<9"]
+
+[project.scripts]
+select-data = "dataflywheel_selection.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+# Put the project root on sys.path so `from tests.conftest import ...` resolves
+# the same way everywhere. Without it the suite passes locally — where the
+# editable install happens to add the root — and fails in the container, where
+# the package is installed normally.
+pythonpath = ["."]

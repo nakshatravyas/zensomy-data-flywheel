@@ -1,0 +1,20 @@
+# Study material — not part of the submission
+wiki/
+
+# Site build tooling
+.site/.venv/
+.site/_build/
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+*.egg-info/
+.venv/
+venv/
+
+# Generated run output
+3-implementation/data/example_output/
+
+# macOS
+.DS_Store

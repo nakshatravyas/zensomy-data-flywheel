@@ -1,0 +1,76 @@
+/* Typography: a touch more room than the default, documents are long */
+.md-typeset { font-size: .76rem; line-height: 1.7; }
+.md-typeset h1 { font-weight: 700; letter-spacing: -.02em; }
+.md-typeset h2 {
+  font-weight: 600;
+  letter-spacing: -.01em;
+  margin-top: 2.4em;
+  padding-top: .6em;
+  border-top: 1px solid var(--md-default-fg-color--lightest);
+}
+.md-typeset h3 { font-weight: 600; margin-top: 1.8em; }
+
+/* Landing page */
+.lede {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  font-weight: 300;
+  color: var(--md-default-fg-color--light);
+  max-width: 38em;
+  margin: .6rem 0 1.4rem;
+}
+.byline {
+  font-size: .72rem;
+  color: var(--md-default-fg-color--light);
+  border-left: 3px solid var(--md-accent-fg-color);
+  padding-left: .9rem;
+}
+.footnote {
+  font-size: .66rem;
+  color: var(--md-default-fg-color--lighter);
+  text-align: center;
+  margin-top: 2.5rem;
+}
+
+/* Tables: these documents are mostly tables, so they get the most attention */
+.md-typeset table:not([class]) {
+  font-size: .68rem;
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.md-typeset table:not([class]) th {
+  background: var(--md-default-fg-color--lightest);
+  font-weight: 600;
+  white-space: nowrap;
+}
+.md-typeset table:not([class]) tr:hover {
+  background: var(--md-accent-fg-color--transparent);
+}
+.md-typeset table:not([class]) td,
+.md-typeset table:not([class]) th { padding: .5em .8em; }
+
+/* Mermaid: centred, with breathing room */
+.md-typeset .mermaid {
+  margin: 1.8em 0;
+  text-align: center;
+}
+
+/* Code */
+.md-typeset code { font-size: .92em; border-radius: 3px; }
+
+/* Cards on the landing page */
+.md-typeset .grid.cards > ul > li {
+  border-radius: 6px;
+  transition: border-color .2s, box-shadow .2s;
+}
+.md-typeset .grid.cards > ul > li:hover {
+  border-color: var(--md-accent-fg-color);
+  box-shadow: 0 2px 12px rgba(0,0,0,.08);
+}
+
+/* Blockquotes read as asides, not as quotes */
+.md-typeset blockquote {
+  border-left-width: 3px;
+  color: var(--md-default-fg-color--light);
+}

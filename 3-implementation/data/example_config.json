@@ -1,0 +1,21 @@
+{
+  "budget_hours": 0.1,
+  "must_take_share": 0.20,
+  "scored_share": 0.70,
+  "random_share": 0.10,
+  "per_vehicle_cap": 0.15,
+  "weights": {
+    "wrong": 0.35,
+    "unsure": 0.30,
+    "conflict": 0.20,
+    "rare": 0.15
+  },
+  "must_take_threshold": 0.80,
+  "clock_sync_trust_ms": 10.0,
+  "clock_sync_disable_ms": 50.0,
+  "sensor_fault_multiplier": 0.25,
+  "min_quality": 0.15,
+  "similarity_threshold": 0.85,
+  "min_attenuation": 0.30,
+  "seed": 1337
+}

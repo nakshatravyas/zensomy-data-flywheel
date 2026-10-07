@@ -1,0 +1,14 @@
+# Run it:
+#
+#     docker compose up --build     first time
+#     docker compose up             after that
+#
+# Output appears in ./output on your machine.
+
+services:
+  select:
+    build: .
+    image: dataflywheel-selection:1.0.0
+    volumes:
+      - ./output:/app/out
+    command: ["--input", "data/example_input.jsonl", "--out", "/app/out"]
