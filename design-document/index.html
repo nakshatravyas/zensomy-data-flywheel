@@ -1142,34 +1142,26 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 </tr>
 <tr>
 <td>4</td>
-<td>On-vehicle software is ROS 2; recordings are written as MCAP</td>
-</tr>
-<tr>
-<td>5</td>
 <td>Sensor clocks are synchronised by GNSS or PTP, and clock drift is <strong>measured, not assumed to be zero</strong></td>
 </tr>
 <tr>
-<td>6</td>
+<td>5</td>
 <td>Annotation is performed off-platform and integrated over an API. Building an annotation tool is out of scope</td>
 </tr>
 <tr>
-<td>7</td>
+<td>6</td>
 <td>Cloud is AWS; §5 marks where the reasoning is portable</td>
 </tr>
 <tr>
-<td>8</td>
+<td>7</td>
 <td><strong>Tens of vehicles now, low hundreds within 2–3 years.</strong> Explicitly not 10,000 - every sizing decision follows from this</td>
 </tr>
 <tr>
-<td>9</td>
+<td>8</td>
 <td><strong>Annotation is the dominant marginal cost</strong>, and the share of recorded data that can be annotated shrinks as the fleet grows. The ceiling is a configuration value, never a constant in the design</td>
 </tr>
 <tr>
-<td>10</td>
-<td>Raw data is retained rather than deleted: 12 months instantly accessible, then deep archive</td>
-</tr>
-<tr>
-<td>11</td>
+<td>9</td>
 <td>A trained perception model exists from cycle one; §2 covers operating before one does</td>
 </tr>
 </tbody>
@@ -1286,32 +1278,6 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 <table>
 <thead>
 <tr>
-<th></th>
-<th>Integrity</th>
-<th>Quality</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Question</td>
-<td>Did all the bytes arrive intact?</td>
-<td>Is the data usable?</td>
-</tr>
-<tr>
-<td>Checks</td>
-<td>Manifest reconciliation, SHA-256 per chunk, chunk count, sequence continuity</td>
-<td>Structural, temporal, signal-level, semantic</td>
-</tr>
-<tr>
-<td>On failure</td>
-<td><strong>Hard fail</strong> → quarantine</td>
-<td><strong>Soft flag</strong> → ingested, annotated, visible downstream</td>
-</tr>
-</tbody>
-</table>
-<table>
-<thead>
-<tr>
 <th>Decision</th>
 <th>Instead of</th>
 <th>Why</th>
@@ -1321,7 +1287,7 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 <tr>
 <td><strong>Separate hard-fail and soft-flag paths</strong></td>
 <td>One validation step</td>
-<td>A corrupt transfer must never become canonical data. A dusty lens must not be thrown away - it is exactly the material §2 wants</td>
+<td>Integrity is checked by manifest reconciliation, a SHA-256 per chunk, chunk count and sequence continuity, and a failure is hard. Quality is checked structurally, temporally and at signal level, and a failure is only a flag. A corrupt transfer must never become canonical data; a dusty lens must not be thrown away, because it is exactly the material §2 wants</td>
 </tr>
 <tr>
 <td><strong><code>landing/</code> → <code>raw/</code> promotion</strong>, raw immutable with Object Lock</td>
@@ -1961,7 +1927,7 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 <tbody>
 <tr>
 <td><strong>Scalability</strong></td>
-<td>Managed and serverless by default, so growth is a configuration change rather than a capacity project. The four axes - more machines, more data per machine, more queries, more vehicle variants - scale independently. The cloud is not what binds first - depot bandwidth and the annotation budget are</td>
+<td>Managed and serverless by default, so growth is a configuration change rather than a capacity project. What grows, and what actually binds, is set out in §1.6: not the cloud, but depot bandwidth and the annotation budget</td>
 </tr>
 <tr>
 <td><strong>Reliability</strong></td>
@@ -1973,7 +1939,7 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 </tr>
 <tr>
 <td><strong>Data storage</strong></td>
-<td>One S3 substrate with prefixes by lifecycle state, Object Lock on raw, and automatic tiering since recordings are written once and read rarely. Two stores because the questions differ - Iceberg for search across billions of rows, PostgreSQL for transactional state</td>
+<td>One S3 substrate with prefixes by lifecycle state, Object Lock on raw, and automatic tiering since recordings are written once and read rarely: about 12 months instantly accessible, then deep archive, retained rather than deleted. Two stores because the questions differ - Iceberg for search across billions of rows, PostgreSQL for transactional state</td>
 </tr>
 <tr>
 <td><strong>Compute</strong></td>
