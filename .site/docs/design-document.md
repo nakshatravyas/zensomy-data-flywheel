@@ -18,14 +18,12 @@ Stated explicitly, as the brief invites. Each one is load-bearing somewhere.
 | 1 | Off-road machines in GNSS-degraded, connectivity-poor environments |
 | 2 | Machines **return to a depot most operating days**, with a high-bandwidth local network. **The most load-bearing assumption in the design** - §1.1 gives the fallback if it is false |
 | 3 | About 8 operating hours per vehicle-day, and **400 GB per vehicle-day** across 4–6 cameras, LiDAR, radar, GNSS/INS and CAN |
-| 4 | On-vehicle software is ROS 2; recordings are written as MCAP |
-| 5 | Sensor clocks are synchronised by GNSS or PTP, and clock drift is **measured, not assumed to be zero** |
-| 6 | Annotation is performed off-platform and integrated over an API. Building an annotation tool is out of scope |
-| 7 | Cloud is AWS; §5 marks where the reasoning is portable |
-| 8 | **Tens of vehicles now, low hundreds within 2–3 years.** Explicitly not 10,000 - every sizing decision follows from this |
-| 9 | **Annotation is the dominant marginal cost**, and the share of recorded data that can be annotated shrinks as the fleet grows. The ceiling is a configuration value, never a constant in the design |
-| 10 | Raw data is retained rather than deleted: 12 months instantly accessible, then deep archive |
-| 11 | A trained perception model exists from cycle one; §2 covers operating before one does |
+| 4 | Sensor clocks are synchronised by GNSS or PTP, and clock drift is **measured, not assumed to be zero** |
+| 5 | Annotation is performed off-platform and integrated over an API. Building an annotation tool is out of scope |
+| 6 | Cloud is AWS; §5 marks where the reasoning is portable |
+| 7 | **Tens of vehicles now, low hundreds within 2–3 years.** Explicitly not 10,000 - every sizing decision follows from this |
+| 8 | **Annotation is the dominant marginal cost**, and the share of recorded data that can be annotated shrinks as the fleet grows. The ceiling is a configuration value, never a constant in the design |
+| 9 | A trained perception model exists from cycle one; §2 covers operating before one does |
 
 ---
 
@@ -80,15 +78,9 @@ graph LR
 
 A dusty lens fails quality and is kept - it is exactly the material selection wants. A truncated upload fails integrity and must never become canonical data.
 
-| | Integrity | Quality |
-|---|---|---|
-| Question | Did all the bytes arrive intact? | Is the data usable? |
-| Checks | Manifest reconciliation, SHA-256 per chunk, chunk count, sequence continuity | Structural, temporal, signal-level, semantic |
-| On failure | **Hard fail** → quarantine | **Soft flag** → ingested, annotated, visible downstream |
-
 | Decision | Instead of | Why |
 |---|---|---|
-| **Separate hard-fail and soft-flag paths** | One validation step | A corrupt transfer must never become canonical data. A dusty lens must not be thrown away - it is exactly the material §2 wants |
+| **Separate hard-fail and soft-flag paths** | One validation step | Integrity is checked by manifest reconciliation, a SHA-256 per chunk, chunk count and sequence continuity, and a failure is hard. Quality is checked structurally, temporally and at signal level, and a failure is only a flag. A corrupt transfer must never become canonical data; a dusty lens must not be thrown away, because it is exactly the material §2 wants |
 | **`landing/` → `raw/` promotion**, raw immutable with Object Lock | Write directly to the final location | A partial upload never becomes canonical. Corrections are new versions, never edits - which is what makes dataset manifests (§3.1) and replay testing (§4.1) safe |
 | **Quarantine rather than discard** | Drop failed data | A rising quarantine rate on one vehicle is a hardware fault signal, not noise |
 
@@ -314,10 +306,10 @@ Managed by default. At tens of machines the load is not the hard part - operatin
 
 | | Approach |
 |---|---|
-| **Scalability** | Managed and serverless by default, so growth is a configuration change rather than a capacity project. The four axes - more machines, more data per machine, more queries, more vehicle variants - scale independently. The cloud is not what binds first - depot bandwidth and the annotation budget are |
+| **Scalability** | Managed and serverless by default, so growth is a configuration change rather than a capacity project. What grows, and what actually binds, is set out in §1.6: not the cloud, but depot bandwidth and the annotation budget |
 | **Reliability** | The vehicle is the first line: it buffers locally and forwards when connected, so a cloud outage delays ingestion rather than losing data - and nothing in AWS provides that. Containment is architectural rather than operational: idempotent keys, dead-letter queues, and a quarantine zone so bad data stops instead of propagating. Single region, with bundles and model artifacts copied to a second one so a regional failure cannot leave the fleet without a way to deploy |
 | **Cost** | Storage dominates at every scale, and it grows with bytes retained rather than with machines - so the lever is deciding what to keep, not tuning jobs. That makes selection a cost lever as well as a quality one: the same mechanism that decides what is worth annotating decides what is worth keeping in instant-access storage |
-| **Data storage** | One S3 substrate with prefixes by lifecycle state, Object Lock on raw, and automatic tiering since recordings are written once and read rarely. Two stores because the questions differ - Iceberg for search across billions of rows, PostgreSQL for transactional state |
+| **Data storage** | One S3 substrate with prefixes by lifecycle state, Object Lock on raw, and automatic tiering since recordings are written once and read rarely: about 12 months instantly accessible, then deep archive, retained rather than deleted. Two stores because the questions differ - Iceberg for search across billions of rows, PostgreSQL for transactional state |
 | **Compute** | Spot by default for anything interruptible, which every job already is. Managed training rather than a cluster. One GPU at a time, because annotation throughput binds long before training capacity does |
 | **Security** | One certificate per machine, scoped so a vehicle can only write its own data. Separate KMS keys per data class. No long-lived credentials - SSO for people, OIDC for CI. And face and plate blurring on the annotation export, because machines in agriculture and construction record people and the exposure is largest where data leaves the account |
 | **Automation** | Event-driven ingestion rather than scheduled sweeps, one event bus, and infrastructure as code throughout so `dev` and `prod` are the same definitions with different values |
