@@ -47,14 +47,4 @@ corpus, and writes the results to `3-implementation/output/`.
 
 After the first build, `docker compose up` on its own is enough.
 
-### 3. Read the output
-
-| File | What it holds |
-|---|---|
-| `output/report.md` | A plain-language explanation of what was picked and why |
-| `output/selected.jsonl` | Every selected clip with its full scoring breakdown |
-| `output/dropped.jsonl` | Everything that was skipped, and the reason |
-| `output/run_manifest.json` | The exact settings and a fingerprint of the input, so the run can be reproduced |
-
-Running the tests, and the local path without Docker, are covered in
-[`3-implementation/README.md`](3-implementation/README.md).
+**The detailed README, including the test suite and the local path without Docker, is in [`3-implementation/`](3-implementation/).**
