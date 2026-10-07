@@ -3,7 +3,7 @@
 **Nakshatra Vyas** · Data Engineer - Autonomous Systems · October 2026
 
 **Deliverable 2** - the major design decisions and the assumptions behind them.
-The architecture itself is in `1-TECHNICAL-DESIGN.md`; the code is in `3-implementation/`.
+The architecture itself is in [`1-technical-design/`](../1-technical-design/); the code is in [`3-implementation/`](../3-implementation/).
 
 Every decision below is stated as **what was chosen and what it was chosen over**, because the brief states that identified trade-offs matter more than the stack selected.
 
@@ -328,4 +328,4 @@ The **data selection and active-learning pipeline** is implemented as working co
 
 Chosen because it is the component whose returns compound, it is what the role description describes as the ideal candidate's work, it requires no infrastructure to demonstrate, and its scoring functions are deterministic and therefore genuinely testable.
 
-Source, README, tests, and example input and output are in `3-implementation/`.
+Source, README, tests, and example input and output are in [`3-implementation/`](../3-implementation/).

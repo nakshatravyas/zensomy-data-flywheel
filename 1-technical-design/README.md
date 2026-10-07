@@ -3,7 +3,7 @@
 **Nakshatra Vyas** · Data Engineer - Autonomous Systems · October 2026
 
 **Deliverable 1** - a high-level architecture covering the complete Data Flywheel.
-Decisions, assumptions and trade-offs are in `2-DESIGN-DOCUMENT.md`.
+Decisions, assumptions and trade-offs are in [`2-design-document/`](../2-design-document/).
 
 ---
 
@@ -496,4 +496,4 @@ graph LR
 
 The **data selection and active-learning pipeline** - section 4 of this document, as working code. Scoring, diversity-aware ranking and budget-constrained selection, with deterministic tests and example input and output.
 
-See `3-implementation/`.
+See [`3-implementation/`](../3-implementation/).

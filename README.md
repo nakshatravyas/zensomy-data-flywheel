@@ -14,33 +14,47 @@ models, and sends the machines back out to collect what the models still get wro
 
 | # | Deliverable | Here |
 |---|---|---|
-| 1 | **Technical Design** - high-level architecture covering the complete flywheel | [`1-TECHNICAL-DESIGN.md`](1-TECHNICAL-DESIGN.md) |
-| 2 | **Design Document** - the major decisions, the assumptions, and the trade-offs | [`2-DESIGN-DOCUMENT.md`](2-DESIGN-DOCUMENT.md) |
+| 1 | **Technical Design** - high-level architecture covering the complete flywheel | [`1-technical-design/`](1-technical-design/) |
+| 2 | **Design Document** - the major decisions, the assumptions, and the trade-offs | [`2-design-document/`](2-design-document/) |
 | 3 | **Practical Implementation** - working code for the data-selection component | [`3-implementation/`](3-implementation/) |
-| 4 | **Presentation** - 10–15 minutes | [`4-presentation/`](4-presentation/) |
+| 4 | **Presentation** - 10-15 minutes | [`4-presentation/`](4-presentation/) |
 
-Deliverable 2 opens with a requirement coverage matrix mapping every bullet in the brief to the
-section that answers it.
+---
 
 ## Running the implementation
+
+### 1. Get the code
+
+Either clone the repository:
+
+```bash
+git clone https://github.com/nakshatravyas/zensomy-data-flywheel.git
+cd zensomy-data-flywheel
+```
+
+Or download it as a ZIP from the green **Code** button above, unzip it, and open a terminal in
+the unzipped folder.
+
+### 2. Run it
 
 ```bash
 cd 3-implementation
 docker compose up --build
 ```
 
-That is the whole setup. Full instructions, including the local path for running the tests, are in
+That is the whole setup. Docker builds the image, runs the selection pipeline over the example
+corpus, and writes the results to `3-implementation/output/`.
+
+After the first build, `docker compose up` on its own is enough.
+
+### 3. Read the output
+
+| File | What it holds |
+|---|---|
+| `output/report.md` | A plain-language explanation of what was picked and why |
+| `output/selected.jsonl` | Every selected clip with its full scoring breakdown |
+| `output/dropped.jsonl` | Everything that was skipped, and the reason |
+| `output/run_manifest.json` | The exact settings and a fingerprint of the input, so the run can be reproduced |
+
+Running the tests, and the local path without Docker, are covered in
 [`3-implementation/README.md`](3-implementation/README.md).
-
-## Building the documentation site
-
-```bash
-cd .site
-python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
-./sync.sh                      # copy the two documents in, rewriting cross-references
-.venv/bin/mkdocs serve         # preview on localhost:8000
-.venv/bin/mkdocs gh-deploy     # publish to GitHub Pages
-```
-
-The site renders the same Markdown that is submitted - it is a view of these files, not a separate
-copy that can drift.

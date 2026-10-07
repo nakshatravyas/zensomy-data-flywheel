@@ -1,5 +1,8 @@
-# Study material — not part of the submission
+# Study material - not part of the submission
 wiki/
+
+# Presentation source - the repository carries the rendered PDF only
+4-presentation/*.md
 
 # Site build tooling
 .site/.venv/
