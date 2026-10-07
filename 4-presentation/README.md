@@ -19,7 +19,7 @@ Add `--pdf-notes` to put the speaker notes into the PDF.
 
 ## Timing budget
 
-15 slides, 12 minutes of speaking, which leaves room inside the 15-minute limit.
+16 slides, 12 minutes of speaking, which leaves room inside the 15-minute limit.
 
 | # | Slide | Time |
 |---|---|---|
@@ -38,7 +38,8 @@ Add `--pdf-notes` to put the speaker notes into the PDF.
 | 13 | The three edges that close the loop | 0:55 |
 | 14 | Five trade-offs, with the cost stated | 0:40 |
 | 15 | Three claims this design makes | 0:30 |
-| | **Total** | **12:00** |
+| 16 | Thank you | 0:15 |
+| | **Total** | **12:15** |
 
 Slides 6, 9 and 13 are the three that must land: the worked ranking, the hidden regression, and the closed loop.
 If the clock runs short, 7 and 11 are the ones to compress.

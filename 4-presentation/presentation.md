@@ -227,8 +227,6 @@ This is the thesis. The forward path — ingest, select, label, train, evaluate,
 <div class="box"><span class="t">Release</span>Signed bundle, staged</div>
 </div>
 
-<div class="feedback"><span class="n">↑</span> Dotted edges run backwards from release and evaluation into training and selection — <strong>solid lines carry data, dotted lines carry decisions.</strong></div>
-
 <!--
 Here is the forward path. Data leaves the machine, is checked and catalogued, selection cuts the hours down, labels come back, a dataset version is built, a model is trained and tested, and a signed bundle goes out. Each stage owes the next one a guarantee. Nothing unchecked reaches a machine.
 -->
@@ -417,8 +415,6 @@ Shipping a model apart from the code around it is a trap: change a normalisation
 - **Buy managed unless managed forces a design compromise.** Kafka is the one bought exception — mine sites have no dependable link, so the streaming layer must be able to run locally.
 - **Build only selection and curation.** The rest is plumbing, and plumbing is rented.
 
-<div class="note">Deliberately unused: EKS · Redshift · DynamoDB · Aurora · multi-region active-active.</div>
-
 <!--
 At this fleet size AWS absorbs the load almost however the architecture is drawn. What it cannot absorb is a few engineers running Kubernetes, Kafka and Spark while also building the thing that differentiates the company. Kafka is the one deliberate exception, bought for portability to sites with no cloud link.
 -->
@@ -432,8 +428,6 @@ At this fleet size AWS absorbs the load almost however the architecture is drawn
 | **Depot upload bandwidth** | A link that serves five machines does not serve fifty | Cut more on the machine; grow the physical tier |
 | **The labelling budget** | Ten times the data is not ten times the budget | Selection carries more weight |
 | **Bench hardware for hardware-in-the-loop** | Scales with vehicle *variants*, not fleet size | One bench per variant; compile and test in parallel |
-
-<div class="small"><strong>What to add, in order:</strong> per-variant bundles when verticals multiply → a learned ranker when hand-set weights stop looking right → more pre-labelling when labelling throughput binds → distributed training when datasets outgrow one node → Kafka on-prem when customer sites appear.</div>
 
 <!--
 Scalability questions usually get answered with the cloud, and the cloud is the part that does not bind. What binds is physical and financial: depot bandwidth, the labelling budget, and bench hardware, which scales with vehicle variants rather than fleet size. I would rather name the revision points than claim the design is final.
@@ -485,8 +479,20 @@ Every decision in the document is written as what was chosen, what it was chosen
 
 <div class="lede"><strong>It is sized for this company, and it says where it stops.</strong> Every place that assumption binds is named, with the trigger that changes the decision.</div>
 
-<div class="small">Thank you. Happy to go deeper on selection, the release gate, or the cost model.</div>
-
 <!--
 Three claims to close on. First, this is a flywheel rather than a pipeline, and the three edges are what make that true. Second, every gate fails closed, and the failed run is recorded as fully as the successful one. Third, it is sized for this company and it says where it stops. Thank you.
+-->
+
+---
+
+<!-- _class: lead -->
+
+# Thank you
+
+<div class="lede">Happy to go deeper on any part of it — selection, the release gate, or how the loop closes.</div>
+
+<div class="small">Nakshatra Vyas · Data Engineer — Autonomous Systems</div>
+
+<!--
+That is the design. Happy to go deeper on any part of it — the selection scoring, the release gate, or how the loop closes on itself.
 -->
