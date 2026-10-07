@@ -500,4 +500,4 @@ graph LR
 
 The **data selection and active-learning pipeline** — section 4 of this document, as working code. Scoring, diversity-aware ranking and budget-constrained selection, with deterministic tests and example input and output.
 
-See [Implementation](implementation.md).
+See `3-implementation/` (in the repository).

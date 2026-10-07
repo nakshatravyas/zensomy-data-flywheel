@@ -49,7 +49,10 @@ A pipeline runs and stops. A flywheel stores momentum — each turn makes the ne
 
     ---
 
-    The architecture end to end — ingestion, selection, training, CI/CD and the cloud layout. Eight diagrams, including the worked clip-ranking example.
+    How the system is built, start to finish. How data leaves the machine and arrives
+    intact. How the system picks which footage is worth a human's time. How a dataset
+    becomes a trained model, how that model is checked, and how it reaches a machine
+    in the field. Mostly diagrams.
 
     [:octicons-arrow-right-24: Read it](technical-design.md)
 
@@ -57,58 +60,12 @@ A pipeline runs and stops. A flywheel stores momentum — each turn makes the ne
 
     ---
 
-    Every major decision, the alternative it beat, and the cost accepted. Opens with a requirement coverage matrix; closes with a 47-row trade-off register.
+    Why it is built that way. Each choice, what was chosen instead, and what that
+    choice costs. Opens with a table showing where every part of the brief is
+    answered, and ends with every trade-off in one list.
 
     [:octicons-arrow-right-24: Read it](design-document.md)
 
--   :material-code-braces:{ .lg .middle } **Implementation**
-
-    ---
-
-    Working Python for the data-selection component — the part of the design that decides which footage is worth paying a human to label. Runs with one Docker command.
-
-    [:octicons-arrow-right-24: Read it](implementation.md)
-
--   :material-presentation:{ .lg .middle } **Presentation**
-
-    ---
-
-    Ten to fifteen minutes on the architecture, the decisions, the trade-offs, scalability, and what makes this a flywheel rather than a pipeline.
-
-    [:octicons-arrow-right-24: Attached as PDF](#)
-
 </div>
-
----
-
-## The constraint that shapes everything
-
-<div class="grid" markdown>
-
-!!! danger "You cannot upload it"
-
-    **400 GB** per machine per day against a rural uplink of about **5 Mbps** is **178 hours of upload for 8 hours of driving.** The backlog grows without bound. So the vehicle decides what leaves it.
-
-!!! warning "You cannot label it"
-
-    Annotation is the real budget. Roughly **1%** of recorded footage can be labelled. Choosing that 1% well is worth more than any other single optimisation in the loop.
-
-!!! success "So selection is the product"
-
-    Four signals — the vehicle logged a problem, the model was unsure, two sensors disagreed, the scene is rare — scored, de-duplicated, and spent against a hard budget with a per-vehicle cap.
-
-</div>
-
----
-
-## Three claims this design makes
-
-| | Claim | Where it is argued |
-|---|---|---|
-| 1 | Model uncertainty alone cannot find the dangerous failures — a model that is **confident and wrong** reports no uncertainty at all | [Design Document §2](design-document.md) |
-| 2 | An aggregate evaluation score hides the regressions that matter; gating must be **per slice** | [Design Document §3](design-document.md) |
-| 3 | The artifact that trains is not the artifact that runs — **compilation changes accuracy**, and it changes it most on the rare slices | [Design Document §4](design-document.md) |
-
----
 
 <p class="footnote">Built with MkDocs Material. Diagrams are Mermaid, rendered from the same Markdown that is submitted.</p>

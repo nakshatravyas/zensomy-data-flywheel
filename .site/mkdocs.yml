@@ -11,15 +11,13 @@ theme:
     logo: material/sync
     repo: fontawesome/brands/github
   palette:
-    - media: "(prefers-color-scheme: light)"
-      scheme: default
+    - scheme: default
       primary: indigo
       accent: amber
       toggle:
         icon: material/weather-night
         name: Dark mode
-    - media: "(prefers-color-scheme: dark)"
-      scheme: slate
+    - scheme: slate
       primary: indigo
       accent: amber
       toggle:
@@ -78,4 +76,3 @@ nav:
   - Overview: index.md
   - 1 · Technical Design: technical-design.md
   - 2 · Design Document: design-document.md
-  - 3 · Implementation: implementation.md

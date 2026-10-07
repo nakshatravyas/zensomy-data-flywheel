@@ -3,7 +3,7 @@
 **Nakshatra Vyas** · Data Engineer — Autonomous Systems · October 2026
 
 **Deliverable 2** — the major design decisions and the assumptions behind them.
-The architecture itself is in [Technical Design](technical-design.md); the code is in [Implementation](implementation.md).
+The architecture itself is in [Technical Design](technical-design.md); the code is in `3-implementation/` (in the repository).
 
 Every decision below is stated as **what was chosen · what it was chosen over · what it costs**, because the brief states that identified trade-offs matter more than the stack selected.
 
@@ -43,7 +43,7 @@ Where each item the brief asks for is answered.
 | | Security | Design §5 |
 | | Automation | Design §5 |
 | | *Deliverable: high-level cloud architecture* | Architecture §7 |
-| **6** | Source code · README · tests · example I/O · design notes | [Implementation](implementation.md) |
+| **6** | Source code · README · tests · example I/O · design notes | `3-implementation/` (in the repository) |
 
 ---
 
@@ -377,7 +377,7 @@ The **data selection and active-learning pipeline** is implemented as working co
 
 Chosen because it is the component whose returns compound, it is what the role description describes as the ideal candidate's work, it requires no infrastructure to demonstrate, and its scoring functions are deterministic and therefore genuinely testable.
 
-Source, README, tests, and example input and output are in [Implementation](implementation.md).
+Source, README, tests, and example input and output are in `3-implementation/` (in the repository).
 
 ---
 
