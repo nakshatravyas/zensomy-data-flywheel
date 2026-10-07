@@ -420,17 +420,6 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#requirement-coverage" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Requirement coverage
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#assumptions" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -752,32 +741,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#7-what-breaks-first-and-what-comes-next" class="md-nav__link">
+  <a href="#7-three-claims-this-design-makes" class="md-nav__link">
     <span class="md-ellipsis">
       
-        7 · What breaks first, and what comes next
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#8-consolidated-trade-off-register" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        8 · Consolidated trade-off register
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#9-three-claims-this-design-makes" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        9 · Three claims this design makes
+        7 · Three claims this design makes
       
     </span>
   </a>
@@ -819,17 +786,6 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#requirement-coverage" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Requirement coverage
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#assumptions" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1151,32 +1107,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#7-what-breaks-first-and-what-comes-next" class="md-nav__link">
+  <a href="#7-three-claims-this-design-makes" class="md-nav__link">
     <span class="md-ellipsis">
       
-        7 · What breaks first, and what comes next
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#8-consolidated-trade-off-register" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        8 · Consolidated trade-off register
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#9-three-claims-this-design-makes" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        9 · Three claims this design makes
+        7 · Three claims this design makes
       
     </span>
   </a>
@@ -1204,166 +1138,7 @@
 <p><strong>Nakshatra Vyas</strong> · Data Engineer — Autonomous Systems · October 2026</p>
 <p><strong>Deliverable 2</strong> — the major design decisions and the assumptions behind them.
 The architecture itself is in <a href="../technical-design/">Technical Design</a>; the code is in <code>3-implementation/</code> (in the repository).</p>
-<p>Every decision below is stated as <strong>what was chosen · what it was chosen over · what it costs</strong>, because the brief states that identified trade-offs matter more than the stack selected.</p>
-<hr />
-<h2 id="requirement-coverage">Requirement coverage<a class="headerlink" href="#requirement-coverage" title="Permanent link">&para;</a></h2>
-<p>Where each item the brief asks for is answered.</p>
-<table>
-<thead>
-<tr>
-<th>Task</th>
-<th>Brief asks for</th>
-<th>Answered in</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>1</strong></td>
-<td>How data is transferred from the vehicle</td>
-<td>Design §1.1 · Architecture §3</td>
-</tr>
-<tr>
-<td></td>
-<td>How recordings are organised and identified</td>
-<td>Design §1.2</td>
-</tr>
-<tr>
-<td></td>
-<td>How metadata is associated with the data</td>
-<td>Design §1.3</td>
-</tr>
-<tr>
-<td></td>
-<td>How data integrity and quality can be maintained</td>
-<td>Design §1.4</td>
-</tr>
-<tr>
-<td></td>
-<td>How the solution handles unreliable connectivity</td>
-<td>Design §1.5</td>
-</tr>
-<tr>
-<td></td>
-<td>How the system scales as vehicles increase</td>
-<td>Design §1.6 · §7</td>
-</tr>
-<tr>
-<td></td>
-<td><em>Deliverable: architecture + key design decisions</em></td>
-<td>Architecture §3 · Design §1</td>
-</tr>
-<tr>
-<td><strong>2</strong></td>
-<td>Approach to identifying the most valuable data</td>
-<td>Design §2 · Architecture §4</td>
-</tr>
-<tr>
-<td></td>
-<td><em>Deliverable: an example of how data is ranked or prioritised</em></td>
-<td><strong>Architecture §4, worked ranking example</strong></td>
-</tr>
-<tr>
-<td><strong>3</strong></td>
-<td>Dataset creation and versioning</td>
-<td>Design §3.1</td>
-</tr>
-<tr>
-<td></td>
-<td>Reproducible model training</td>
-<td>Design §3.3</td>
-</tr>
-<tr>
-<td></td>
-<td>Model evaluation</td>
-<td>Design §3.4</td>
-</tr>
-<tr>
-<td></td>
-<td>Experiment tracking</td>
-<td>Design §3.5</td>
-</tr>
-<tr>
-<td></td>
-<td>Model / artifact management</td>
-<td>Design §3.6</td>
-</tr>
-<tr>
-<td></td>
-<td>Re-running the pipeline when new data arrives</td>
-<td>Design §3.7</td>
-</tr>
-<tr>
-<td></td>
-<td><em>Deliverable: workflow from new dataset → training → evaluation → candidate</em></td>
-<td>Architecture §5</td>
-</tr>
-<tr>
-<td><strong>4</strong></td>
-<td>Software changes</td>
-<td>Design §4.1</td>
-</tr>
-<tr>
-<td></td>
-<td>ML / model changes</td>
-<td>Design §4.2</td>
-</tr>
-<tr>
-<td></td>
-<td>Preventing unvalidated changes reaching a vehicle</td>
-<td>Design §4.3 · §4.4</td>
-</tr>
-<tr>
-<td></td>
-<td><em>Deliverable: workflow from change → validation → deployment</em></td>
-<td>Architecture §6</td>
-</tr>
-<tr>
-<td><strong>5</strong></td>
-<td>Scalability</td>
-<td>Design §5</td>
-</tr>
-<tr>
-<td></td>
-<td>Reliability</td>
-<td>Design §5</td>
-</tr>
-<tr>
-<td></td>
-<td>Cost</td>
-<td>Design §5</td>
-</tr>
-<tr>
-<td></td>
-<td>Data storage</td>
-<td>Design §5</td>
-</tr>
-<tr>
-<td></td>
-<td>Compute</td>
-<td>Design §5</td>
-</tr>
-<tr>
-<td></td>
-<td>Security</td>
-<td>Design §5</td>
-</tr>
-<tr>
-<td></td>
-<td>Automation</td>
-<td>Design §5</td>
-</tr>
-<tr>
-<td></td>
-<td><em>Deliverable: high-level cloud architecture</em></td>
-<td>Architecture §7</td>
-</tr>
-<tr>
-<td><strong>6</strong></td>
-<td>Source code · README · tests · example I/O · design notes</td>
-<td><code>3-implementation/</code> (in the repository)</td>
-</tr>
-</tbody>
-</table>
+<p>Every decision below is stated as <strong>what was chosen and what it was chosen over</strong>, because the brief states that identified trade-offs matter more than the stack selected.</p>
 <hr />
 <h2 id="assumptions">Assumptions<a class="headerlink" href="#assumptions" title="Permanent link">&para;</a></h2>
 <p>Stated explicitly, as the brief invites. Each one is load-bearing somewhere.</p>
@@ -1372,69 +1147,52 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 <tr>
 <th>#</th>
 <th>Assumption</th>
-<th>Where it binds</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>1</td>
-<td>Off-road machines in <strong>GNSS-degraded, connectivity-poor</strong> environments</td>
-<td>All of §1</td>
+<td>Off-road machines in GNSS-degraded, connectivity-poor environments</td>
 </tr>
 <tr>
 <td>2</td>
-<td>Machines <strong>return to a depot most operating days</strong>, with high-bandwidth local network</td>
-<td><strong>The most load-bearing assumption in the design.</strong> §1.1 gives the fallback if it is false</td>
+<td>Machines <strong>return to a depot most operating days</strong>, with a high-bandwidth local network. <strong>The most load-bearing assumption in the design</strong> — §1.1 gives the fallback if it is false</td>
 </tr>
 <tr>
 <td>3</td>
-<td>Roughly <strong>8 operating hours per vehicle-day</strong></td>
-<td>Volume arithmetic</td>
+<td>About 8 operating hours per vehicle-day, and <strong>400 GB per vehicle-day</strong> across 4–6 cameras, LiDAR, radar, GNSS/INS and CAN</td>
 </tr>
 <tr>
 <td>4</td>
-<td><strong>~40–60 GB per vehicle-hour</strong> → ~400 GB/vehicle-day. 4–6 cameras, 1 LiDAR, 1–2 radar, GNSS/INS, CAN</td>
-<td>Transfer architecture</td>
+<td>On-vehicle software is ROS 2; recordings are written as MCAP</td>
 </tr>
 <tr>
 <td>5</td>
-<td>On-vehicle software is <strong>ROS 2</strong>; recordings written as <strong>MCAP</strong></td>
-<td>Format decisions</td>
+<td>Sensor clocks are synchronised by GNSS or PTP, and residual skew is <strong>measured, not assumed zero</strong></td>
 </tr>
 <tr>
 <td>6</td>
-<td>Sensor clocks synchronised by GNSS or PTP; <strong>residual skew is measured, not assumed zero</strong></td>
-<td>Cross-sensor signals in §2</td>
+<td>Annotation is performed off-platform and integrated over an API. Building an annotation tool is out of scope</td>
 </tr>
 <tr>
 <td>7</td>
-<td><strong>Annotation is performed off-platform</strong> — external vendor or internal tool, integrated over an API. Building an annotation tool is out of scope</td>
-<td>§3 owns the handoff, not the tool</td>
+<td>Cloud is AWS; §5 marks where the reasoning is portable</td>
 </tr>
 <tr>
 <td>8</td>
-<td>Cloud is <strong>AWS</strong>; §5 marks where the reasoning is portable</td>
-<td>§5</td>
+<td><strong>Tens of vehicles now, low hundreds within 2–3 years.</strong> Explicitly not 10,000 — every sizing decision follows from this</td>
 </tr>
 <tr>
 <td>9</td>
-<td>Scale target: <strong>tens of vehicles now, low hundreds within 2–3 years.</strong> Explicitly not 10,000</td>
-<td>Every sizing decision</td>
+<td><strong>Annotation is the dominant marginal cost</strong>, and the share of recorded data that can be annotated shrinks as the fleet grows. The ceiling is a configuration value, never a constant in the design</td>
 </tr>
 <tr>
 <td>10</td>
-<td><strong>Annotation is the dominant marginal cost</strong>, and the annotation ceiling is a small and shrinking fraction of what is recorded. The specific figure — 100 hours in the worked example — is an input, not a constant</td>
-<td>Why §2 carries disproportionate weight; the ceiling is a config value, never hard-coded</td>
+<td>Raw data is retained rather than deleted: 12 months instantly accessible, then deep archive</td>
 </tr>
 <tr>
 <td>11</td>
-<td>Raw retention: 12 months instantly accessible, then deep archive, retained rather than deleted</td>
-<td>Cost model</td>
-</tr>
-<tr>
-<td>12</td>
-<td>A trained perception model exists from cycle one; §2.7 covers operating before one does</td>
-<td>Selection bootstrapping</td>
+<td>A trained perception model exists from cycle one; §2 covers operating before one does</td>
 </tr>
 </tbody>
 </table>
@@ -1448,7 +1206,6 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 <th>Decision</th>
 <th>Instead of</th>
 <th>Why</th>
-<th>Cost accepted</th>
 </tr>
 </thead>
 <tbody>
@@ -1456,19 +1213,16 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 <td><strong>Four transfer tiers</strong> split by urgency and size — cellular telemetry, cellular flagged clips, depot WiFi bulk, physical media</td>
 <td>One upload path</td>
 <td>Cellular carries only what must be timely; depot WiFi carries ~98% of bytes at near-zero marginal cost</td>
-<td>Depends on assumption 2. Tier 4 is the explicit fallback</td>
 </tr>
 <tr>
 <td><strong>Resumable multipart upload</strong>, chunk-level</td>
 <td>Whole-file transfer</td>
 <td>A dropped link mid-transfer resumes rather than restarts</td>
-<td>More parts to track</td>
 </tr>
 <tr>
 <td><strong>Priority queue on the vehicle</strong>, not FIFO</td>
 <td>First-in-first-out buffer</td>
 <td>When the buffer fills or a link returns briefly, flagged data goes first and routine data waits</td>
-<td>Requires a priority policy, which is a judgement call</td>
 </tr>
 </tbody>
 </table>
@@ -1479,7 +1233,6 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 <th>Decision</th>
 <th>Instead of</th>
 <th>Why</th>
-<th>Cost accepted</th>
 </tr>
 </thead>
 <tbody>
@@ -1487,25 +1240,21 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 <td><strong>MCAP, 60-second chunks</strong></td>
 <td>Whole-session files; raw rosbag</td>
 <td>MCAP is indexed — session metadata is readable from a few MB of a 10 GB file, which is what makes cataloguing affordable. Chunking makes upload resumable and bounds the loss from a corrupt write</td>
-<td>More objects to track</td>
 </tr>
 <tr>
 <td><strong>ULID session identifiers generated on-vehicle</strong></td>
 <td>Server-assigned IDs; UUIDv4</td>
 <td>A machine in a field cannot reach a server to request an ID. ULIDs are collision-free offline and sort by time</td>
-<td>Slightly larger keys than an integer</td>
 </tr>
 <tr>
 <td><strong>Hive-style partitioning</strong> — <code>vehicle_id=…/date=…/session=…</code></td>
 <td>Flat prefixes</td>
 <td>Queries skip irrelevant partitions entirely; this is the main query-performance lever</td>
-<td>Partition layout is hard to change later</td>
 </tr>
 <tr>
 <td><strong>Idempotent keys throughout</strong></td>
 <td>Retry bookkeeping and dedup logic</td>
 <td>Over unreliable links, unknown completion state is the normal case. Deterministic keys make retry unconditionally safe and collapse a whole class of failure handling</td>
-<td>Keys must be derivable without server state</td>
 </tr>
 </tbody>
 </table>
@@ -1516,7 +1265,6 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 <th>Decision</th>
 <th>Instead of</th>
 <th>Why</th>
-<th>Cost accepted</th>
 </tr>
 </thead>
 <tbody>
@@ -1524,25 +1272,21 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 <td><strong>Four metadata levels</strong> — fleet, vehicle, session, chunk</td>
 <td>Flat metadata per file</td>
 <td>Fleet-wide facts are not duplicated across millions of chunks, and chunk-level facts are not lost inside session summaries</td>
-<td>Schema complexity</td>
 </tr>
 <tr>
 <td><strong>Manifest sidecar <em>and</em> a catalog</strong></td>
 <td>Catalog only</td>
 <td>The manifest makes a session self-describing even if the catalog is lost or has to be rebuilt — and it is what integrity verification reconciles against</td>
-<td>Two artifacts to keep in step</td>
 </tr>
 <tr>
 <td><strong>Calibration version as a first-class required field</strong></td>
 <td>Assume calibration is stable</td>
 <td>A mount that shifts two centimetres without re-calibration silently invalidates every LiDAR-to-camera projection from that moment on. <strong>Nothing fails and no error is raised.</strong> Models trained on the mixture degrade and the cause is untraceable unless the version was recorded at ingestion</td>
-<td>One more mandatory field, enforced at ingest</td>
 </tr>
 <tr>
 <td><strong>Clock-synchronisation quality recorded per session</strong></td>
 <td>Assume clocks agree</td>
 <td>200 ms of skew at 10 km/h displaces observations by 0.56 m. Downstream consumers need to know how much to trust cross-sensor alignment</td>
-<td>One more field</td>
 </tr>
 </tbody>
 </table>
@@ -1593,7 +1337,6 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 <th>Decision</th>
 <th>Instead of</th>
 <th>Why</th>
-<th>Cost accepted</th>
 </tr>
 </thead>
 <tbody>
@@ -1601,19 +1344,16 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 <td><strong>Separate hard-fail and soft-flag paths</strong></td>
 <td>One validation step</td>
 <td>A corrupt transfer must never become canonical data. A dusty lens must not be thrown away — it is exactly the material §2 wants</td>
-<td>Two code paths</td>
 </tr>
 <tr>
 <td><strong><code>landing/</code> → <code>raw/</code> promotion</strong>, raw immutable with Object Lock</td>
 <td>Write directly to the final location</td>
 <td>A partial upload never becomes canonical. Corrections are new versions, never edits — which is what makes dataset manifests (§3.1) and replay testing (§4.1) safe</td>
-<td>Transient double storage</td>
 </tr>
 <tr>
 <td><strong>Quarantine rather than discard</strong></td>
 <td>Drop failed data</td>
 <td>A rising quarantine rate on one vehicle is a hardware fault signal, not noise</td>
-<td>90 days of storage for data that may be unusable</td>
 </tr>
 </tbody>
 </table>
@@ -1624,7 +1364,6 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 <th>Decision</th>
 <th>Instead of</th>
 <th>Why</th>
-<th>Cost accepted</th>
 </tr>
 </thead>
 <tbody>
@@ -1632,25 +1371,21 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 <td><strong>Durable local buffer, store-and-forward</strong></td>
 <td>Upload-on-generate</td>
 <td>A cloud or link outage delays ingestion; it does not lose data. This is the single most important reliability property in the system, and it lives on the vehicle rather than in the cloud</td>
-<td>Finite on-vehicle storage — see the priority queue in §1.1</td>
 </tr>
 <tr>
 <td><strong>Exponential backoff with jitter</strong></td>
 <td>Fixed retry interval</td>
 <td>Prevents an entire fleet reconnecting after an outage from arriving as a synchronised thundering herd</td>
-<td>Slower recovery for an individual machine</td>
 </tr>
 <tr>
 <td><strong>Idempotent retry</strong></td>
 <td>Transactional upload protocol</td>
 <td>See §1.2 — this is why retry is safe at all</td>
-<td>—</td>
 </tr>
 <tr>
 <td><strong>Physical media tier for prolonged blackouts</strong></td>
 <td>Software-only solution</td>
 <td>Days or weeks fully offline is an operational problem, not a software one. A technician swapping a drive is standard practice at remote sites</td>
-<td>Logistics; higher latency to the platform</td>
 </tr>
 </tbody>
 </table>
@@ -1689,81 +1424,66 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 </table>
 <hr />
 <h2 id="2-data-selection-and-active-learning">2 · Data selection and active learning<a class="headerlink" href="#2-data-selection-and-active-learning" title="Permanent link">&para;</a></h2>
-<p><strong>The constraint.</strong> 10,000 hours recorded against 100 hours that can be annotated.</p>
-<blockquote>
-<p><strong>The 100 hours is a stand-in for a ceiling, not a number the design depends on.</strong> It will be a different figure next quarter, and as the fleet grows the recorded side grows far faster than the annotated side — so the fraction shrinks rather than holds. Nothing below is tuned to 100 hours: the ceiling is a single config value, the bucket shares and caps are proportions, and the scoring is independent of corpus size. What the design is actually built around is the permanent shape of the problem — <strong>only a small part of what is recorded can ever be looked at, so the system must decide where that attention goes.</strong></p>
-</blockquote>
-<p>The limit is financial rather than technical, and that is what makes it durable: more compute does not relieve it. So the question is never <em>how much can we annotate</em>, it is <strong>how do we concentrate a fixed amount of human attention on the material that carries the most information.</strong></p>
-<p>Random sampling fails that question on two counts. Most footage is a machine driving straight across a flat dry field, which the stack already handles — so a random hour buys almost nothing. And it <strong>degrades over time</strong>: as the model improves, the share of footage it already handles grows, so the expected value of a random hour falls every cycle. Selection therefore has to get smarter simply to hold its value constant, which is precisely why it is the component whose returns compound.</p>
+<p><strong>The constraint.</strong> Far more is recorded than can ever be annotated, and the limit is financial rather than technical — more compute does not relieve it. So the question is never <em>how much can we annotate</em>, it is <strong>where do we concentrate a fixed amount of human attention.</strong></p>
+<p>Random sampling answers it badly. Most footage is a machine driving straight across a flat dry field, which the stack already handles. And it <strong>degrades over time</strong>: as the model improves, the share of footage it already handles grows, so the expected value of a random hour falls every cycle. Selection has to get smarter simply to hold its value constant — which is why its returns compound.</p>
 <table>
 <thead>
 <tr>
 <th>Decision</th>
 <th>Instead of</th>
 <th>Why</th>
-<th>Cost accepted</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><strong>2.1 Four signals — WRONG, UNSURE, CONFLICT, RARE</strong></td>
-<td>Classic uncertainty sampling</td>
-<td>Uncertainty <strong>cannot detect confident error</strong> — the model 97% certain and wrong. That is the highest-risk failure mode, because the machine proceeds at full speed into it, and only WRONG and CONFLICT can see it. WRONG also needs no model at all, which solves the cold start</td>
-<td>More scoring machinery</td>
+<td>Uncertainty sampling alone</td>
+<td>Uncertainty cannot detect <strong>confident error</strong> — the model certain and wrong, which is the highest-risk case. Only WRONG and CONFLICT see it. WRONG also needs no model, which solves the cold start</td>
 </tr>
 <tr>
 <td><strong>2.2 Weighted linear score</strong></td>
 <td>A learned ranking model</td>
-<td>Every selection is explainable, and it operates from cycle one with no training data about selection itself</td>
-<td>Weights hand-tuned initially; a learned ranker is a second-phase upgrade</td>
+<td>Every selection is explainable, and it works from cycle one with no training data about selection itself</td>
 </tr>
 <tr>
-<td><strong>2.3 Quality as a multiplier, not an additive term</strong></td>
-<td>Quality as a penalty added to the score</td>
-<td>A faulty sensor produces high uncertainty <em>and</em> high cross-sensor conflict. Only a multiplier suppresses the clip regardless of how strongly it scores elsewhere</td>
-<td>None significant</td>
+<td><strong>2.3 Quality as a multiplier</strong></td>
+<td>Quality as a subtracted penalty</td>
+<td>A faulty sensor scores high on several signals at once. Only a multiplier suppresses the clip however strongly it scores elsewhere</td>
 </tr>
 <tr>
-<td><strong>2.4 Adaptive frame sampling</strong> with three safety properties</td>
+<td><strong>2.4 Adaptive frame sampling</strong></td>
 <td>Fixed-rate subsampling</td>
-<td>(1) Sampling governs <strong>scanning, not storage</strong> — raw recordings stay complete. (2) Events are detected in <strong>logs, not frames</strong>, so skipping frames cannot conceal them. (3) The rate rises to full 30 fps inside event windows. Without these, a person stepping into the path for half a second could be sampled away</td>
-<td>More complex sampling logic</td>
+<td>Sampling governs scanning, not storage; events are found in logs rather than frames; and the rate rises to full frame rate inside an event window. Without all three, a brief safety-critical moment can be sampled away</td>
 </tr>
 <tr>
-<td><strong>2.5 Three-group shortlist</strong> — all events + all rare + random sample of ordinary</td>
-<td>Rank by the cheap score and take the top N</td>
-<td>At shortlist time only WRONG and RARE have been computed. Ranking on those admits almost exclusively event-bearing clips and <strong>systematically excludes what UNSURE and CONFLICT exist to find</strong> — the funnel becomes self-confirming</td>
-<td>Larger shortlist, higher GPU cost at the scoring stage</td>
+<td><strong>2.5 Three-group shortlist</strong></td>
+<td>Rank on the cheap score, take the top N</td>
+<td>At shortlist time only the cheap signals exist. Ranking on those admits almost only event clips and excludes what the expensive signals are there to find</td>
 </tr>
 <tr>
-<td><strong>2.6 Diversity-attenuated greedy selection</strong> over an ANN index</td>
-<td>Pure ranked selection; clustering</td>
-<td>One dusty afternoon produces hundreds of near-identical high-scoring clips. Ranking alone spends the budget on one afternoon. Each selection attenuates its near neighbours by ×0.3</td>
-<td>Requires an embedding index; clustering remains a simpler fallback</td>
+<td><strong>2.6 Diversity-attenuated selection</strong></td>
+<td>Pure ranked selection</td>
+<td>One dusty afternoon produces hundreds of near-identical high-scoring clips. Ranking alone spends the whole budget on that afternoon</td>
 </tr>
 <tr>
-<td><strong>2.7 Budget split 20% must-take / 70% scored-diverse / 10% random</strong></td>
+<td><strong>2.7 Budget split — must-take, scored, random</strong></td>
 <td>Fully scored selection</td>
-<td>The random reservation preserves <strong>evaluation validity</strong> — if every labelled clip was chosen because the model struggled, normal-condition performance becomes unmeasurable — and is the only mechanism that can surface a failure mode no signal was designed to detect</td>
-<td>10% of the budget not optimised for information value</td>
+<td>The random share keeps evaluation honest, and is the only way a failure mode no signal was designed to find can surface</td>
 </tr>
 <tr>
-<td><strong>2.8 15% per-vehicle cap</strong></td>
+<td><strong>2.8 Per-vehicle cap</strong></td>
 <td>Uncapped allocation</td>
-<td>One machine with a dirty lens would otherwise consume the entire budget. The cap doubles as a fault detector: a vehicle repeatedly hitting it is a maintenance signal</td>
-<td>May constrain a genuinely information-rich machine</td>
+<td>One machine with a dirty lens would otherwise take the whole budget. The cap doubles as a maintenance signal</td>
 </tr>
 <tr>
 <td><strong>2.9 Clock-synchronisation gate on CONFLICT</strong></td>
 <td>Trusting cross-sensor comparison</td>
-<td>Below 10 ms the signal is trusted; above 50 ms it is disabled, because correctly functioning sensors appear to disagree on every frame when they are 200 ms apart</td>
-<td>The signal is unavailable on poorly synchronised vehicles</td>
+<td>Badly synchronised sensors appear to disagree on every frame, so the signal is disabled rather than believed</td>
 </tr>
 <tr>
-<td><strong>2.10 10-second clips</strong></td>
+<td><strong>2.10 Fixed-length clips</strong></td>
 <td>Single frames; whole sessions</td>
-<td>Matches annotator throughput and prevents intra-moment duplication</td>
-<td>Marginally coarser selection granularity</td>
+<td>Matches annotator throughput and prevents the same moment being bought twice</td>
 </tr>
 </tbody>
 </table>
@@ -1780,7 +1500,6 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 <th>Decision</th>
 <th>Instead of</th>
 <th>Why</th>
-<th>Cost accepted</th>
 </tr>
 </thead>
 <tbody>
@@ -1788,19 +1507,16 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 <td><strong>A dataset version is an immutable manifest of references</strong>, written once</td>
 <td>A folder of copied files</td>
 <td>A folder is mutable. Someone removes a bad clip, corrects fifty labels, appends a batch — the name stays <code>v4</code> and <em>"what data produced this model"</em> becomes unanswerable. References keep versioning cheap enough that engineers actually create versions</td>
-<td>Correctness depends on the immutable raw zone; content hashes are the detection mechanism</td>
 </tr>
 <tr>
 <td><strong>Content hash per sample, verified at load</strong></td>
 <td>Trusting the reference</td>
 <td>If a referenced file ever changes, the run aborts rather than silently training on different data</td>
-<td>Hash computation at build time</td>
 </tr>
 <tr>
 <td><strong>Sampling weights, not duplication</strong>, for class and scenario imbalance</td>
 <td>Physically copying rare samples</td>
 <td>Duplication makes the manifest misrepresent its own contents and corrupts every count derived from it</td>
-<td>Sampler complexity</td>
 </tr>
 </tbody>
 </table>
@@ -1811,7 +1527,6 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 <th>Decision</th>
 <th>Instead of</th>
 <th>Why</th>
-<th>Cost accepted</th>
 </tr>
 </thead>
 <tbody>
@@ -1819,25 +1534,21 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 <td><strong>Session-level splits</strong></td>
 <td>Random split over frames</td>
 <td>Consecutive frames are near-duplicates. A random split puts one frame in training and its twin in test, and the score comes back <strong>high, stable, and unrelated to field performance.</strong> It does not present as an error; it presents as success</td>
-<td>Less data-efficient; splits cannot be balanced precisely</td>
 </tr>
 <tr>
 <td><strong>Permanently sticky assignment</strong> — <code>hash(session_id)</code>, never re-drawn</td>
 <td>Re-splitting each build</td>
 <td>If splits are redrawn, last version's test data becomes this version's training data, and <strong>every historical model comparison becomes invalid.</strong> The loss is unrecoverable — the models cannot be re-measured against a split that no longer exists</td>
-<td>A valuable session may land entirely in test</td>
 </tr>
 <tr>
 <td><strong>Held-out sites and dates in the test split</strong></td>
 <td>Same-distribution test split</td>
 <td>Measures generalisation rather than interpolation. A new field, next month, is what deployment actually is</td>
-<td>Test scores read lower than same-distribution scores</td>
 </tr>
 <tr>
 <td><strong>An independent leakage check as its own pipeline step</strong></td>
 <td>Trusting the split implementation</td>
 <td>The rule can be satisfied exactly while leakage occurs: a session re-ingested under a new ID is one physical drive with two identifiers, hashed onto opposite sides. The check compares <strong>content</strong> — exact hashes plus near-duplicate embeddings — not identifiers</td>
-<td>ANN index cost per dataset build</td>
 </tr>
 </tbody>
 </table>
@@ -1848,7 +1559,6 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 <th>Decision</th>
 <th>Instead of</th>
 <th>Why</th>
-<th>Cost accepted</th>
 </tr>
 </thead>
 <tbody>
@@ -1856,13 +1566,11 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 <td><strong>Four pins: dataset hash · git SHA · container image digest · config and seeds</strong></td>
 <td>Pinning code and data only</td>
 <td>The environment pin is the one usually weakened. <strong>An image tag is a mutable pointer</strong> — <code>:latest</code> resolves differently over time, and CUDA, driver and library versions shift with no record in the run</td>
-<td>Image management overhead</td>
 </tr>
 <tr>
 <td><strong>Statistical, not bitwise, reproducibility — stated explicitly</strong></td>
 <td>Deterministic GPU kernels</td>
 <td>Bit-identical reproduction costs roughly 20–30% throughput for a property rarely needed. Claiming stronger reproducibility than has been paid for is worse than claiming none, because someone will rely on it</td>
-<td>Re-runs vary within normal run-to-run variance</td>
 </tr>
 </tbody>
 </table>
@@ -1873,7 +1581,6 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 <th>Decision</th>
 <th>Instead of</th>
 <th>Why</th>
-<th>Cost accepted</th>
 </tr>
 </thead>
 <tbody>
@@ -1881,19 +1588,16 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 <td><strong>A frozen evaluation set</strong>, refreshed quarterly and deliberately</td>
 <td>A continuously extended set</td>
 <td>A growing exam means successive models sat different tests and their scores are not comparable. Each refresh re-scores the current production model so a valid baseline survives</td>
-<td>Drifts from the operating domain between refreshes</td>
 </tr>
 <tr>
 <td><strong>Gate on per-slice metrics, not the aggregate</strong></td>
 <td>A single aggregate score</td>
 <td>A scenario that is 3% of the evaluation set contributes 3% of the aggregate, so a severe regression confined to it is invisible. <strong>A real result from this design: +1.2 points overall, −5.7 in dust.</strong> For a machine in a dry field that model is worse, and the aggregate hid it. The rare slices are exactly the costly ones</td>
-<td>More evaluation compute; occasional noisy failures on small slices, managed by minimum slice sizes and tolerance bands</td>
 </tr>
 <tr>
 <td><strong>A regression suite of real past field incidents</strong>, which only grows</td>
 <td>Slice metrics alone</td>
 <td>Specific known failures must not return regardless of summary statistics. Entries are never removed, because the conditions that produced them have not stopped existing</td>
-<td>Curation effort</td>
 </tr>
 </tbody>
 </table>
@@ -1904,7 +1608,6 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 <th>Decision</th>
 <th>Instead of</th>
 <th>Why</th>
-<th>Cost accepted</th>
 </tr>
 </thead>
 <tbody>
@@ -1912,13 +1615,11 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 <td><strong>Every run recorded automatically</strong> — inputs, metrics, artifacts, lineage</td>
 <td>Recording runs that seem important</td>
 <td>A run that is not recorded did not happen. A pipeline permitting unrecorded runs accumulates models whose origin cannot be established</td>
-<td>Storage for every failed run — which is the point; the dust failure was the most useful run of its cycle</td>
 </tr>
 <tr>
 <td><strong>MLflow, self-hosted</strong></td>
 <td>Weights &amp; Biases (SaaS)</td>
 <td>No per-seat cost, and field recordings and model artifacts remain inside the organisation's own account</td>
-<td>Weaker interface, one more service to operate. Revisit past ~15 engineers</td>
 </tr>
 </tbody>
 </table>
@@ -1929,7 +1630,6 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 <th>Decision</th>
 <th>Instead of</th>
 <th>Why</th>
-<th>Cost accepted</th>
 </tr>
 </thead>
 <tbody>
@@ -1937,13 +1637,11 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 <td><strong>The registry is a gate, not a store</strong> — stages <code>candidate → validated → shadow → production → archived</code></td>
 <td>A model directory</td>
 <td>Storage is object storage. What the registry adds is a <strong>stage</strong> and a <strong>lineage record</strong> tying a model to the exact data, code and environment that produced it</td>
-<td>—</td>
 </tr>
 <tr>
 <td><strong>Registration rejected without an attached evaluation report</strong>, enforced in the API</td>
 <td>A review checklist</td>
 <td>A rule enforced by convention is a rule that holds until the first deadline</td>
-<td>Marginally slower registration path</td>
 </tr>
 </tbody>
 </table>
@@ -1954,7 +1652,6 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 <th>Decision</th>
 <th>Instead of</th>
 <th>Why</th>
-<th>Cost accepted</th>
 </tr>
 </thead>
 <tbody>
@@ -1962,13 +1659,11 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 <td><strong>Three triggers:</strong> accumulation (+5% by volume), field performance, schedule</td>
 <td>Retrain on every arrival</td>
 <td>Retraining on fifty new clips burns GPU hours learning noise — but a serious field regression must not wait for a volume threshold. The performance trigger is <strong>feedback edge ①</strong> expressed as a mechanism</td>
-<td>Latency between annotation and improvement, bypassed by the performance trigger when it matters</td>
 </tr>
 <tr>
 <td><strong>A weekly scheduled floor</strong></td>
 <td>Trigger-only execution</td>
 <td>A pipeline that runs only when needed is a pipeline that is broken when needed</td>
-<td>Occasional unnecessary runs</td>
 </tr>
 </tbody>
 </table>
@@ -1979,7 +1674,6 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 <th>Decision</th>
 <th>Instead of</th>
 <th>Why</th>
-<th>Cost accepted</th>
 </tr>
 </thead>
 <tbody>
@@ -1987,7 +1681,6 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 <td><strong>Sequential ~1 GB shards for training reads</strong></td>
 <td>Per-sample object reads</td>
 <td>One request per file starves the GPU — utilisation settles around 30% waiting on the network. The manifest stays authoritative; shards are a regenerable materialisation of it</td>
-<td>Shard rebuild per dataset version</td>
 </tr>
 </tbody>
 </table>
@@ -2028,7 +1721,6 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 <th>Decision</th>
 <th>Instead of</th>
 <th>Why</th>
-<th>Cost accepted</th>
 </tr>
 </thead>
 <tbody>
@@ -2036,19 +1728,16 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 <td><strong>Replay against recorded field sessions in CI</strong></td>
 <td>Synthetic fixtures only</td>
 <td>Regression testing against the real distribution, catching behavioural divergence and latency regressions that no unit test produces. It is possible <strong>only because the raw zone is immutable and complete</strong> — a Task 1 decision made for unrelated reasons</td>
-<td>Corpus curation; replay compute per commit</td>
 </tr>
 <tr>
 <td><strong>A curated, versioned replay corpus that only grows</strong></td>
 <td>Replaying everything, or a fixed sample</td>
 <td>Scenario coverage from the taxonomy, plus every session associated with a past field incident</td>
-<td>Storage pinned to instant-access tiers</td>
 </tr>
 <tr>
 <td><strong>Images addressed by digest</strong></td>
 <td>Image tags</td>
 <td>Same reasoning as §3.3</td>
-<td>—</td>
 </tr>
 </tbody>
 </table>
@@ -2059,7 +1748,6 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 <th>Decision</th>
 <th>Instead of</th>
 <th>Why</th>
-<th>Cost accepted</th>
 </tr>
 </thead>
 <tbody>
@@ -2067,13 +1755,11 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 <td><strong>Re-evaluate the compiled artifact on target hardware</strong></td>
 <td>Trusting the training-time evaluation</td>
 <td><strong>The artifact that trains is not the artifact that runs.</strong> It is exported, quantised and compiled for the vehicle's accelerator, and <strong>quantisation degrades low-contrast inputs disproportionately</strong> — exactly the rare, costly slices. In this design v7 passed dust at FP32 and failed it at INT8. Skip this step and the model you validated and the model you deployed are different objects, with the deployed one carrying a report saying it passed</td>
-<td>An additional evaluation run per release</td>
 </tr>
 <tr>
 <td><strong>Provenance verification before compilation</strong></td>
 <td>Trusting the candidate's score</td>
 <td>A candidate with incomplete lineage is rejected regardless of its metrics</td>
-<td>—</td>
 </tr>
 </tbody>
 </table>
@@ -2109,7 +1795,6 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 <th>Decision</th>
 <th>Instead of</th>
 <th>Why</th>
-<th>Cost accepted</th>
 </tr>
 </thead>
 <tbody>
@@ -2117,25 +1802,21 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 <td><strong>The release unit is a bundle</strong> — software image + compiled models + config + calibration schema + hardware target, signed as one</td>
 <td>Deploying software and models independently</td>
 <td>A model's accuracy depends on pre- and post-processing that live in the software. Change the normalisation constants or the NMS threshold and the model behaves differently <strong>without the model changing.</strong> A model validated against software v12 has no established behaviour under v13</td>
-<td>Couples release cadence — a one-line fix requires a full release and full validation</td>
 </tr>
 <tr>
 <td><strong>A gate of seven conditions</strong> — traceability, software tests, replay, compiled-model evaluation, hardware-in-the-loop, signature, named human approval</td>
 <td>An approval checklist</td>
 <td>This is the operational definition of "validated". Six are automatic; conditions 1–6 produce the evidence, and condition 7 records accountability</td>
-<td>Hours of latency per release</td>
 </tr>
 <tr>
 <td><strong>Hardware-in-the-loop before release</strong></td>
 <td>Software testing only</td>
 <td><strong>There is no staging server here — the staging environment for a robot is a physical machine.</strong> Thermal throttling, memory pressure from the recording stack competing with perception, and embedded latency budgets cannot be reproduced off-target</td>
-<td>Bench hardware per vehicle variant</td>
 </tr>
 <tr>
 <td><strong>A named human approves production promotion</strong></td>
 <td>Fully automated promotion</td>
 <td>Auto-promotion is correct where failure is reversible and bounded. Here it is neither — the blast radius is physical machines near people. The approver is not re-deriving evidence; they are accountable, and the signature records that</td>
-<td>Latency, which is not the binding constraint on a weekly cadence</td>
 </tr>
 </tbody>
 </table>
@@ -2146,7 +1827,6 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 <th>Decision</th>
 <th>Instead of</th>
 <th>Why</th>
-<th>Cost accepted</th>
 </tr>
 </thead>
 <tbody>
@@ -2154,59 +1834,47 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 <td><strong>The gate is enforced in the pipeline <em>and</em> on the vehicle</strong></td>
 <td>Pipeline enforcement alone</td>
 <td>The two fail independently. A pipeline can be bypassed with sufficient access; <strong>a vehicle that refuses unsigned bundles cannot be made to accept one remotely.</strong> The vehicle independently checks signature, hardware target, calibration schema and the revocation list</td>
-<td>Key management; verification time at install</td>
 </tr>
 <tr>
 <td><strong>Shadow before canary</strong></td>
 <td>Canary directly</td>
 <td>The candidate runs on live sensor data with its outputs logged and never actuated — real field evidence at <strong>zero operational risk</strong></td>
-<td>Compute, memory and thermal cost on a constrained device; time-boxed and auto-disabled if production headroom drops</td>
 </tr>
 <tr>
 <td><strong>Shadow disagreements fed back into the selection pool</strong></td>
 <td>Discarding them after validation</td>
 <td>A frame on which two independently trained models disagree is difficult by construction. <strong>Validating a model produces the data that improves the next one</strong> — feedback edge ③</td>
-<td>Storage and scoring for disagreement clips</td>
 </tr>
 <tr>
 <td><strong>Time-in-stage <em>and</em> metric thresholds at every transition</strong></td>
 <td>Either alone</td>
 <td>A metric threshold alone can be satisfied by two easy hours; a time threshold alone can be satisfied while metrics degrade</td>
-<td>Roughly a week to reach the full fleet</td>
 </tr>
 <tr>
 <td><strong>Dual-slot A/B with automatic revert on failed boot health check</strong></td>
 <td>In-place update</td>
 <td>Rollback works with <strong>no network and no human</strong> — which is exactly the state a bad bundle creates — and is bounded in minutes rather than waiting on a diagnosis</td>
-<td>Doubles system storage on the device</td>
 </tr>
 <tr>
 <td><strong>Download decoupled from installation</strong></td>
 <td>Install on receipt</td>
 <td>Installation proceeds only when parked, with sufficient power margin, no pending upload backlog, and the operator informed</td>
-<td>The fleet is never instantaneously consistent, which the design accommodates rather than fights</td>
 </tr>
 <tr>
 <td><strong>Bundle version recorded in every recording's session metadata</strong></td>
 <td>Deployment logs only</td>
 <td><strong>Data cannot be rolled back.</strong> A defective model that ran six hours produced six hours of recordings. With this field, every artifact it produced is identifiable in one query; without it the contamination is permanent and undetectable</td>
-<td>One metadata field</td>
 </tr>
 <tr>
 <td><strong>A separate, bounded configuration path</strong> — schema-validated, bounds-checked in CI and again on the vehicle</td>
 <td>Everything is a bundle</td>
 <td>Requiring a full release for a threshold change creates pressure to bypass the process, which produces <strong>undocumented on-machine overrides — invisible, and strictly worse.</strong> Anything the models were validated against is excluded from this path by schema</td>
-<td>A second path that can break a vehicle</td>
 </tr>
 </tbody>
 </table>
 <hr />
 <h2 id="5-cloud-architecture">5 · Cloud architecture<a class="headerlink" href="#5-cloud-architecture" title="Permanent link">&para;</a></h2>
-<blockquote>
-<p><strong>The scarcest resource is not compute or storage. It is engineering attention.</strong></p>
-</blockquote>
-<p>At tens of machines, AWS absorbs this load almost regardless of how the architecture is drawn. What it cannot absorb is a few engineers operating a Kubernetes cluster, a Kafka cluster and a Spark cluster <em>while also</em> building the thing that differentiates the company.</p>
-<p>Two rules follow: <strong>buy managed unless managed forces a design compromise</strong>, and <strong>build only the selection and curation logic</strong> — everything else is plumbing, and plumbing should be rented.</p>
+<p>Managed by default. At tens of machines the load is not the hard part — operating clusters with a small team is. Two rules follow: <strong>buy managed unless managed forces a design compromise</strong>, and <strong>build only the selection and curation logic.</strong></p>
 <h3 id="51-the-services-and-why-each-one">5.1 The services, and why each one<a class="headerlink" href="#51-the-services-and-why-each-one" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -2214,7 +1882,6 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 <th>Service</th>
 <th>Chosen over</th>
 <th>Why</th>
-<th>Cost accepted</th>
 </tr>
 </thead>
 <tbody>
@@ -2222,107 +1889,89 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 <td><strong>IoT Greengrass</strong></td>
 <td>A custom agent</td>
 <td>Store-and-forward when disconnected, and remote deployment of the recording stack without physical access to a machine in a field</td>
-<td>Tied to one vendor's agent on the vehicle</td>
 </tr>
 <tr>
 <td><strong>IoT Core</strong></td>
 <td>A self-run MQTT broker</td>
 <td>One X.509 certificate per machine, and a device shadow that carries the desired bundle version — which is exactly the desired-state convergence deployment needs</td>
-<td>Another managed service in the path</td>
 </tr>
 <tr>
 <td><strong>Amazon MSK — Kafka</strong></td>
 <td>A cloud-native managed queue</td>
 <td><strong>Portability.</strong> Some customer sites — mining especially — will have no dependable link to any cloud, and the streaming layer is the one component that must then run locally. Kafka runs anywhere</td>
-<td>Brokers to size and patch, where a fully managed queue needs neither</td>
 </tr>
 <tr>
 <td><strong>Glue Schema Registry</strong></td>
 <td>Validating downstream, or not at all</td>
 <td>A firmware change that adds a field or alters a unit is caught at ingest instead of surfacing weeks later as unexplained data</td>
-<td>One more thing to register when a message shape changes</td>
 </tr>
 <tr>
 <td><strong>Data Firehose</strong></td>
 <td>A streaming Spark job</td>
 <td>Buffering, file sizing and compaction into Iceberg, with no job to write, deploy or operate</td>
-<td>Less control over the landing format</td>
 </tr>
 <tr>
 <td><strong>S3</strong></td>
 <td>A distributed filesystem</td>
 <td>One substrate for every lifecycle state. <strong>Object Lock</strong> on <code>raw/</code> enforces immutability at the storage layer, which dataset manifests and replay testing both silently assume</td>
-<td>Eventual consistency semantics to design around</td>
 </tr>
 <tr>
 <td><strong>Iceberg + Glue Data Catalog</strong></td>
 <td>Plain Parquet; Redshift</td>
 <td>Schema evolution when a sensor is added, snapshot IDs so a dataset can record the catalog state it was built against, and ACID writes with no coordination layer to build</td>
-<td>Compaction and snapshot expiry must actually run on a schedule</td>
 </tr>
 <tr>
 <td><strong>RDS PostgreSQL</strong></td>
 <td>Aurora Serverless; DynamoDB</td>
 <td>The operational state is ~10⁶ rows at low transaction rates, joined constantly. Aurora's elasticity solves a problem this workload does not have; DynamoDB would trade a write-scale problem we do not have for a query-rigidity problem we would acquire</td>
-<td>A fixed instance size to revisit later</td>
 </tr>
 <tr>
 <td><strong>AWS Batch on EC2 Spot</strong></td>
 <td>On-demand; a Kubernetes cluster</td>
 <td>Every job is already idempotent and restartable, so interruption is cheap — roughly a two-thirds saving for a property the pipeline had to have anyway</td>
-<td>Jobs must tolerate interruption</td>
 </tr>
 <tr>
 <td><strong>Glue · Athena</strong></td>
 <td>EMR; Redshift</td>
 <td>Scheduled transforms and SQL over Iceberg with no cluster to own. EMR Serverless is the upgrade when job complexity outgrows Glue's abstractions</td>
-<td>Less control than a Spark cluster</td>
 </tr>
 <tr>
 <td><strong>SageMaker Training</strong></td>
 <td>Self-managed GPU instances</td>
 <td>Per-second billing, managed spot with checkpointing, and interruption handled by the service rather than by code the team maintains</td>
-<td>Less control over the training environment</td>
 </tr>
 <tr>
 <td><strong>MLflow, self-hosted</strong></td>
 <td>Weights &amp; Biases; SageMaker Model Registry</td>
 <td>No per-seat cost, and field recordings and model artifacts stay inside the organisation's own account. Keeping the registry here too means a model's lineage lives in one system — lineage in two places is lineage nobody trusts</td>
-<td>Weaker interface, one more service to run</td>
 </tr>
 <tr>
 <td><strong>Step Functions</strong></td>
 <td>Airflow for everything</td>
 <td>Per-recording verification is thousands of short independent runs a day with branching. Billed per transition, so an idle week costs nothing</td>
-<td>A second orchestrator to learn</td>
 </tr>
 <tr>
 <td><strong>Airflow (MWAA)</strong></td>
 <td>Step Functions for everything</td>
 <td>The pipeline is dependency-rich and routinely re-run over historical ranges. Expressing a backfillable DAG as a state machine costs more in authoring pain than the service costs to run</td>
-<td>A fixed monthly cost that does not shrink with usage</td>
 </tr>
 <tr>
 <td><strong>EventBridge</strong></td>
 <td>Point-to-point wiring</td>
 <td>S3 events, schedules, fleet alarms and manual triggers all enter in one place</td>
-<td>—</td>
 </tr>
 <tr>
 <td><strong>GitHub Actions · ECR · AWS Signer</strong></td>
 <td>CodePipeline</td>
 <td>Better ecosystem, and OIDC removes long-lived credentials. Images addressed by digest; bundles signed with a key whose public half is on every vehicle</td>
-<td>Replay testing has to reach AWS compute</td>
 </tr>
 <tr>
 <td><strong>CloudWatch + SNS</strong></td>
 <td>A third-party observability stack</td>
 <td>Fleet inventory, runtime health and data-quality alarms in the account that already holds everything else</td>
-<td>Weaker querying than a dedicated tool</td>
 </tr>
 </tbody>
 </table>
-<p><strong>Deliberately not used:</strong> <code>EKS</code> — nobody should administer a cluster at this team size · <code>Redshift</code> — serverless query over Iceberg serves this volume with no cluster · <code>DynamoDB</code> — access patterns are relational · <code>Aurora</code> — elasticity this workload does not need · <code>SageMaker Pipelines</code> — a third orchestrator · <code>SageMaker Model Registry</code> — would split a model's lineage · <code>Lake Formation</code> — IAM and bucket policies suffice for one team · <code>Multi-region active-active</code> — disproportionate to the failure modes actually faced · <code>Managed Flink / Kafka Connect</code> — no stream-processing requirement exists.</p>
 <h3 id="52-the-seven-things-the-brief-asks-about">5.2 The seven things the brief asks about<a class="headerlink" href="#52-the-seven-things-the-brief-asks-about" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -2334,7 +1983,7 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 <tbody>
 <tr>
 <td><strong>Scalability</strong></td>
-<td>Managed and serverless by default, so growth is a configuration change rather than a capacity project. The four axes — more machines, more data per machine, more queries, more vehicle variants — scale independently. §7 names what actually binds first, and it is not the cloud</td>
+<td>Managed and serverless by default, so growth is a configuration change rather than a capacity project. The four axes — more machines, more data per machine, more queries, more vehicle variants — scale independently. The cloud is not what binds first — depot bandwidth and the annotation budget are</td>
 </tr>
 <tr>
 <td><strong>Reliability</strong></td>
@@ -2367,367 +2016,7 @@ The architecture itself is in <a href="../technical-design/">Technical Design</a
 <p>Chosen because it is the component whose returns compound, it is what the role description describes as the ideal candidate's work, it requires no infrastructure to demonstrate, and its scoring functions are deterministic and therefore genuinely testable.</p>
 <p>Source, README, tests, and example input and output are in <code>3-implementation/</code> (in the repository).</p>
 <hr />
-<h2 id="7-what-breaks-first-and-what-comes-next">7 · What breaks first, and what comes next<a class="headerlink" href="#7-what-breaks-first-and-what-comes-next" title="Permanent link">&para;</a></h2>
-<p><strong>The cloud is not the constraint.</strong> What binds first is physical and financial:</p>
-<table>
-<thead>
-<tr>
-<th>Binds first</th>
-<th>Response</th>
-<th>Already addressed by</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>Depot upload bandwidth</strong> — a link serving 5 machines does not serve 50</td>
-<td>More aggressive on-vehicle reduction; the physical tier expands</td>
-<td>§1.1</td>
-</tr>
-<tr>
-<td><strong>The annotation budget</strong> — ten times the data, not ten times the budget</td>
-<td>Selection carries more weight, which is its compounding argument</td>
-<td>§2</td>
-</tr>
-<tr>
-<td><strong>Bench hardware for hardware-in-the-loop</strong> — scales with vehicle <em>variants</em>, not fleet size</td>
-<td>Per-variant benches; parallel compile-and-evaluate stages</td>
-<td>§4.3</td>
-</tr>
-</tbody>
-</table>
-<p><strong>Evolution path, in the order it should happen:</strong></p>
-<table>
-<thead>
-<tr>
-<th>When</th>
-<th>Change</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Multiple verticals — agriculture, mining, construction</td>
-<td>Per-variant bundles with an explicit hardware compatibility matrix. The field and the on-vehicle check already exist</td>
-</tr>
-<tr>
-<td>Hand-tuned selection weights stop being obviously right</td>
-<td>Replace the linear score with a learned ranker, trained on which selected clips actually improved the model</td>
-</tr>
-<tr>
-<td>Annotation throughput becomes the ceiling</td>
-<td>Expand model-assisted pre-labelling; auto-accept high-confidence pre-labels and route only uncertain ones to humans</td>
-</tr>
-<tr>
-<td>Datasets outgrow single-node training time</td>
-<td>Distributed data-parallel training — deliberately not built now</td>
-</tr>
-<tr>
-<td>On-premises customer sites appear</td>
-<td>Move the streaming layer to Kafka; everything else is already portable or S3-compatible</td>
-</tr>
-<tr>
-<td>Team passes roughly 15 engineers</td>
-<td>Revisit MLflow self-hosting, account structure, and fine-grained table access</td>
-</tr>
-</tbody>
-</table>
-<hr />
-<h2 id="8-consolidated-trade-off-register">8 · Consolidated trade-off register<a class="headerlink" href="#8-consolidated-trade-off-register" title="Permanent link">&para;</a></h2>
-<table>
-<thead>
-<tr>
-<th>#</th>
-<th>Decision</th>
-<th>Alternative</th>
-<th>Cost accepted</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>1</td>
-<td>Four-tier transfer, depot WiFi for bulk</td>
-<td>Single upload path</td>
-<td>Depends on daily depot return; physical media is the fallback</td>
-</tr>
-<tr>
-<td>2</td>
-<td>60-second MCAP chunks</td>
-<td>Whole-session files</td>
-<td>More objects to track</td>
-</tr>
-<tr>
-<td>3</td>
-<td>On-vehicle ULIDs, idempotent keys</td>
-<td>Server-assigned IDs</td>
-<td>Larger keys; deterministic derivation required</td>
-</tr>
-<tr>
-<td>4</td>
-<td>Manifest sidecar <em>and</em> catalog</td>
-<td>Catalog only</td>
-<td>Two artifacts to keep in step</td>
-</tr>
-<tr>
-<td>5</td>
-<td>Calibration version mandatory at ingest</td>
-<td>Assume calibration is stable</td>
-<td>One more enforced field</td>
-</tr>
-<tr>
-<td>6</td>
-<td>Integrity hard-fails, quality soft-flags</td>
-<td>One validation step</td>
-<td>Two code paths</td>
-</tr>
-<tr>
-<td>7</td>
-<td>Immutable raw zone, promotion pattern</td>
-<td>Write in place</td>
-<td>Transient double storage</td>
-</tr>
-<tr>
-<td>8</td>
-<td>Iceberg for search, RDS PostgreSQL for state</td>
-<td>One store; Aurora; DynamoDB</td>
-<td>Two stores to operate</td>
-</tr>
-<tr>
-<td>9</td>
-<td>Four selection signals</td>
-<td>Uncertainty sampling alone</td>
-<td>More scoring machinery</td>
-</tr>
-<tr>
-<td>10</td>
-<td>Weighted linear score</td>
-<td>Learned ranker</td>
-<td>Weights hand-tuned initially</td>
-</tr>
-<tr>
-<td>11</td>
-<td>Quality as a multiplier</td>
-<td>Quality as an additive penalty</td>
-<td>None significant</td>
-</tr>
-<tr>
-<td>12</td>
-<td>Three-group shortlist</td>
-<td>Top-N by cheap score</td>
-<td>Larger shortlist, higher GPU cost</td>
-</tr>
-<tr>
-<td>13</td>
-<td>Diversity-attenuated greedy selection</td>
-<td>Pure ranking; clustering</td>
-<td>Requires an ANN index</td>
-</tr>
-<tr>
-<td>14</td>
-<td>10% random reservation</td>
-<td>Fully scored selection</td>
-<td>10% not optimised for information value</td>
-</tr>
-<tr>
-<td>15</td>
-<td>15% per-vehicle cap</td>
-<td>Uncapped allocation</td>
-<td>May constrain a genuinely rich machine</td>
-</tr>
-<tr>
-<td>16</td>
-<td>Adaptive frame sampling</td>
-<td>Fixed-rate subsampling</td>
-<td>More complex sampling logic</td>
-</tr>
-<tr>
-<td>17</td>
-<td>Dataset as an immutable manifest of references</td>
-<td>Materialised copies</td>
-<td>Depends on the immutable raw zone</td>
-</tr>
-<tr>
-<td>18</td>
-<td>Session-level sticky splits</td>
-<td>Random frame split</td>
-<td>Less data-efficient; splits cannot be balanced</td>
-</tr>
-<tr>
-<td>19</td>
-<td>Held-out sites and dates in test</td>
-<td>Same-distribution split</td>
-<td>Test scores read lower</td>
-</tr>
-<tr>
-<td>20</td>
-<td>Independent leakage check</td>
-<td>Trusting the split logic</td>
-<td>ANN index cost per build</td>
-</tr>
-<tr>
-<td>21</td>
-<td>Frozen evaluation set</td>
-<td>Continuously extended set</td>
-<td>Drifts; scheduled refresh with baseline re-score</td>
-</tr>
-<tr>
-<td>22</td>
-<td>Gate on per-slice metrics</td>
-<td>Aggregate metric only</td>
-<td>More eval compute; noisy small slices</td>
-</tr>
-<tr>
-<td>23</td>
-<td>Regression suite of real incidents</td>
-<td>Slice metrics alone</td>
-<td>Curation effort; it only grows</td>
-</tr>
-<tr>
-<td>24</td>
-<td>Four pins, image by digest</td>
-<td>Pinning code and data only</td>
-<td>Image management overhead</td>
-</tr>
-<tr>
-<td>25</td>
-<td>Statistical reproducibility, stated</td>
-<td>Bitwise determinism</td>
-<td>Re-runs vary within variance</td>
-</tr>
-<tr>
-<td>26</td>
-<td>MLflow self-hosted</td>
-<td>Weights &amp; Biases</td>
-<td>Weaker UI; one more service</td>
-</tr>
-<tr>
-<td>27</td>
-<td>Eval report required for registration, in the API</td>
-<td>Review checklist</td>
-<td>Slower registration path</td>
-</tr>
-<tr>
-<td>28</td>
-<td>Three retraining triggers</td>
-<td>Retrain on every arrival</td>
-<td>Latency before improvements land</td>
-</tr>
-<tr>
-<td>29</td>
-<td>Sequential shards for training reads</td>
-<td>Per-sample object reads</td>
-<td>Shard rebuild per version</td>
-</tr>
-<tr>
-<td>30</td>
-<td>Bundle as the release unit</td>
-<td>Independent deploys</td>
-<td>Couples release cadence</td>
-</tr>
-<tr>
-<td>31</td>
-<td>Re-evaluate the compiled artifact</td>
-<td>Trust training evaluation</td>
-<td>An extra evaluation per release</td>
-</tr>
-<tr>
-<td>32</td>
-<td>Hardware-in-the-loop before release</td>
-<td>Software testing only</td>
-<td>Bench hardware per variant</td>
-</tr>
-<tr>
-<td>33</td>
-<td>Gate in pipeline <em>and</em> on vehicle</td>
-<td>Pipeline alone</td>
-<td>Key management</td>
-</tr>
-<tr>
-<td>34</td>
-<td>Named human approval for production</td>
-<td>Full automation</td>
-<td>Hours of latency per release</td>
-</tr>
-<tr>
-<td>35</td>
-<td>Shadow before canary</td>
-<td>Canary directly</td>
-<td>On-device compute and thermal cost</td>
-</tr>
-<tr>
-<td>36</td>
-<td>Dual-slot A/B with automatic revert</td>
-<td>In-place update</td>
-<td>Doubled device storage</td>
-</tr>
-<tr>
-<td>37</td>
-<td>Download decoupled from installation</td>
-<td>Install on receipt</td>
-<td>Fleet never instantaneously consistent</td>
-</tr>
-<tr>
-<td>38</td>
-<td>Bundle version in session metadata</td>
-<td>Deployment logs only</td>
-<td>One metadata field</td>
-</tr>
-<tr>
-<td>39</td>
-<td>Separate configuration path</td>
-<td>Everything is a bundle</td>
-<td>A second path that can break a vehicle</td>
-</tr>
-<tr>
-<td>40</td>
-<td>Managed services by default</td>
-<td>Self-operated</td>
-<td>Less control</td>
-</tr>
-<tr>
-<td>41</td>
-<td>Kafka (MSK), two small brokers</td>
-<td>A cloud-native managed queue</td>
-<td>Brokers to size and patch; bought portability to on-prem sites</td>
-</tr>
-<tr>
-<td>42</td>
-<td>Two orchestrators, one rule</td>
-<td>One orchestrator</td>
-<td>Engineers must know which is which</td>
-</tr>
-<tr>
-<td>43</td>
-<td>Spot by default</td>
-<td>On-demand</td>
-<td>Jobs must tolerate interruption</td>
-</tr>
-<tr>
-<td>44</td>
-<td>Single region + selective replication</td>
-<td>Multi-region active-active</td>
-<td>Longer recovery from regional failure</td>
-</tr>
-<tr>
-<td>45</td>
-<td>Blur on export, full fidelity at rest</td>
-<td>Blur at ingest</td>
-<td>Raw zone holds personal data; must be governed</td>
-</tr>
-<tr>
-<td>46</td>
-<td>Single GPU, one training run</td>
-<td>Distributed from day one</td>
-<td>Revisit at scale; path documented</td>
-</tr>
-<tr>
-<td>47</td>
-<td>Glue Schema Registry on telemetry topics</td>
-<td>Validate downstream, or not at all</td>
-<td>One more thing to register per message-shape change</td>
-</tr>
-</tbody>
-</table>
-<hr />
-<h2 id="9-three-claims-this-design-makes">9 · Three claims this design makes<a class="headerlink" href="#9-three-claims-this-design-makes" title="Permanent link">&para;</a></h2>
+<h2 id="7-three-claims-this-design-makes">7 · Three claims this design makes<a class="headerlink" href="#7-three-claims-this-design-makes" title="Permanent link">&para;</a></h2>
 <p><strong>It is a flywheel, not a pipeline.</strong> Three feedback edges are named and mechanised: field failures fire retraining, weak evaluation slices steer the next collection, and shadow-mode disagreements become annotation candidates. Remove them and this is a pipeline that is run repeatedly.</p>
 <p><strong>Every gate fails closed.</strong> No stage produces output by default. A label batch, a dataset version, a model candidate, a release bundle — each exists only because a specific check passed, and the failed attempt is recorded as completely as the successful one. The most useful run in the worked example was the one that failed.</p>
 <p><strong>It is sized for this company, and it says where it stops.</strong> Tens of machines now, low hundreds within three years. Every place where that assumption binds is named, along with the trigger that would change the decision — because an architecture that knows its own revision points is more useful than one that claims to be final.</p>
