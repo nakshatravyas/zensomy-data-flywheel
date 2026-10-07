@@ -269,31 +269,44 @@ Eight representative clips from one selection cycle. This is the concrete output
 
 **What this stage produces is a candidate**, not a deployed model. Training answers *is this better*; deployment answers *is this safe to release*.
 
+Three questions have to be answered yes before a trained model is allowed to exist as a candidate: **are the labels good, is the test set clean, and is the model actually better.** Each one is a gate, and each gate stops the work rather than flagging it.
+
 ```mermaid
 graph TB
-    SEL["selected clips - from Task 2"]
-    EXP["export package<br/>pre-labelled by the production model<br/>correcting is faster than drawing"]
-    EXT["external annotation"]
-    IMP["import labels"]
-    QA{{"QA GATE<br/>sample double-annotated<br/>agreement must clear a threshold"}}
-    REJ["batch rejected<br/>returned for re-annotation"]
-    BUILD["BUILD DATASET VERSION<br/>immutable manifest of references<br/>content hashes · sticky session splits<br/>sampling weights"]
-    LEAK{{"LEAKAGE CHECK<br/>exact hash overlap<br/>+ near-duplicate embeddings"}}
-    STOP["STOP - rebuild required"]
-    TRAIN["TRAIN<br/>pinned: dataset hash · git SHA<br/>image digest · config and seeds"]
-    EV["EVALUATE<br/>aggregate + per-slice + regression suite"]
-    CMP{{"COMPARE vs PRODUCTION<br/>any slice regression fails"}}
-    NOCAND["run fully recorded<br/>NO candidate registered"]
-    CAND["MODEL CANDIDATE<br/>registered, evaluation report attached"]
-    T4["→ Task 4"]
+    subgraph P1["① GET THE LABELS"]
+        direction TB
+        SEL["clips chosen in Task 2"]
+        EXP["sent out for labelling<br/>the live model draws first"]
+        IMP["labels come back"]
+        QA{{"are the labels good?"}}
+        REJ["back for re-labelling"]
+    end
 
-    SEL --> EXP --> EXT --> IMP --> QA
-    QA -->|"fail"| REJ
-    QA -->|"pass"| BUILD --> LEAK
-    LEAK -->|"duplicates found"| STOP
+    subgraph P2["② BUILD THE DATASET"]
+        direction TB
+        BUILD["write a dataset version<br/>which clips, which labels, which split"]
+        LEAK{{"any test clip<br/>also in training?"}}
+        STOP["rebuild the dataset"]
+    end
+
+    subgraph P3["③ TRAIN AND CHECK"]
+        direction TB
+        TRAIN["train<br/>data, code, environment, seeds pinned"]
+        EV["score it<br/>overall, per scenario, past failures"]
+        CMP{{"better than<br/>what is live?"}}
+        NOCAND["recorded, not released"]
+        CAND["model candidate"]
+    end
+
+    T4["→ Task 4 decides whether<br/>it is allowed near a vehicle"]
+
+    SEL --> EXP --> IMP --> QA
+    QA -->|"no"| REJ
+    QA -->|"yes"| BUILD --> LEAK
+    LEAK -->|"overlap found"| STOP
     LEAK -->|"clean"| TRAIN --> EV --> CMP
-    CMP -->|"fail"| NOCAND
-    CMP -->|"pass"| CAND --> T4
+    CMP -->|"no"| NOCAND
+    CMP -->|"yes"| CAND --> T4
 
     classDef gate fill:#fdecea,stroke:#c0392b,stroke-width:2px,color:#7b241c
     classDef bad fill:#fbeaea,stroke:#c0392b,color:#7b241c
@@ -303,9 +316,21 @@ graph TB
     class CAND,T4 good
 ```
 
-**Splits are assigned at session level and are permanently sticky** - a session assigned to test stays in test across every future dataset version - because consecutive frames are near-duplicates, and because redrawn splits invalidate every historical model comparison.
+### The three gates, and why each one exists
 
-**Evaluation is gated per scenario slice**, not on the aggregate. A small slice contributes little to the aggregate, so a severe regression confined to it is invisible - and the rare slices are exactly the costly ones.
+| Gate | What it asks | Why it is there |
+|---|---|---|
+| **① Label quality** | Do two people labelling the same clip agree? | Labels are what the model learns from. Bad labels do not announce themselves later - they just become a model that is quietly wrong |
+| **② Leakage** | Is any test clip also in the training set? | If it is, the score comes back high and means nothing. Checked by **content**, because the same drive re-ingested under a new name is one recording wearing two identities |
+| **③ Comparison** | Is it better than the model in the field? | A model can gain overall and still get worse at night, or in dust. Those are the conditions that cost the most, so losing ground on any one of them counts as a loss |
+
+Nothing proceeds by default. A failed run is recorded as completely as a successful one, so the reason a model did not ship is as traceable as the reason one did.
+
+### Two decisions worth stating plainly
+
+**Train and test are split by session, and the split never moves.** Frames a second apart are almost the same picture, so splitting frame by frame puts a clip in training and its near-twin in test - the score then looks excellent and says nothing about the field. Sessions are assigned once, by a hash of the session ID, and stay put. If splits were redrawn each time, last version's test data would become this version's training data, and every past model comparison would quietly become meaningless.
+
+**Models are judged per scenario, not on one overall number.** A scenario that is a small share of the test set moves the overall score by a small amount, so a serious failure inside it is invisible in the headline. The rare scenarios are the expensive ones, which is exactly why they get their own pass or fail.
 
 ---
 
