@@ -559,6 +559,34 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="6 · CI/CD and deployment">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-four-ideas-in-that-picture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The four ideas in that picture
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-one-thing-that-cannot-be-rolled-back" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The one thing that cannot be rolled back
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -836,6 +864,34 @@
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="6 · CI/CD and deployment">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-four-ideas-in-that-picture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The four ideas in that picture
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-one-thing-that-cannot-be-rolled-back" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The one thing that cannot be rolled back
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -1393,49 +1449,93 @@ Decisions, assumptions and trade-offs are in <a href="../design-document/">Desig
 <p><strong>Models are judged per scenario, not on one overall number.</strong> A scenario that is a small share of the test set moves the overall score by a small amount, so a serious failure inside it is invisible in the headline. The rare scenarios are the expensive ones, which is exactly why they get their own pass or fail.</p>
 <hr />
 <h2 id="6-cicd-and-deployment">6 · CI/CD and deployment<a class="headerlink" href="#6-cicd-and-deployment" title="Permanent link">&para;</a></h2>
-<p><strong>The constraint.</strong> Support continuous development while preventing an unvalidated model or software change from reaching a vehicle. Four properties of the target shape everything: it can injure someone; it is offline for days; it cannot be recreated; and it is busy when the update arrives.</p>
+<p><strong>The constraint.</strong> Ship continuously, while making it impossible for an unchecked model or an unchecked line of code to reach a machine in a field.</p>
+<p>A vehicle is not a server, and four differences decide the whole design:</p>
+<table>
+<thead>
+<tr>
+<th>The machine</th>
+<th>So the pipeline must</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>can injure someone</td>
+<td>keep a named person in the final approval</td>
+</tr>
+<tr>
+<td>is offline for days</td>
+<td>leave an instruction the machine collects, not push an update at it</td>
+</tr>
+<tr>
+<td>cannot be recreated</td>
+<td>make rollback work with no network and nobody present</td>
+</tr>
+<tr>
+<td>is busy when the update arrives</td>
+<td>let the machine choose when to install</td>
+</tr>
+</tbody>
+</table>
 <pre class="mermaid"><code>graph TB
-    subgraph SW["SOFTWARE PATH"]
-        CM["commit · pull request"]
-        CI["lint · unit · build by digest · integration"]
-        RP{{"REPLAY&lt;br/&gt;against recorded field sessions"}}
-        CM --&gt; CI --&gt; RP
+    subgraph A["① WHAT CHANGED"]
+        direction TB
+        CM["code change"]
+        CI["tests, then replay&lt;br/&gt;against real recorded drives"]
+        MC["new model from Task 3"]
+        CO["compile it for the vehicle's chip"]
+        RE{{"does the compiled version&lt;br/&gt;still pass?"}}
+        CM --&gt; CI
+        MC --&gt; CO --&gt; RE
     end
 
-    subgraph MD["MODEL PATH"]
-        MC["model candidate - from Task 3"]
-        PV["verify provenance&lt;br/&gt;report · eval-set version · lineage"]
-        CO["compile for target&lt;br/&gt;ONNX → INT8 / FP16 engine"]
-        RE{{"RE-EVALUATE the compiled engine&lt;br/&gt;on target hardware"}}
-        MC --&gt; PV --&gt; CO --&gt; RE
+    subgraph B["② ONE SIGNED PACKAGE"]
+        direction TB
+        BUN["bundle&lt;br/&gt;software + models + config + calibration"]
+        HIL{{"run it on real hardware"}}
+        GATE{{"release gate&lt;br/&gt;7 checks, 6 automatic, 1 a person"}}
+        BUN --&gt; HIL --&gt; GATE
     end
 
-    BUN["BUNDLE - signed&lt;br/&gt;software image + compiled models + config&lt;br/&gt;+ calibration schema + hardware target"]
-    HIL{{"HARDWARE-IN-THE-LOOP&lt;br/&gt;real device · true-rate sensor replay&lt;br/&gt;accuracy · p99 latency · memory · thermal"}}
-    GATE{{"RELEASE GATE - 7 conditions&lt;br/&gt;6 automatic + 1 named human approval"}}
+    subgraph C["③ ROLL OUT SLOWLY"]
+        direction TB
+        SH["shadow - 3 machines&lt;br/&gt;runs live, never acts"]
+        CN["canary - 2 machines&lt;br/&gt;driving, supervised"]
+        W1["a quarter of the fleet"]
+        W2["the rest"]
+        SH --&gt; CN --&gt; W1 --&gt; W2
+    end
 
-    SH["SHADOW - 3 machines&lt;br/&gt;zero exposure, outputs logged only&lt;br/&gt;≥ 20 operating hours"]
-    CN["CANARY - 2 machines&lt;br/&gt;live, supervised, known sites&lt;br/&gt;≥ 50 operating hours"]
-    W1["WAVE 1 - 25% of fleet&lt;br/&gt;≥ 72 hour soak"]
-    W2["WAVE 2 - remainder"]
-    SELP["selection pool - Task 2"]
+    subgraph D["④ ON EACH MACHINE"]
+        direction TB
+        VEH["checks the bundle itself&lt;br/&gt;signature, hardware, calibration, not withdrawn"]
+        INS["installs when parked&lt;br/&gt;and not mid-upload"]
+        AB["will not boot?&lt;br/&gt;switches back by itself"]
+        VEH --&gt; INS --&gt; AB
+    end
 
-    AB["ON THE MACHINE&lt;br/&gt;dual-slot A/B · boot health check&lt;br/&gt;automatic revert, no network, no human"]
+    SELP["clips the two models disagreed on&lt;br/&gt;→ back to Task 2"]
 
-    RP --&gt; BUN
+    CI --&gt; BUN
     RE --&gt; BUN
-    BUN --&gt; HIL --&gt; GATE --&gt; SH --&gt; CN --&gt; W1 --&gt; W2
-    SH -.-&gt;|"disagreements"| SELP
-    W2 --&gt; AB
-    CN --&gt; AB
+    GATE --&gt; SH
+    W2 --&gt; VEH
+    SH -.-&gt;|"③ feedback edge"| SELP
 
     classDef gate fill:#fdecea,stroke:#c0392b,stroke-width:2px,color:#7b241c
     classDef stage fill:#eefaf0,stroke:#3f9c62,color:#14432a
     classDef box fill:#eef4fb,stroke:#5b86b8,color:#13293d
-    class RP,RE,HIL,GATE gate
+    class RE,HIL,GATE gate
     class SH,CN,W1,W2 stage
-    class BUN,AB,SELP box</code></pre>
-<p><strong>The release unit is a bundle</strong>, never a model or a binary alone, because a model's accuracy depends on pre- and post-processing that live in the software. <strong>The gate is enforced twice</strong> - in the pipeline, and again on the vehicle, which independently verifies signature, hardware target, calibration schema and the revocation list before installing anything.</p>
+    class BUN,VEH,INS,AB,SELP box</code></pre>
+<h3 id="the-four-ideas-in-that-picture">The four ideas in that picture<a class="headerlink" href="#the-four-ideas-in-that-picture" title="Permanent link">&para;</a></h3>
+<p><strong>① One package, never a loose model.</strong> A model's accuracy depends on code that sits around it - how the image is prepared, what threshold filters the results. Change that code and the model behaves differently without the model changing. Ship them separately and combinations end up in the field that nobody ever tested together.</p>
+<p><strong>② The model that trains is not the model that runs.</strong> It gets shrunk to run on a small chip, and shrinking it costs accuracy - most of all on dim, low-contrast scenes, which are exactly the dust and night clips that matter. So the shrunk version is scored again, on the real hardware, before it counts.</p>
+<p><strong>③ The gate is checked twice.</strong> Once in the pipeline, and again by the machine before it installs anything. A pipeline can be bypassed by someone with enough access. A machine that refuses unsigned bundles cannot be talked into accepting one.</p>
+<p><strong>④ Rollout buys evidence, and so does failure.</strong> Shadow runs the new model on live sensors with its decisions recorded but never acted on - real evidence at no risk. Every frame where the new and old models disagreed is a hard frame by definition, and goes back into the pool worth labelling. <strong>Validating a model produces the data that improves the next one.</strong></p>
+<p>Each stage needs both a time threshold and a metric threshold before it promotes. Time alone can pass while the numbers slide; metrics alone can be satisfied by two easy hours in good weather.</p>
+<h3 id="the-one-thing-that-cannot-be-rolled-back">The one thing that cannot be rolled back<a class="headerlink" href="#the-one-thing-that-cannot-be-rolled-back" title="Permanent link">&para;</a></h3>
+<p>A bad bundle can be withdrawn, but the six hours it ran already produced six hours of recordings. So <strong>every recording stores the bundle version that made it.</strong> Withdraw a bundle and one query finds everything it touched. Without that field the contamination is permanent and invisible.</p>
 <hr />
 <h2 id="7-cloud-architecture">7 · Cloud architecture<a class="headerlink" href="#7-cloud-architecture" title="Permanent link">&para;</a></h2>
 <p>The major services, and how they interact. The organising split: a <strong>data plane</strong> that bytes flow through, and a <strong>control plane</strong> that decides when things run.</p>
