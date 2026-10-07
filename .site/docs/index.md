@@ -5,9 +5,9 @@ hide:
 
 # Data Flywheel for Autonomous Systems
 
-<p class="lede">A continuous loop that turns field data from off-road autonomous machines into measurably better models — and sends the machines back out to collect what the models still get wrong.</p>
+<p class="lede">A continuous loop that turns field data from off-road autonomous machines into measurably better models - and sends the machines back out to collect what the models still get wrong.</p>
 
-<p class="byline"><strong>Nakshatra Vyas</strong> · Data Engineer — Autonomous Systems · October 2026<br>
+<p class="byline"><strong>Nakshatra Vyas</strong> · Data Engineer - Autonomous Systems · October 2026<br>
 Technical assessment · Zensomy Autonomous Technologies</p>
 
 ---
@@ -37,7 +37,7 @@ graph LR
     class VA,DE fb
 ```
 
-A pipeline runs and stops. A flywheel stores momentum — each turn makes the next turn cheaper and more productive. **The three dotted edges are the design.** Without them this is a data pipeline that happens to be run repeatedly.
+A pipeline runs and stops. A flywheel stores momentum - each turn makes the next turn cheaper and more productive. **The three dotted edges are the design.** Without them this is a data pipeline that happens to be run repeatedly.
 
 ---
 

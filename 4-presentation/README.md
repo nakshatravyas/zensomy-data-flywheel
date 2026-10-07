@@ -1,9 +1,9 @@
 # Presentation
 
-**Deliverable 4** — the 10–15 minute talk covering the Data Flywheel design.
+**Deliverable 4** - the 10–15 minute talk covering the Data Flywheel design.
 
 `presentation.md` is a [Marp](https://marp.app) deck: plain Markdown, one slide per `---`.
-Every slide carries speaker notes in an HTML comment at the end — that is the script, written to be read out loud.
+Every slide carries speaker notes in an HTML comment at the end - that is the script, written to be read out loud.
 
 Source material: `../1-TECHNICAL-DESIGN.md`, `../2-DESIGN-DOCUMENT.md`, `../3-implementation/`.
 Every number and example in the deck comes from one of those three.

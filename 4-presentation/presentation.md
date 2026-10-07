@@ -177,7 +177,7 @@ style: |
 
 ## Design for off-road perception at fleet scale
 
-**Nakshatra Vyas** — Data Engineer, Autonomous Systems
+**Nakshatra Vyas** - Data Engineer, Autonomous Systems
 Zensomy Autonomous Technologies · October 2026
 
 <div class="small">Ingestion · selection · training · release · the three edges that close the loop</div>
@@ -200,7 +200,7 @@ Thank you for the time. I will walk through how field data gets off the machine,
 <div class="note">Three edges, named and built: field failures fire retraining · weak evaluation slices steer the next collection · shadow disagreements become labelling candidates.</div>
 
 <!--
-This is the thesis. The forward path — ingest, select, label, train, evaluate, deploy — is necessary, but it is not a flywheel. What makes it one is three edges that carry information backwards. I come back to them at the end and show why the returns build rather than repeat.
+This is the thesis. The forward path - ingest, select, label, train, evaluate, deploy - is necessary, but it is not a flywheel. What makes it one is three edges that carry information backwards. I come back to them at the end and show why the returns build rather than repeat.
 -->
 
 ---
@@ -238,16 +238,16 @@ Here is the forward path. Data leaves the machine, is checked and catalogued, se
 <div class="row">
 <div class="box"><span class="t">1 · Telemetry</span>Always on. Tiny.</div>
 <div class="box"><span class="t">2 · Cellular clips</span>Flagged events only.</div>
-<div class="box accent"><span class="t">3 · Depot WiFi</span>Bulk — about <strong>98% of bytes</strong>, near-zero cost.</div>
+<div class="box accent"><span class="t">3 · Depot WiFi</span>Bulk - about <strong>98% of bytes</strong>, near-zero cost.</div>
 <div class="box"><span class="t">4 · Physical media</span>Sites with no link.</div>
 </div>
 
 <div class="row">
-<div class="box gate"><span class="t">Integrity — hard fail</span>Did all the bytes arrive? Hashes, chunk counts, sequence gaps. → <strong>quarantine</strong></div>
-<div class="box"><span class="t">Quality — soft flag</span>Is the data usable? Flagged, not dropped. A dusty lens is what selection wants. → <strong>raw</strong></div>
+<div class="box gate"><span class="t">Integrity - hard fail</span>Did all the bytes arrive? Hashes, chunk counts, sequence gaps. → <strong>quarantine</strong></div>
+<div class="box"><span class="t">Quality - soft flag</span>Is the data usable? Flagged, not dropped. A dusty lens is what selection wants. → <strong>raw</strong></div>
 </div>
 
-<div class="note"><span class="cost">Cost</span> Tier 3 assumes machines come back to a depot most days — the biggest assumption here, and tier 4 is its fallback. <strong>Calibration version is required at ingest:</strong> a mount that shifts raises no error, it just poisons every cross-sensor projection.</div>
+<div class="note"><span class="cost">Cost</span> Tier 3 assumes machines come back to a depot most days - the biggest assumption here, and tier 4 is its fallback. <strong>Calibration version is required at ingest:</strong> a mount that shifts raises no error, it just poisons every cross-sensor projection.</div>
 
 <!--
 Four transfer tiers, split by urgency and size. Depot WiFi carries most of the bytes cheaply. A durable buffer on the machine means an outage delays ingestion rather than losing data. At ingest, integrity hard-fails to quarantine but quality only flags, because a dusty lens is the material we want.
@@ -284,7 +284,7 @@ Classic active learning samples on uncertainty. Uncertainty is blind to the dang
 |---|---|
 | Disengagement in dust | **Must-take** |
 | LiDAR sees it, camera does not | **Selected** |
-| Same dust, a minute later | **Deferred** — a near neighbour was already taken |
+| Same dust, a minute later | **Deferred** - a near neighbour was already taken |
 | Straight line, clear day | **Random** reserve |
 
 <div class="two-col">
@@ -298,7 +298,7 @@ Ranking the shortlist on the cheap signals admits only event clips, and excludes
 </div>
 </div>
 
-<div class="note">Every pick carries its reasons, so anyone can ask why we paid for a clip. The random reserve keeps evaluation honest — without it, normal-condition performance stops being measurable.</div>
+<div class="note">Every pick carries its reasons, so anyone can ask why we paid for a clip. The random reserve keeps evaluation honest - without it, normal-condition performance stops being measurable.</div>
 
 <!--
 Row two is the confident error: uncertainty is near zero, so uncertainty sampling drops it, and conflict rescues it. Row three has the same signals as row one but a near neighbour was already taken, so it is deferred, not discarded, and returns next cycle. Row four is below threshold and taken anyway, from the random reserve.
@@ -333,7 +333,7 @@ I built selection because it is the part whose returns build up, and because its
 # A dataset version is a manifest, and a run has four pins
 
 <div class="row">
-<div class="box"><span class="t">Fixed manifest</span>References plus content hashes, written once. A folder is editable — clips come and go and the name stays the same.</div>
+<div class="box"><span class="t">Fixed manifest</span>References plus content hashes, written once. A folder is editable - clips come and go and the name stays the same.</div>
 <div class="box"><span class="t">Sticky splits</span>Set per session and never redrawn. Nearby frames are near-duplicates, so a frame split puts twins in train and test.</div>
 <div class="box gate"><span class="t">Leakage check</span>Compares content, not IDs. A session ingested twice is one drive with two names.</div>
 </div>
@@ -345,7 +345,7 @@ I built selection because it is the part whose returns build up, and because its
 <div class="box"><span class="t">Config and seeds</span></div>
 </div>
 
-<div class="note">A leaky split does not look like an error. It looks like success. <span class="cost">Cost</span> Sticky splits waste some data, but redrawing them breaks every past comparison. Reproducibility is statistical, not bitwise, and we say so — claiming more than we paid for is worse than claiming none.</div>
+<div class="note">A leaky split does not look like an error. It looks like success. <span class="cost">Cost</span> Sticky splits waste some data, but redrawing them breaks every past comparison. Reproducibility is statistical, not bitwise, and we say so - claiming more than we paid for is worse than claiming none.</div>
 
 <!--
 A dataset version is a fixed manifest with a hash per sample, checked at load. Splits are per session and never redrawn, because redrawing turns last version's test data into this version's training data. Four pins make a run repeatable, and the image pin is the one teams weaken: a tag is a moving pointer.
@@ -360,7 +360,7 @@ A dataset version is a fixed manifest with a hash per sample, checked at load. S
 <div class="box gate"><span class="t">Dust slice</span><span style="font-size:40px;font-weight:700;color:#b03a2e;">−5.7</span><br>points. For a machine in a dry field, that model is worse.</div>
 </div>
 
-<div class="lede">A small slice moves the headline number by almost nothing, so a bad regression inside it stays invisible — and the rare slices are the costly ones.</div>
+<div class="lede">A small slice moves the headline number by almost nothing, so a bad regression inside it stays invisible - and the rare slices are the costly ones.</div>
 
 - **A frozen evaluation set**, refreshed on purpose. A growing exam means models sat different tests.
 - **A regression suite of real field incidents that only grows.** Nothing is removed, because the conditions have not stopped existing.
@@ -391,7 +391,7 @@ This is a real result from the design. Plus one point two overall, minus five po
 <div class="box"><span class="t">Waves</span>Part of the fleet, soak, then the rest</div>
 </div>
 
-<div class="note">Accuracy depends on code around the model, so the bundle is the release unit. <strong>The artifact that trains is not the artifact that runs</strong> — quantising hurts low-contrast scenes most, so the compiled model is retested on target hardware. On the machine, two slots and an automatic revert, which works with no network and no human. <span class="cost">Cost</span> One bundle couples cadence: a one-line fix needs a full release.</div>
+<div class="note">Accuracy depends on code around the model, so the bundle is the release unit. <strong>The artifact that trains is not the artifact that runs</strong> - quantising hurts low-contrast scenes most, so the compiled model is retested on target hardware. On the machine, two slots and an automatic revert, which works with no network and no human. <span class="cost">Cost</span> One bundle couples cadence: a one-line fix needs a full release.</div>
 
 <!--
 Shipping a model apart from the code around it is a trap: change a normalisation constant and behaviour changes without the model changing. So one signed bundle. Then shadow, canary, waves, with time and metric thresholds at each step. The gate is enforced twice, in the pipeline and again on the machine, which refuses unsigned bundles.
@@ -412,7 +412,7 @@ Shipping a model apart from the code around it is a trap: change a normalisation
 
 <div class="lede">The scarcest resource is not compute or storage. It is engineering attention.</div>
 
-- **Buy managed unless managed forces a design compromise.** Kafka is the one bought exception — mine sites have no dependable link, so the streaming layer must be able to run locally.
+- **Buy managed unless managed forces a design compromise.** Kafka is the one bought exception - mine sites have no dependable link, so the streaming layer must be able to run locally.
 - **Build only selection and curation.** The rest is plumbing, and plumbing is rented.
 
 <!--
@@ -461,7 +461,7 @@ Here is the loop closed. Field failures fire retraining. Weak slices get more we
 | The bundle as release unit | Separate model and software deploys | A one-line fix needs a full release |
 | Statistical reproducibility, stated | Bitwise determinism | Re-runs vary within normal variance |
 
-<div class="note">The full register states each decision as <em>what was chosen · what it was chosen over · what it costs</em> — the named trade-offs matter more than the stack.</div>
+<div class="note">The full register states each decision as <em>what was chosen · what it was chosen over · what it costs</em> - the named trade-offs matter more than the stack.</div>
 
 <!--
 Every decision in the document is written as what was chosen, what it was chosen over, and what it costs. These five carry the most weight. The first is the one I would most want challenged: the transfer design rests on machines returning to a depot most days, and if that fails, tier four is the fallback.
@@ -475,7 +475,7 @@ Every decision in the document is written as what was chosen, what it was chosen
 
 <div class="lede"><strong>It is a flywheel, not a pipeline.</strong> Three feedback edges are named and built. Take them out and this is a pipeline that is run often.</div>
 
-<div class="lede"><strong>Every gate fails closed.</strong> No stage produces output by default. A label batch, a dataset version, a model, a release bundle — each exists because a check passed, and failed attempts are recorded as fully as successful ones.</div>
+<div class="lede"><strong>Every gate fails closed.</strong> No stage produces output by default. A label batch, a dataset version, a model, a release bundle - each exists because a check passed, and failed attempts are recorded as fully as successful ones.</div>
 
 <div class="lede"><strong>It is sized for this company, and it says where it stops.</strong> Every place that assumption binds is named, with the trigger that changes the decision.</div>
 
@@ -489,10 +489,10 @@ Three claims to close on. First, this is a flywheel rather than a pipeline, and 
 
 # Thank you
 
-<div class="lede">Happy to go deeper on any part of it — selection, the release gate, or how the loop closes.</div>
+<div class="lede">Happy to go deeper on any part of it - selection, the release gate, or how the loop closes.</div>
 
-<div class="small">Nakshatra Vyas · Data Engineer — Autonomous Systems</div>
+<div class="small">Nakshatra Vyas · Data Engineer - Autonomous Systems</div>
 
 <!--
-That is the design. Happy to go deeper on any part of it — the selection scoring, the release gate, or how the loop closes on itself.
+That is the design. Happy to go deeper on any part of it - the selection scoring, the release gate, or how the loop closes on itself.
 -->

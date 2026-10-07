@@ -1,15 +1,15 @@
-# Technical Design — Data Flywheel for Autonomous Systems
+# Technical Design - Data Flywheel for Autonomous Systems
 
-**Nakshatra Vyas** · Data Engineer — Autonomous Systems · October 2026
+**Nakshatra Vyas** · Data Engineer - Autonomous Systems · October 2026
 
-**Deliverable 1** — a high-level architecture covering the complete Data Flywheel.
+**Deliverable 1** - a high-level architecture covering the complete Data Flywheel.
 Decisions, assumptions and trade-offs are in `2-DESIGN-DOCUMENT.md`.
 
 ---
 
 ## 1 · The flywheel
 
-A pipeline runs and stops. A flywheel stores momentum — each turn makes the next turn cheaper and more productive. **The feedback edges are the design.** Without them this is a data pipeline that happens to be run repeatedly.
+A pipeline runs and stops. A flywheel stores momentum - each turn makes the next turn cheaper and more productive. **The feedback edges are the design.** Without them this is a data pipeline that happens to be run repeatedly.
 
 ```mermaid
 graph LR
@@ -44,8 +44,8 @@ graph LR
 
 ### Why the returns compound rather than repeat
 
-- As the model improves, the share of footage it already handles grows — so **the value of a randomly chosen hour falls every cycle.** Selection must get smarter simply to hold its value constant. That makes selection the component whose returns compound, not a cost measure bolted on.
-- The production model pre-labels clips before annotation, so **a better model makes annotation cheaper** — the same budget buys more labelled hours each cycle.
+- As the model improves, the share of footage it already handles grows - so **the value of a randomly chosen hour falls every cycle.** Selection must get smarter simply to hold its value constant. That makes selection the component whose returns compound, not a cost measure bolted on.
+- The production model pre-labels clips before annotation, so **a better model makes annotation cheaper** - the same budget buys more labelled hours each cycle.
 - Every release contributes new regression tests, new replay sessions and new scenario weights. **The test suite strengthens as a by-product of shipping.**
 
 ---
@@ -64,15 +64,15 @@ graph TB
     subgraph TRANSFER["FOUR TRANSFER TIERS"]
         T1["1 · cellular telemetry<br/>always, kilobytes/s"]
         T2["2 · cellular clips<br/>flagged events only"]
-        T3["3 · depot WiFi<br/>bulk — about 98% of bytes"]
+        T3["3 · depot WiFi<br/>bulk - about 98% of bytes"]
         T4["4 · physical media<br/>sites with no usable link"]
     end
 
     subgraph STORE["STORAGE"]
         LAND["landing/<br/>unverified"]
-        RAW["raw/ — immutable, Object Lock"]
+        RAW["raw/ - immutable, Object Lock"]
         QUAR["quarantine/"]
-        CUR["curated/ — Iceberg catalog"]
+        CUR["curated/ - Iceberg catalog"]
     end
 
     GATE1{{"VERIFY<br/>integrity + quality"}}
@@ -127,7 +127,7 @@ graph TB
 
 ## 3 · Data ingestion and management
 
-**The constraint is arithmetic.** 400 GB per vehicle-day against a 5 Mbps rural uplink is **178 hours of upload for 8 hours of driving**, and at $1–10/GB, **$400–4,000 per vehicle per day**. Streaming everything to the cloud is not a rejected trade-off; it is impossible. The transfer architecture follows from that.
+**The constraint is arithmetic.** 400 GB per vehicle-day against a rural uplink is **178 hours of upload for 8 hours of driving**, and cellular is priced per gigabyte. Streaming everything to the cloud is not a rejected trade-off; it is impossible. The transfer architecture follows from that.
 
 ```mermaid
 graph TB
@@ -147,15 +147,15 @@ graph TB
 
     L["s3://…/landing/<br/>unverified · expires after 7 days"]
 
-    INT{{"INTEGRITY — hard fail<br/>manifest reconciliation<br/>SHA-256 · chunk count · sequence"}}
-    QUAL{{"QUALITY — soft flag<br/>structural · temporal<br/>signal · semantic"}}
+    INT{{"INTEGRITY - hard fail<br/>manifest reconciliation<br/>SHA-256 · chunk count · sequence"}}
+    QUAL{{"QUALITY - soft flag<br/>structural · temporal<br/>signal · semantic"}}
 
     RAWZ["s3://…/raw/<br/>immutable · Object Lock · canonical"]
     QZ["s3://…/quarantine/<br/>90 days for diagnosis"]
 
-    subgraph CAT["CATALOG — two stores, two workloads"]
+    subgraph CAT["CATALOG - two stores, two workloads"]
         ICE["Iceberg on S3 + Glue Catalog<br/>searchable metadata, about 10⁹ rows"]
-        PG["PostgreSQL<br/>session state machine, about 10⁶ rows"]
+        PG["PostgreSQL<br/>session state machine"]
     end
 
     ID --> A1 & A2 & A3 & A4
@@ -174,7 +174,7 @@ graph TB
     class L,RAWZ,QZ,ICE,PG store
 ```
 
-**Metadata is recorded at four levels** — fleet, vehicle, session, chunk — so fleet-wide facts are not repeated per chunk and chunk-level facts are not lost inside session summaries.
+**Metadata is recorded at four levels** - fleet, vehicle, session, chunk - so fleet-wide facts are not repeated per chunk and chunk-level facts are not lost inside session summaries.
 
 **Calibration version is a first-class required field.** A sensor mount that shifts two centimetres without re-calibration silently invalidates every LiDAR-to-camera projection from that moment onward. Nothing fails, and no error is raised.
 
@@ -184,22 +184,18 @@ graph TB
 
 **The constraint.** 10,000 hours recorded against 100 hours that can be annotated.
 
-**The 100 hours is an illustration, not a design parameter.** Next quarter it may be 60 or 300, and as the fleet grows the recorded side grows far faster than the annotated side, so the fraction shrinks rather than holds. What is permanent is the shape of the problem: *only a small part of what is recorded can ever be looked at, so the system's job is to decide where that attention goes.*
-
 Everything below is therefore built around **the ratio and the mechanism**, never around a particular ceiling. The ceiling is one number in a config file; the question the design answers is **how to concentrate a fixed amount of human attention on the material that carries the most information**, whatever that amount turns out to be.
-
-The worked numbers that follow use 100 hours because a concrete walkthrough is easier to check than an abstract one.
 
 ```mermaid
 graph TB
     F["1.08 billion frames"]
-    FS["ADAPTIVE FRAME SAMPLING<br/>1 frame / 2 s when idle<br/>full 30 fps inside event windows<br/>governs scanning only — raw stays complete"]
+    FS["ADAPTIVE FRAME SAMPLING<br/>1 frame / 2 s when idle<br/>full 30 fps inside event windows<br/>governs scanning only - raw stays complete"]
     C1["1.5 million clips of 10 s"]
     QF["quality filter<br/>exclude already-labelled"]
     C2["1.335 million clips"]
     SL["THREE-GROUP SHORTLIST<br/>all event-bearing<br/>+ all rare-scenario<br/>+ random sample of ordinary"]
     C3["133,000 clips"]
-    SC["SCORE<br/>0.35·WRONG + 0.30·UNSURE<br/>+ 0.20·CONFLICT + 0.15·RARE<br/>× quality ÷ similarity"]
+    SC["SCORE<br/>four weighted signals<br/>scaled by quality<br/>attenuated by similarity"]
     BU["BUDGET ALLOCATION<br/>20% must-take · 70% scored and<br/>diversity-attenuated · 10% random<br/>15% per-vehicle cap"]
     OUT["36,000 clips = the annotation ceiling<br/>100 h in this walkthrough"]
 
@@ -215,13 +211,13 @@ graph TB
 
 ```mermaid
 graph LR
-    subgraph EV["EVIDENCE OF DIFFICULTY — no ground truth required"]
+    subgraph EV["EVIDENCE OF DIFFICULTY - no ground truth required"]
         W["WRONG<br/>disengagement · emergency brake<br/>near-miss · re-plan storm<br/>needs no model"]
         U["UNSURE<br/>low confidence · narrow margin<br/>detection instability"]
-        CF["CONFLICT<br/>camera and LiDAR disagree<br/>requires clock sync under 10 ms"]
+        CF["CONFLICT<br/>camera and LiDAR disagree<br/>requires synchronised clocks"]
         RA["RARE<br/>coverage gap against<br/>the scenario taxonomy"]
     end
-    SCORE["weighted score<br/>× quality ÷ similarity"]
+    SCORE["weighted score<br/>scaled by quality<br/>attenuated by similarity"]
     W -->|0.35| SCORE
     U -->|0.30| SCORE
     CF -->|0.20| SCORE
@@ -235,12 +231,12 @@ graph LR
 
 | Signal | Source | Available before a model exists |
 |---|---|---|
-| **WRONG** | Vehicle logs | ✅ Yes — the strongest signal needs no model |
+| **WRONG** | Vehicle logs | ✅ Yes - the strongest signal needs no model |
 | **UNSURE** | Model output | ❌ No |
-| **CONFLICT** | Cross-sensor comparison | ⚠️ Partially — needs clock sync under 10 ms |
+| **CONFLICT** | Cross-sensor comparison | ⚠️ Partially - needs synchronised clocks |
 | **RARE** | Catalog coverage counts | ✅ Yes |
 
-Four signals rather than one because **uncertainty cannot detect confident error** — the model 97% certain and wrong. That is the highest-risk failure mode, because the machine proceeds at full speed into it, and only WRONG and CONFLICT can see it.
+Four signals rather than one because **uncertainty cannot detect confident error** - the model certain and wrong. That is the highest-risk failure mode, because the machine proceeds at full speed into it, and only WRONG and CONFLICT can see it.
 
 ### Worked ranking example
 
@@ -252,20 +248,20 @@ Eight representative clips from one selection cycle. This is the concrete output
 |---|---|---|---|---|---|---|---|---|---|
 | 1 | `veh03` disengagement, dust plume | 1.00 | 0.71 | 0.44 | 0.92 | 0.95 | 1.0 | **0.750** | **Must-take** |
 | 2 | `veh01` emergency brake, low sun | 0.90 | 0.55 | 0.30 | 0.40 | 0.98 | 1.0 | **0.588** | Selected |
-| 3 | `veh04` near-miss — LiDAR sees obstacle, camera does not | 0.80 | 0.12 | 0.78 | 0.55 | 0.93 | 1.0 | **0.516** | Selected |
-| 4 | `veh02` wet descent, steep grade, no event | 0.00 | 0.48 | 0.10 | 0.95 | 1.00 | 1.0 | **0.307** | Selected — rare bucket |
-| 5 | `veh03` same dust afternoon as #1, 90 s later | 1.00 | 0.68 | 0.41 | 0.92 | 0.95 | **2.4** | **0.310** | Deferred — diversity |
-| 6 | `veh05` mud on lens, hardware fault confirmed | 0.60 | 0.88 | 0.91 | 0.30 | **0.21** | 1.0 | **0.147** | Rejected — quality |
+| 3 | `veh04` near-miss - LiDAR sees obstacle, camera does not | 0.80 | 0.12 | 0.78 | 0.55 | 0.93 | 1.0 | **0.516** | Selected |
+| 4 | `veh02` wet descent, steep grade, no event | 0.00 | 0.48 | 0.10 | 0.95 | 1.00 | 1.0 | **0.307** | Selected - rare bucket |
+| 5 | `veh03` same dust afternoon as #1, 90 s later | 1.00 | 0.68 | 0.41 | 0.92 | 0.95 | **2.4** | **0.310** | Deferred - diversity |
+| 6 | `veh05` mud on lens, hardware fault confirmed | 0.60 | 0.88 | 0.91 | 0.30 | **0.21** | 1.0 | **0.147** | Rejected - quality |
 | 7 | `veh01` straight-line travel, clear day | 0.00 | 0.08 | 0.05 | 0.05 | 1.00 | 1.0 | **0.042** | Not selected |
-| 8 | `veh02` straight-line travel, clear day | 0.00 | 0.06 | 0.04 | 0.08 | 1.00 | 1.0 | **0.038** | Selected — random 10% |
+| 8 | `veh02` straight-line travel, clear day | 0.00 | 0.06 | 0.04 | 0.08 | 1.00 | 1.0 | **0.038** | Selected - random 10% |
 
 **What each row demonstrates:**
 
-- **#1** — A disengagement is the strongest available evidence: a trained operator judged the machine unsafe. It needs no model to detect and enters the must-take bucket unconditionally.
-- **#3 — the confident error.** `UNSURE` is 0.12: the model is *certain*. Uncertainty sampling would discard this clip entirely. `WRONG` and `CONFLICT` are what surface it, and it is the most dangerous category in the set — the machine proceeds at full speed into a situation it has misread.
-- **#5 — diversity attenuation.** Identical raw signals to #1, but a similarity divisor of 2.4 because near-neighbours were already selected. Without this term, one dusty afternoon consumes a large share of the budget. The clip is deferred, not discarded — it returns to the pool next cycle.
-- **#6 — quality as a multiplier, not an additive term.** Every difficulty signal is high, but the sensor is faulty. Annotating it would teach the model about a dirty lens. A multiplier suppresses the clip regardless of how strongly it scores elsewhere; an additive penalty would not. The clip instead raises a maintenance alert.
-- **#8 — the random reservation.** Scores below the threshold and is selected anyway, from the 10% random bucket. Without it, every labelled clip would be one the model struggled with, and performance under normal conditions would become unmeasurable.
+- **#1** - A disengagement is the strongest available evidence: a trained operator judged the machine unsafe. It needs no model to detect and enters the must-take bucket unconditionally.
+- **#3 - the confident error.** `UNSURE` is 0.12: the model is *certain*. Uncertainty sampling would discard this clip entirely. `WRONG` and `CONFLICT` are what surface it, and it is the most dangerous category in the set - the machine proceeds at full speed into a situation it has misread.
+- **#5 - diversity attenuation.** Identical raw signals to #1, but a similarity divisor of 2.4 because near-neighbours were already selected. Without this term, one dusty afternoon consumes a large share of the budget. The clip is deferred, not discarded - it returns to the pool next cycle.
+- **#6 - quality as a multiplier, not an additive term.** Every difficulty signal is high, but the sensor is faulty. Annotating it would teach the model about a dirty lens. A multiplier suppresses the clip regardless of how strongly it scores elsewhere; an additive penalty would not. The clip instead raises a maintenance alert.
+- **#8 - the random reservation.** Scores below the threshold and is selected anyway, from the 10% random bucket. Without it, every labelled clip would be one the model struggled with, and performance under normal conditions would become unmeasurable.
 
 ---
 
@@ -275,15 +271,15 @@ Eight representative clips from one selection cycle. This is the concrete output
 
 ```mermaid
 graph TB
-    SEL["selected clips — from Task 2"]
-    EXP["export package<br/>pre-labelled by the production model<br/>about 4× faster annotation"]
+    SEL["selected clips - from Task 2"]
+    EXP["export package<br/>pre-labelled by the production model<br/>correcting is faster than drawing"]
     EXT["external annotation"]
     IMP["import labels"]
-    QA{{"QA GATE<br/>2% double-annotated<br/>mean IoU ≥ 0.80"}}
+    QA{{"QA GATE<br/>sample double-annotated<br/>agreement must clear a threshold"}}
     REJ["batch rejected<br/>returned for re-annotation"]
     BUILD["BUILD DATASET VERSION<br/>immutable manifest of references<br/>content hashes · sticky session splits<br/>sampling weights"]
     LEAK{{"LEAKAGE CHECK<br/>exact hash overlap<br/>+ near-duplicate embeddings"}}
-    STOP["STOP — rebuild required"]
+    STOP["STOP - rebuild required"]
     TRAIN["TRAIN<br/>pinned: dataset hash · git SHA<br/>image digest · config and seeds"]
     EV["EVALUATE<br/>aggregate + per-slice + regression suite"]
     CMP{{"COMPARE vs PRODUCTION<br/>any slice regression fails"}}
@@ -307,9 +303,9 @@ graph TB
     class CAND,T4 good
 ```
 
-**Splits are assigned at session level and are permanently sticky** — a session assigned to test stays in test across every future dataset version — because consecutive frames are near-duplicates, and because redrawn splits invalidate every historical model comparison.
+**Splits are assigned at session level and are permanently sticky** - a session assigned to test stays in test across every future dataset version - because consecutive frames are near-duplicates, and because redrawn splits invalidate every historical model comparison.
 
-**Evaluation is gated per scenario slice**, not on the aggregate. A scenario that is 3% of the evaluation set contributes 3% of the aggregate, so a severe regression confined to it is invisible — and the rare slices are exactly the costly ones.
+**Evaluation is gated per scenario slice**, not on the aggregate. A small slice contributes little to the aggregate, so a severe regression confined to it is invisible - and the rare slices are exactly the costly ones.
 
 ---
 
@@ -327,22 +323,22 @@ graph TB
     end
 
     subgraph MD["MODEL PATH"]
-        MC["model candidate — from Task 3"]
+        MC["model candidate - from Task 3"]
         PV["verify provenance<br/>report · eval-set version · lineage"]
         CO["compile for target<br/>ONNX → INT8 / FP16 engine"]
         RE{{"RE-EVALUATE the compiled engine<br/>on target hardware"}}
         MC --> PV --> CO --> RE
     end
 
-    BUN["BUNDLE — signed<br/>software image + compiled models + config<br/>+ calibration schema + hardware target"]
+    BUN["BUNDLE - signed<br/>software image + compiled models + config<br/>+ calibration schema + hardware target"]
     HIL{{"HARDWARE-IN-THE-LOOP<br/>real device · true-rate sensor replay<br/>accuracy · p99 latency · memory · thermal"}}
-    GATE{{"RELEASE GATE — 7 conditions<br/>6 automatic + 1 named human approval"}}
+    GATE{{"RELEASE GATE - 7 conditions<br/>6 automatic + 1 named human approval"}}
 
-    SH["SHADOW — 3 machines<br/>zero exposure, outputs logged only<br/>≥ 20 operating hours"]
-    CN["CANARY — 2 machines<br/>live, supervised, known sites<br/>≥ 50 operating hours"]
-    W1["WAVE 1 — 25% of fleet<br/>≥ 72 hour soak"]
-    W2["WAVE 2 — remainder"]
-    SELP["selection pool — Task 2"]
+    SH["SHADOW - 3 machines<br/>zero exposure, outputs logged only<br/>≥ 20 operating hours"]
+    CN["CANARY - 2 machines<br/>live, supervised, known sites<br/>≥ 50 operating hours"]
+    W1["WAVE 1 - 25% of fleet<br/>≥ 72 hour soak"]
+    W2["WAVE 2 - remainder"]
+    SELP["selection pool - Task 2"]
 
     AB["ON THE MACHINE<br/>dual-slot A/B · boot health check<br/>automatic revert, no network, no human"]
 
@@ -361,7 +357,7 @@ graph TB
     class BUN,AB,SELP box
 ```
 
-**The release unit is a bundle**, never a model or a binary alone, because a model's accuracy depends on pre- and post-processing that live in the software. **The gate is enforced twice** — in the pipeline, and again on the vehicle, which independently verifies signature, hardware target, calibration schema and the revocation list before installing anything.
+**The release unit is a bundle**, never a model or a binary alone, because a model's accuracy depends on pre- and post-processing that live in the software. **The gate is enforced twice** - in the pipeline, and again on the vehicle, which independently verifies signature, hardware target, calibration schema and the revocation list before installing anything.
 
 ---
 
@@ -379,12 +375,12 @@ graph LR
     subgraph L2["② INGEST"]
         direction TB
         IOT["IoT Core<br/>device identity · MQTT"]
-        MSK["Amazon MSK — Kafka<br/>runs on-prem unchanged"]
+        MSK["Amazon MSK - Kafka<br/>runs on-prem unchanged"]
         FH["Data Firehose<br/>Kafka → Iceberg"]
         UP["presigned upload<br/>recordings direct to S3"]
     end
 
-    subgraph L3["③ STORE — S3"]
+    subgraph L3["③ STORE - S3"]
         direction TB
         LAND["landing/<br/>unverified"]
         RAW["raw/ · Object Lock<br/>immutable"]
@@ -459,7 +455,7 @@ graph LR
     class GDC,PG,CW shr
 ```
 
-**Solid lines are data. Dotted lines are decisions.** The three numbered dotted edges are the flywheel — the only paths that carry information backwards.
+**Solid lines are data. Dotted lines are decisions.** The three numbered dotted edges are the flywheel - the only paths that carry information backwards.
 
 ### How the pieces interact
 
@@ -467,10 +463,10 @@ graph LR
 |---|---|---|
 | Vehicle → IoT Core → Kafka | Telemetry and events, kilobytes | Small and frequent. Needs ordering, replay, several independent consumers |
 | Vehicle → S3 directly | Recordings, gigabytes | A 10 GB file never enters a message bus, and never touches compute we operate |
-| Kafka → Firehose → Iceberg | Validated messages | Managed landing — no streaming job to write or run |
+| Kafka → Firehose → Iceberg | Validated messages | Managed landing - no streaming job to write or run |
 | S3 event → EventBridge → Step Functions | A reference, not a payload | Verification starts when data arrives, not on a schedule |
 | Step Functions → `raw/` or `quarantine/` | A promotion decision | A partial upload never becomes canonical data |
-| Airflow → selection → dataset → training | Clip IDs, then a manifest | Dependency-rich and periodically backfilled — DAG-shaped work |
+| Airflow → selection → dataset → training | Clip IDs, then a manifest | Dependency-rich and periodically backfilled - DAG-shaped work |
 | Training → compile → bundle → IoT Jobs | A signed release | What reaches a vehicle is one versioned unit |
 | Fleet → CloudWatch → Airflow | Slice failure rates | The deployed model's own failures trigger its replacement |
 
@@ -480,24 +476,24 @@ graph LR
 |---|---|
 | **IoT Greengrass** | Buffers on the machine, forwards when connected, deploys the recording stack |
 | **IoT Core** | One certificate per machine; carries the desired bundle version |
-| **Amazon MSK — Kafka** | Telemetry and events. Chosen because it also runs at a site with no cloud link |
+| **Amazon MSK - Kafka** | Telemetry and events. Chosen because it also runs at a site with no cloud link |
 | **Data Firehose** | Reads Kafka, writes Iceberg. No streaming job to operate |
 | **S3** | One storage substrate. `raw/` is write-once under Object Lock |
 | **Glue Data Catalog** | Metastore for the Iceberg tables |
 | **RDS PostgreSQL** | Session state, upload progress, fleet inventory |
-| **AWS Batch on Spot** | Heavy work — parsing, frame extraction, GPU embeddings |
+| **AWS Batch on Spot** | Heavy work - parsing, frame extraction, GPU embeddings |
 | **Glue · Athena** | Scheduled transforms, table maintenance, SQL with no cluster |
 | **SageMaker Training** | Managed spot training with checkpointing |
 | **MLflow** | Experiment tracking and the model registry |
 | **GitHub Actions · ECR · Signer** | Build, test, replay, sign the bundle |
 | **IoT Jobs** | Staged rollout, against the version each machine reports |
-| **EventBridge** | One bus — S3 events, schedules, alarms, manual triggers |
+| **EventBridge** | One bus - S3 events, schedules, alarms, manual triggers |
 | **Step Functions** | Per-recording verification: thousands of short runs a day |
 | **Airflow** | The pipeline DAGs: selection, dataset build, train, evaluate, register |
 | **CloudWatch + SNS** | Fleet inventory, data-quality alarms, the retraining trigger |
 
 ## 8 · Implemented component
 
-The **data selection and active-learning pipeline** — section 4 of this document, as working code. Scoring, diversity-aware ranking and budget-constrained selection, with deterministic tests and example input and output.
+The **data selection and active-learning pipeline** - section 4 of this document, as working code. Scoring, diversity-aware ranking and budget-constrained selection, with deterministic tests and example input and output.
 
 See `3-implementation/`.
